@@ -39,3 +39,4 @@ class MMKVStorageDelegate<T>(private val defaultValue: T) {
 }
 
 var isFirstStartup by MMKVStorageDelegate(false)
+var alreadyRequestStoragePermissions by MMKVStorageDelegate(false)

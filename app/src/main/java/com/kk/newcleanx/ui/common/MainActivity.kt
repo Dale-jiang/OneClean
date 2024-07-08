@@ -1,14 +1,12 @@
 package com.kk.newcleanx.ui.common
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
-import com.kk.newcleanx.data.local.USER_AGREEMENT_URL
 import com.kk.newcleanx.databinding.AcMainBinding
-import com.kk.newcleanx.ui.base.BaseActivity
+import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 
-class MainActivity : BaseActivity<AcMainBinding>() {
+class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
     override val isLight by lazy { true }
     override val isBottomPadding by lazy { false }
@@ -22,7 +20,13 @@ class MainActivity : BaseActivity<AcMainBinding>() {
         }
 
         binding.hello.setOnClickListener {
-            WebViewActivity.start(this, USER_AGREEMENT_URL)
+            requestAllFilePermission {
+                if (it.not()) {
+                    Toast.makeText(this, "伟授权", Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(this, "已授权", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
