@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import com.kk.newcleanx.databinding.AcOpenBinding
-import com.kk.newcleanx.ui.MainActivity
 import com.kk.newcleanx.ui.base.BaseActivity
 
 class OpenActivity : BaseActivity<AcOpenBinding>() {

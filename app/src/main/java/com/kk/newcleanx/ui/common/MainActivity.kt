@@ -1,4 +1,4 @@
-package com.kk.newcleanx.ui
+package com.kk.newcleanx.ui.common
 
 import android.os.Bundle
 import android.widget.Toast

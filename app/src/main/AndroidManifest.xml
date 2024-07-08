@@ -28,7 +28,7 @@
         </activity>
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.common.MainActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>
