@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MyAPP"
         android:allowBackup="true"
@@ -29,6 +31,12 @@
 
         <activity
             android:name=".ui.common.MainActivity"
+            android:configChanges="density|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.common.WebViewActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>
