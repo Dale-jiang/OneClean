@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">NewCleanX</string>
+    <string name="app_name">One Clean</string>
+    <string name="this_action_may_contains_ads">this action may contains ads</string>
 </resources>
