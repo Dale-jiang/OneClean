@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
+import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
@@ -20,13 +21,18 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
 
         binding.hello.setOnClickListener {
-            requestAllFilePermission {
-                if (it.not()) {
-                    Toast.makeText(this, "伟授权", Toast.LENGTH_LONG).show()
-                }else{
-                    Toast.makeText(this, "已授权", Toast.LENGTH_LONG).show()
+            CustomAlertDialog(this).showDialog(
+                title = "Dialog Title",
+                message = "This is a custom message.",
+                positiveButtonText = "OK",
+                negativeButtonText = "Cancel",
+                onPositiveButtonClick = {
+                    // 处理正面按钮点击事件
+                },
+                onNegativeButtonClick = {
+                    // 处理负面按钮点击事件
                 }
-            }
+            )
         }
     }
 
