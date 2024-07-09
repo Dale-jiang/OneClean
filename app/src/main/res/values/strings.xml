@@ -3,4 +3,5 @@
     <string name="this_action_may_contains_ads">this action may contains ads</string>
     <string name="string_ok">OK</string>
     <string name="string_cancel">Cancel</string>
+    <string name="grant_permission_to_use">Grant permission to use</string>
 </resources>

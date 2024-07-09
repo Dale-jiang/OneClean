@@ -16,8 +16,8 @@ class CustomAlertDialog(private val context: Context, private val cancelable: Bo
         message: String,
         positiveButtonText: String,
         negativeButtonText: String,
-        onPositiveButtonClick: () -> Unit,
-        onNegativeButtonClick: () -> Unit
+        onPositiveButtonClick: (AlertDialog) -> Unit,
+        onNegativeButtonClick: (AlertDialog) -> Unit
     ) {
         val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
         val inflater = LayoutInflater.from(context)
@@ -28,20 +28,21 @@ class CustomAlertDialog(private val context: Context, private val cancelable: Bo
         binding.positiveButton.text = positiveButtonText
         binding.negativeButton.text = negativeButtonText
 
+        builder.setView(binding.root)
+        val dialog = builder.setCancelable(cancelable).create()
+
         binding.positiveButton.setOnClickListener {
-            onPositiveButtonClick()
+            onPositiveButtonClick(dialog)
         }
 
         binding.negativeButton.setOnClickListener {
-            onNegativeButtonClick()
+            onNegativeButtonClick(dialog)
+            dialog.dismiss()
         }
 
-        builder.setView(binding.root)
-        val dialog = builder.setCancelable(cancelable).create()
         dialog.show()
-
         dialog.window?.setLayout(
-            context.getScreenWidth() - 40.dp2px(), WindowManager.LayoutParams.WRAP_CONTENT
+            context.getScreenWidth() - 46.dp2px(), WindowManager.LayoutParams.WRAP_CONTENT
         )
     }
 

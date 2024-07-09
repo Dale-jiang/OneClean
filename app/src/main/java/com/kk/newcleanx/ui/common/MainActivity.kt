@@ -3,6 +3,7 @@ package com.kk.newcleanx.ui.common
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.addCallback
+import com.kk.newcleanx.R
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
@@ -22,15 +23,15 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
         binding.hello.setOnClickListener {
             CustomAlertDialog(this).showDialog(
-                title = "Dialog Title",
-                message = "This is a custom message.",
-                positiveButtonText = "OK",
-                negativeButtonText = "Cancel",
+                title = getString(R.string.app_name),
+                message = getString(R.string.grant_permission_to_use),
+                positiveButtonText = getString(R.string.string_ok),
+                negativeButtonText = getString(R.string.string_cancel),
                 onPositiveButtonClick = {
-                    // 处理正面按钮点击事件
+
                 },
                 onNegativeButtonClick = {
-                    // 处理负面按钮点击事件
+
                 }
             )
         }
