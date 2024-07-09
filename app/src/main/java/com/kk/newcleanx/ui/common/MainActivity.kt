@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
+import com.kk.newcleanx.ui.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
@@ -32,7 +32,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         initAdapter()
         binding.btnScan.setOnClickListener {
             requestAllFilePermission {
-                Toast.makeText(this, if (it) "success" else "failed", Toast.LENGTH_LONG).show()
+                if (it) JunkScanningActivity.start(this)
             }
         }
 
