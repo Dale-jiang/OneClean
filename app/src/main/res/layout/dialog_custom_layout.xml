@@ -16,8 +16,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="13dp"
             android:layout_marginTop="18dp"
+            android:ellipsize="end"
             android:fontFamily="@font/montserrat"
             android:includeFontPadding="false"
+            android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -33,7 +35,7 @@
             android:includeFontPadding="false"
             android:textColor="@color/black"
             android:textSize="12sp"
-            tools:text="BBBBBBB" />
+            tools:text="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
