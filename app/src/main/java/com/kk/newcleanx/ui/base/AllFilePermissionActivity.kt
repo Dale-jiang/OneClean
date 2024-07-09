@@ -8,9 +8,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.alreadyRequestStoragePermissions
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.ui.common.PermissionSettingDialogActivity
+import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.utils.CommonUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,31 +38,51 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
             mBlack(true)
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        showRequestDialog {
+            if (it) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
-            isToSettings = true
-            permissionResult.launch(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
-            })
+                    isToSettings = true
+                    permissionResult.launch(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                        data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
+                    })
 
-            lifecycleScope.launch {
-                delay(400)
-                startActivity(Intent(this@AllFilePermissionActivity, PermissionSettingDialogActivity::class.java))
-            }
+                    lifecycleScope.launch {
+                        delay(400)
+                        startActivity(Intent(this@AllFilePermissionActivity, PermissionSettingDialogActivity::class.java))
+                    }
 
-        } else {
-            if (alreadyRequestStoragePermissions.not()) {
-                alreadyRequestStoragePermissions = true
-                permissionLauncher.launch(CommonUtils.storagePermissions)
-            } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                permissionLauncher.launch(CommonUtils.storagePermissions)
-            } else {
-                isToSettings = true
-                permissionResult.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
-                })
-            }
+                } else {
+                    if (alreadyRequestStoragePermissions.not()) {
+                        alreadyRequestStoragePermissions = true
+                        permissionLauncher.launch(CommonUtils.storagePermissions)
+                    } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        permissionLauncher.launch(CommonUtils.storagePermissions)
+                    } else {
+                        isToSettings = true
+                        permissionResult.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
+                        })
+                    }
+                }
+            } else mBlack(false)
         }
+
+    }
+
+
+    private fun showRequestDialog(block: (Boolean) -> Unit) {
+        CustomAlertDialog(this).showDialog(title = getString(R.string.app_name),
+                                           message = getString(R.string.grant_permission_to_use),
+                                           positiveButtonText = getString(R.string.string_ok),
+                                           negativeButtonText = getString(R.string.string_cancel),
+                                           onPositiveButtonClick = {
+                                               block(true)
+                                               it.dismiss()
+                                           },
+                                           onNegativeButtonClick = {
+                                               block(false)
+                                           })
     }
 
     override fun onDestroy() {

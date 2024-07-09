@@ -3,10 +3,8 @@ package com.kk.newcleanx.ui.common
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.addCallback
-import com.kk.newcleanx.R
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
@@ -22,18 +20,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
 
         binding.hello.setOnClickListener {
-            CustomAlertDialog(this).showDialog(
-                title = getString(R.string.app_name),
-                message = getString(R.string.grant_permission_to_use),
-                positiveButtonText = getString(R.string.string_ok),
-                negativeButtonText = getString(R.string.string_cancel),
-                onPositiveButtonClick = {
-
-                },
-                onNegativeButtonClick = {
-
-                }
-            )
+            requestAllFilePermission {
+                Toast.makeText(this, if (it) "success" else "failed", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
