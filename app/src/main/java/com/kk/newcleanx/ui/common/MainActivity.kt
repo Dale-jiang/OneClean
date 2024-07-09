@@ -4,9 +4,17 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kk.newcleanx.data.local.APP_MANAGER
+import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
+import com.kk.newcleanx.data.local.DEVICE_STATUS
+import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
+import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
 import kotlinx.coroutines.Dispatchers
@@ -16,20 +24,47 @@ import kotlin.math.ceil
 
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
-
     private var animator: Animator? = null
+    private var adapter: MainListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding.btnScan.setOnClickListener { //                    requestAllFilePermission {
-            //                        Toast.makeText(this, if (it) "success" else "failed", Toast.LENGTH_LONG).show()
-            //                    }
-
-            startLoading()
-
+        initAdapter()
+        binding.btnScan.setOnClickListener {
+            requestAllFilePermission {
+                Toast.makeText(this, if (it) "success" else "failed", Toast.LENGTH_LONG).show()
+            }
         }
 
+    }
+
+    private fun initAdapter() {
+
+        adapter = MainListAdapter(this) {
+            when (it.type) {
+                BIG_FILE_CLEAN -> {}
+                APP_MANAGER -> {}
+                DEVICE_STATUS -> {}
+                EMPTY_FOLDER -> {}
+            }
+        }
+
+        val layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerView.layoutManager = layoutManager
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (adapter!!.getItemViewType(position) == 0) {
+                    2
+                } else {
+                    1
+                }
+            }
+        }
+        binding.recyclerView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
         startLoading()
     }
 

@@ -5,4 +5,9 @@
     <string name="string_cancel">Cancel</string>
     <string name="grant_permission_to_use">Grant permission to use</string>
     <string name="string_scan">Scan</string>
+    <string name="free_up_space">Free Up Space</string>
+    <string name="big_file_clean">Big File Clean</string>
+    <string name="app_manager">App Manager</string>
+    <string name="device_status">Device Status</string>
+    <string name="empty_folder">Empty Folder</string>
 </resources>
