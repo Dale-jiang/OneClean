@@ -3,12 +3,15 @@ package com.kk.newcleanx.ui.common
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.BLANK_URL
 import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.databinding.AcWebviewBinding
@@ -31,6 +34,7 @@ class WebViewActivity : BaseActivity<AcWebviewBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
+            toolbar.ivBack.setColorFilter(ContextCompat.getColor(this@WebViewActivity, R.color.main_text_color), PorterDuff.Mode.SRC_IN)
             setWebView()
             toolbar.ivBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()

@@ -83,7 +83,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 percent.text = "${usePercent}%"
 
                 progressBar.isIndeterminate = true
-                delay(2200L)
+                delay(1960L)
 
                 setCircleProgress(usePercent)
             }
