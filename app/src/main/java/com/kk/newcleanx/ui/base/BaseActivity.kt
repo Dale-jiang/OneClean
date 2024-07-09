@@ -16,7 +16,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     private lateinit var _binding: VB
     protected val binding get() = _binding
-    protected open val isLight = false
+    protected open val isLight = true
     protected open val isBottomPadding = true
     open fun topView(): View? = null
 

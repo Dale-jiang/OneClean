@@ -24,7 +24,6 @@ class WebViewActivity : BaseActivity<AcWebviewBinding>() {
         }
     }
 
-    override val isLight by lazy { true }
     override fun topView(): View {
         return binding.toolbar.root
     }

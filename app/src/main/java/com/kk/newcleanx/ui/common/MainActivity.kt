@@ -8,9 +8,6 @@ import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
-    override val isLight by lazy { true }
-    override val isBottomPadding by lazy { false }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         test()
