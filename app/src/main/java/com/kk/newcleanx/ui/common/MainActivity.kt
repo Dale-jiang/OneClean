@@ -20,6 +20,7 @@ import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -28,6 +29,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
     private var animator: Animator? = null
     private var adapter: MainListAdapter? = null
+    private var loadingJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +75,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
     @SuppressLint("SetTextI18n")
     private fun startLoading() {
-        lifecycleScope.launch(Dispatchers.Main) {
+        loadingJob?.cancel()
+        loadingJob = lifecycleScope.launch(Dispatchers.Main) {
             binding.apply {
 
                 val total = CommonUtils.getTotalStorageByManager()
@@ -121,6 +124,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         super.onDestroy()
         animator?.cancel()
         animator = null
+
+        loadingJob?.cancel()
+        loadingJob = null
     }
 
 }
