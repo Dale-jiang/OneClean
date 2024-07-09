@@ -4,9 +4,11 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.APP_MANAGER
 import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
 import com.kk.newcleanx.data.local.DEVICE_STATUS
@@ -84,23 +86,34 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
                 progressBar.isIndeterminate = true
                 delay(1960L)
-
                 setCircleProgress(usePercent)
             }
         }
     }
 
     private fun setCircleProgress(end: Int) {
-        binding.progressBar.isIndeterminate = false
-        animator = ValueAnimator.ofInt(0, end).apply {
-            duration = 500L * ceil(end.toDouble() / 25.toDouble()).toLong()
-            addUpdateListener {
-                (it.animatedValue as? Int)?.apply {
-                    binding.progressBar.progress = this
+        binding.progressBar.run {
+
+            isIndeterminate = false
+
+            val colorId = if (end > 75) {
+                R.color.color_30e382
+            } else if (end > 50) {
+                R.color.color_2dd99f
+            } else {
+                R.color.primary
+            }
+            setIndicatorColor(ContextCompat.getColor(this@MainActivity, colorId))
+            animator = ValueAnimator.ofInt(0, end).apply {
+                duration = 500L * ceil(end.toDouble() / 25.toDouble()).toLong()
+                addUpdateListener {
+                    (it.animatedValue as? Int)?.apply {
+                        progress = this
+                    }
                 }
             }
+            animator?.start()
         }
-        animator?.start()
     }
 
 
