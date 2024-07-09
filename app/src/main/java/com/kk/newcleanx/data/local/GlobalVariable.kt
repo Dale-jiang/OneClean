@@ -11,5 +11,5 @@ val main_list_data = arrayListOf(
     MainFunction(R.string.big_file_clean, R.drawable.big_file_clean, BIG_FILE_CLEAN),
     MainFunction(R.string.app_manager, R.drawable.app_manager, APP_MANAGER),
     MainFunction(R.string.device_status, R.drawable.device_status, DEVICE_STATUS),
-    MainFunction(R.string.empty_folder, R.drawable.empty_folder, EMPTY_FOLDER),
+    MainFunction(R.string.empty_folder, R.drawable.empty_folder, EMPTY_FOLDER)
 )
