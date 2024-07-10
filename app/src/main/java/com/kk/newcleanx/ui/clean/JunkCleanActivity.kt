@@ -18,6 +18,7 @@ import com.kk.newcleanx.data.local.junkCleanTimeTag
 import com.kk.newcleanx.databinding.AcJunkCleanBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.clean.vm.JunkCleanViewModel
+import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,7 +56,10 @@ class JunkCleanActivity : BaseActivity<AcJunkCleanBinding>() {
                 }
             }
 
-            btnContinue.setOnClickListener {}
+            btnContinue.setOnClickListener {
+                CleanResultActivity.start(this@JunkCleanActivity)
+                finish()
+            }
 
             startProgress()
             viewModel.cleanJunk()

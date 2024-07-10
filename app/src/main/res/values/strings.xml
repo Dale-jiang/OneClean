@@ -27,4 +27,6 @@
     <string name="string_continue">Continue</string>
     <string name="junk_cleaning">junk cleaning…</string>
     <string name="string_cleaning_stop_tip">Are you sure you want to exit? The current cleaning progress will be lost after exiting.</string>
+    <string name="clean_finished_">Clean Finished</string>
+    <string name="your_phone_is_already_cleaned">Your Phone Is Already Cleaned·</string>
 </resources>

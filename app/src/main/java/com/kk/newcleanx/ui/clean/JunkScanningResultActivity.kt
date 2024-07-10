@@ -50,6 +50,7 @@ class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
 
             btnClean.setOnClickListener {
                 JunkCleanActivity.start(this@JunkScanningResultActivity)
+                finish()
             }
 
             binding.recyclerView.itemAnimator = null

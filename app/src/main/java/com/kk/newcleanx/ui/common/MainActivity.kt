@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -41,7 +40,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                     if (CommonUtils.checkIfCanClean()) {
                         JunkScanningActivity.start(this)
                     } else {
-                        Toast.makeText(this, "冷却中。。。。", Toast.LENGTH_LONG).show()
+                        CleanResultActivity.start(this)
                     }
                 }
 

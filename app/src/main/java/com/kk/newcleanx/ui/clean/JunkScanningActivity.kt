@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -18,6 +17,7 @@ import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.clean.vm.JunkScanningViewModel
+import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.startRotateAnim
@@ -108,8 +108,9 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
                     if (it) {
                         JunkScanningResultActivity.start(this@JunkScanningActivity)
                         finish()
-                    } else { // TODO:
-                        Toast.makeText(this@JunkScanningActivity, "无数据", Toast.LENGTH_LONG).show()
+                    } else {
+                        CleanResultActivity.start(this@JunkScanningActivity)
+                        finish()
                     }
                 }
 
