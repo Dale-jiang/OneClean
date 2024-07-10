@@ -15,8 +15,9 @@ import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
+import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
+import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +57,11 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 BIG_FILE_CLEAN -> {}
                 APP_MANAGER -> {}
                 DEVICE_STATUS -> {}
-                EMPTY_FOLDER -> {}
+                EMPTY_FOLDER -> {
+                    requestAllFilePermission { success ->
+                        if (success) EmptyFolderActivity.start(this)
+                    }
+                }
             }
         }
 
