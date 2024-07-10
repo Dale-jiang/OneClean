@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.kk.newcleanx.R
 import com.kk.newcleanx.databinding.DialogCustomLayoutBinding
 import com.kk.newcleanx.utils.dp2px
@@ -26,7 +27,12 @@ class CustomAlertDialog(private val context: Context, private val cancelable: Bo
         binding.dialogTitle.text = title
         binding.dialogMessage.text = message
         binding.positiveButton.text = positiveButtonText
-        binding.negativeButton.text = negativeButtonText
+        if (negativeButtonText.isEmpty()) {
+            binding.negativeButton.isVisible = false
+        } else {
+            binding.negativeButton.isVisible = true
+            binding.negativeButton.text = negativeButtonText
+        }
 
         builder.setView(binding.root)
         val dialog = builder.setCancelable(cancelable).create()

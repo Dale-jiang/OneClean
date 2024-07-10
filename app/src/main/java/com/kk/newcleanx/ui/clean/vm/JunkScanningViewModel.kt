@@ -217,7 +217,7 @@ class JunkScanningViewModel : ViewModel() {
                         val tempCacheList = mutableListOf<JunkDetailsType>()
                         val cacheList = junkDetailsList.filter { it.junkType == JunkType.APP_CACHE }.toMutableList()
                         if (cacheList.isNotEmpty()) {
-                            tempCacheList.add(JunkDetailsParent(cacheList, false, cacheList.sumOf { it.fileSize }, JunkType.APP_CACHE, true))
+                            tempCacheList.add(JunkDetailsParent(cacheList, true, cacheList.sumOf { it.fileSize }, JunkType.APP_CACHE, true))
                             tempCacheList.addAll(cacheList)
                         }
                         tempCacheList
@@ -229,7 +229,7 @@ class JunkScanningViewModel : ViewModel() {
                         val tempList = mutableListOf<JunkDetailsType>()
                         val apkList = junkDetailsList.filter { it.junkType == JunkType.APK_FILES }.toMutableList()
                         if (apkList.isNotEmpty()) {
-                            tempList.add(JunkDetailsParent(apkList, false, apkList.sumOf { it.fileSize }, JunkType.APK_FILES, true))
+                            tempList.add(JunkDetailsParent(apkList, true, apkList.sumOf { it.fileSize }, JunkType.APK_FILES, true))
                             tempList.addAll(apkList)
                         }
                         tempList
@@ -241,7 +241,7 @@ class JunkScanningViewModel : ViewModel() {
                         val tempList = mutableListOf<JunkDetailsType>()
                         val logList = junkDetailsList.filter { it.junkType == JunkType.LOG_FILES }.toMutableList()
                         if (logList.isNotEmpty()) {
-                            tempList.add(JunkDetailsParent(logList, false, logList.sumOf { it.fileSize }, JunkType.LOG_FILES, true))
+                            tempList.add(JunkDetailsParent(logList, true, logList.sumOf { it.fileSize }, JunkType.LOG_FILES, true))
                             tempList.addAll(logList)
                         }
                         tempList
@@ -253,7 +253,7 @@ class JunkScanningViewModel : ViewModel() {
                         val tempList = mutableListOf<JunkDetailsType>()
                         val adList = junkDetailsList.filter { it.junkType == JunkType.AD_JUNK }.toMutableList()
                         if (adList.isNotEmpty()) {
-                            tempList.add(JunkDetailsParent(adList, false, adList.sumOf { it.fileSize }, JunkType.AD_JUNK, true))
+                            tempList.add(JunkDetailsParent(adList, true, adList.sumOf { it.fileSize }, JunkType.AD_JUNK, true))
                             tempList.addAll(adList)
                         }
                         tempList
@@ -265,7 +265,7 @@ class JunkScanningViewModel : ViewModel() {
                         val tempTempList = mutableListOf<JunkDetailsType>()
                         val tempList = junkDetailsList.filter { it.junkType == JunkType.TEMP_FILES }.toMutableList()
                         if (tempList.isNotEmpty()) {
-                            tempTempList.add(JunkDetailsParent(tempList, false, tempList.sumOf { it.fileSize }, JunkType.AD_JUNK, true))
+                            tempTempList.add(JunkDetailsParent(tempList, true, tempList.sumOf { it.fileSize }, JunkType.TEMP_FILES, true))
                             tempTempList.addAll(tempList)
                         }
                         tempTempList

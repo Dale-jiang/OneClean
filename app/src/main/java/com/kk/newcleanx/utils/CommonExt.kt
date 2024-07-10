@@ -8,6 +8,10 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
+import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.JunkDetailsType
+import com.kk.newcleanx.data.local.JunkType
+import com.kk.newcleanx.data.local.app
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -40,5 +44,25 @@ fun View.startRotateAnim() = run {
             duration = 800L
             fillAfter = true
         })
+    }
+}
+
+fun JunkDetailsType.imageIcon() = run {
+    when (junkType) {
+        JunkType.APP_CACHE -> R.drawable.junk_app_cache
+        JunkType.LOG_FILES -> R.drawable.junk_log
+        JunkType.TEMP_FILES -> R.drawable.junk_temp
+        JunkType.AD_JUNK -> R.drawable.junk_ad
+        JunkType.APK_FILES -> R.drawable.junk_apk
+    }
+}
+
+fun JunkDetailsType.nameString() = run {
+    when (junkType) {
+        JunkType.APP_CACHE -> runCatching { app.getString(R.string.app_cache) }.getOrNull() ?: ""
+        JunkType.LOG_FILES -> runCatching { app.getString(R.string.log_files) }.getOrNull() ?: ""
+        JunkType.TEMP_FILES -> runCatching { app.getString(R.string.temp_files) }.getOrNull() ?: ""
+        JunkType.AD_JUNK -> runCatching { app.getString(R.string.ad_junk) }.getOrNull() ?: ""
+        JunkType.APK_FILES -> runCatching { app.getString(R.string.apk_files) }.getOrNull() ?: ""
     }
 }

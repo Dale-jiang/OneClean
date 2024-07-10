@@ -19,4 +19,5 @@
     <string name="string_tips">Tips</string>
     <string name="string_scanning_stop_tip">Are you sure you want to exit the cleaning scan? The current scanning progress will be lost after exiting.</string>
     <string name="string_junk">Junk</string>
+    <string name="clean_junk">Clean Junk</string>
 </resources>
