@@ -49,7 +49,7 @@ class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
             onBackPressedDispatcher.addCallback { finish() }
 
             btnClean.setOnClickListener {
-
+                JunkCleanActivity.start(this@JunkScanningResultActivity)
             }
 
             binding.recyclerView.itemAnimator = null

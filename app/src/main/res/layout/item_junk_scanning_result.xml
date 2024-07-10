@@ -53,6 +53,8 @@
             android:textColor="@color/color_7f695c"
             android:textSize="12sp"
             android:textStyle="bold"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/montserrat"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_apk_loading"
             app:layout_constraintTop_toTopOf="parent"
