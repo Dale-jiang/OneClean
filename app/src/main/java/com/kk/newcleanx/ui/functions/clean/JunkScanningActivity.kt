@@ -1,12 +1,9 @@
 package com.kk.newcleanx.ui.functions.clean
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
@@ -16,9 +13,9 @@ import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.functions.clean.vm.JunkScanningViewModel
 import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
+import com.kk.newcleanx.ui.functions.clean.vm.JunkScanningViewModel
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.startRotateAnim
 import kotlinx.coroutines.delay
@@ -33,9 +30,6 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
     }
 
     private val viewModel by viewModels<JunkScanningViewModel>()
-    private val handler = Handler(Looper.getMainLooper())
-    private var isCompleted = false
-    private var animator: ValueAnimator? = null
 
     override fun topView(): View {
         return binding.toolbar.root
@@ -54,7 +48,9 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
                 if (it) {
                     setStartAnim()
                     viewModel.getAllJunk()
-                    startProgress()
+                    startProgress { p ->
+                        progressBar.progress = p
+                    }
                 } else finish()
             }
         }
@@ -150,40 +146,6 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
     }
 
 
-    private fun startProgress() {
-        val startTime = System.currentTimeMillis()
-        val maxTime = 10000L
-        val progressUpdateInterval = 50L
-
-        handler.post(object : Runnable {
-            override fun run() {
-                val elapsedTime = System.currentTimeMillis() - startTime
-                val progress = if (elapsedTime < maxTime) {
-                    (elapsedTime.toFloat() / maxTime * 80).toInt()
-                } else {
-                    80
-                }
-                binding.progressBar.progress = progress
-                if (isCompleted) {
-                    animateProgressTo100()
-                } else {
-                    handler.postDelayed(this, progressUpdateInterval)
-                }
-            }
-        })
-    }
-
-    private fun animateProgressTo100() {
-        animator = ValueAnimator.ofInt(binding.progressBar.progress, 100)
-        animator?.apply {
-            duration = 500
-            addUpdateListener { animation ->
-                binding.progressBar.progress = animation.animatedValue as Int
-            }
-            start()
-        }
-    }
-
     private fun onBackClicked() {
         CustomAlertDialog(this).showDialog(title = getString(R.string.string_tips),
                                            message = getString(R.string.string_scanning_stop_tip),
@@ -199,10 +161,6 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
     override fun onDestroy() {
         super.onDestroy()
         viewModel.scanningJob?.cancel()
-        handler.removeCallbacksAndMessages(null)
-        animator?.cancel()
-        animator = null
     }
-
 
 }

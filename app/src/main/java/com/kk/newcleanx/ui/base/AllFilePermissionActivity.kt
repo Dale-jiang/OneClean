@@ -1,8 +1,11 @@
 package com.kk.newcleanx.ui.base
 
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -20,6 +23,7 @@ import kotlinx.coroutines.launch
 abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() {
 
     protected var mBlack: (Boolean) -> Unit = {}
+    protected var mProgressBlack: (Int) -> Unit = {}
 
     private val permissionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         isToSettings = false
@@ -85,8 +89,49 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
                                            })
     }
 
+
+    private val handler = Handler(Looper.getMainLooper())
+    protected var isCompleted = false
+    private var animator: ValueAnimator? = null
+
+    protected fun startProgress(
+        maxTime: Long = 10000L, progressUpdateInterval: Long = 50L, elapsedProgress: Int = 80, endDuration: Long = 500, block: (Int) -> Unit
+    ) {
+        this.mProgressBlack = block
+        val startTime = System.currentTimeMillis()
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsedTime = System.currentTimeMillis() - startTime
+                val progress = if (elapsedTime < maxTime) {
+                    (elapsedTime.toFloat() / maxTime * elapsedProgress).toInt()
+                } else elapsedProgress
+
+                mProgressBlack(progress)
+                if (isCompleted) {
+                    animateProgressTo100(endDuration, progress)
+                } else {
+                    handler.postDelayed(this, progressUpdateInterval)
+                }
+            }
+        })
+    }
+
+    private fun animateProgressTo100(endDuration: Long, progress: Int) {
+        animator = ValueAnimator.ofInt(progress, 100)
+        animator?.apply {
+            duration = endDuration
+            addUpdateListener { animation ->
+                mProgressBlack(animation.animatedValue as Int)
+            }
+            start()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+        animator?.cancel()
+        animator = null
         isToSettings = false
     }
 }
