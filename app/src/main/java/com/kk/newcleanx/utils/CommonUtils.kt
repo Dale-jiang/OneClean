@@ -10,10 +10,40 @@ import android.os.storage.StorageManager
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.kk.newcleanx.data.local.app
+import java.io.File
+import java.util.LinkedList
 
 object CommonUtils {
 
-     fun getTotalStorageByManager(): Long = let {
+
+    fun getFileSize(file: File): Long = let {
+        val pool = LinkedList<File>().also { it.offer(file) }
+        var size = 0L
+        while (pool.isNotEmpty()) {
+            val pop = pool.pop()
+            if (!pop.exists()) continue
+            if (pop.isDirectory) {
+                pop.listFiles()?.forEach {
+                    pool.offer(it)
+                }
+                size += 4096
+                continue
+            }
+            size += pop.length()
+        }
+        size
+    }
+
+    fun getFolderJunkRegex(folder: String): String = let {
+        ".*(\\\\|/)$folder(\\\\|/|$).*"
+    }
+
+    fun getFileJunkRegex(file: String): String = let {
+        ".+" + file.replace(".", "\\.") + "$"
+    }
+
+
+    fun getTotalStorageByManager(): Long = let {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val storageStatsManager = app.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
@@ -31,7 +61,7 @@ object CommonUtils {
         totalBlocks * blockSize
     }
 
-     fun getUsedStorageByManager(): Long = let {
+    fun getUsedStorageByManager(): Long = let {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val storageStatsManager = app.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager

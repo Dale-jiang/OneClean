@@ -13,3 +13,7 @@ val main_list_data = arrayListOf(
     MainFunction(R.string.device_status, R.drawable.device_status, DEVICE_STATUS),
     MainFunction(R.string.empty_folder, R.drawable.empty_folder, EMPTY_FOLDER)
 )
+
+enum class JunkType() {
+    LOG_FILES(), TEMP_FILES(), APP_CACHE(), AD_JUNK(), APK_FILES()
+}

@@ -89,15 +89,14 @@
         android:layout_height="34dp"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:maxLines="1"
-        android:paddingStart="12dp"
-        android:paddingEnd="60dp"
-        android:text="Scanning://https://stayfoolish.feishu.cn/docx/..."
+        android:paddingHorizontal="30dp"
         android:textColor="@color/color_ffa68e7d"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view_bg" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_bg"
+        tools:text="XXXXXXXXXXXX" />
 
     <View
         android:id="@+id/view_line"
