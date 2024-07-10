@@ -1,7 +1,6 @@
 package com.kk.newcleanx.ui.clean.vm
 
 import android.os.Environment
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,24 +14,21 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.Locale
 
 class JunkScanningViewModel : ViewModel() {
 
-    private val cacheFolders = arrayOf("Cache", "leakcanary", ".DS_Store", "cache")
-    private val cacheFiles = arrayOf("Analytics", "LOST.DIR", "desktop.ini", ".Trash", ".trash")
+    private val cacheFolders = arrayOf("cache", "Analytics", "LOST.DIR", ".Trash", "desktop.ini", "leakcanary", ".DS_Store", "fseventsd", ".cache")
     private val cacheFilters = mutableListOf<String>()
 
-    private val logFolders = arrayOf("Logs", "logs", "Bugreport", "bugreports")
-    private val logFiles = arrayOf(".log")
+    private val logFolders = arrayOf("logs", "Bugreport", "bugreports", "debug_log", "MiPushLog")
     private val logFilters = mutableListOf<String>()
 
-    private val tempFolders = arrayOf("temp", "Temporary", "temporary", "thumbnails?", "albumthumbs?")
-    private val tempFiles = arrayOf(".tmp", "thumbs?.db", ".thumb[0-9]", ".thumb")
+    private val tempFolders = arrayOf("temp", "temporary", "thumbnails?", ".thumbnails")
+    private val tempFiles = arrayOf("thumbs?.db", ".thumb[0-9]")
     private val tempFilters = mutableListOf<String>()
 
-    private val aDJunkFolders = arrayOf("supersonicads", "mobvista", "UnityAdsVideoCache", "splashad", ".spotlight-V100", "fseventsd")
-    private val aDJunkFiles = arrayOf(".exo", "splashad")
+    private val aDJunkFolders = arrayOf("supersonicads", "UnityAdsVideoCache", ".spotlight-V100", "splashad")
+    private val aDJunkFiles = arrayOf("splashad", ".exo")
     private val aDJunkFilters = mutableListOf<String>()
 
     var scanningJob: Job? = null
@@ -63,15 +59,16 @@ class JunkScanningViewModel : ViewModel() {
             for (singleFile in files) {
 
                 if (singleFile.exists().not()) continue
-                pathChaneObserver.postValue(singleFile.path)
+                val filePath = singleFile.absolutePath
+                pathChaneObserver.postValue(filePath)
 
                 if (singleFile.isDirectory) {
 
-                    if (cacheFilters.any { singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex()) }) {
+                    if (cacheFilters.any { filePath.matches(it.toRegex()) }) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.APP_CACHE,
                             select = true
@@ -79,11 +76,11 @@ class JunkScanningViewModel : ViewModel() {
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
 
-                    } else if (logFilters.any { singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex()) }) {
+                    } else if (logFilters.any { filePath.matches(it.toRegex()) }) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.LOG_FILES,
                             select = true
@@ -91,13 +88,11 @@ class JunkScanningViewModel : ViewModel() {
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
 
-                    } else if (tempFilters.any {
-                            singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex())
-                        }) {
+                    } else if (tempFilters.any { filePath.matches(it.toRegex()) }) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.TEMP_FILES,
                             select = true
@@ -106,13 +101,11 @@ class JunkScanningViewModel : ViewModel() {
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
 
-                    } else if (aDJunkFilters.any {
-                            singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex())
-                        }) {
+                    } else if (aDJunkFilters.any { filePath.matches(it.toRegex()) }) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.AD_JUNK,
                             select = true
@@ -123,59 +116,56 @@ class JunkScanningViewModel : ViewModel() {
 
                 } else {
 
-                    if (cacheFilters.any { singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex()) }) {
+                    if (cacheFilters.any { filePath.matches(it.toRegex()) }) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.APP_CACHE,
                             select = true
                         )
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
-                    } else if (logFilters.any {
-                            singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex())
-                        }) {
+                    } else if (filePath.endsWith(".log", true) || logFilters.any { filePath.matches(it.toRegex()) }) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.LOG_FILES,
                             select = true
                         )
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
-                    } else if (tempFilters.any {
-                            singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex())
-                        }) {
+                    } else if (filePath.contains(".thumb", true) || filePath.endsWith(
+                            ".tmp", true
+                        ) || tempFilters.any { filePath.matches(it.toRegex()) }
+                    ) {
 
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.TEMP_FILES,
                             select = true
                         )
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
-                    } else if (aDJunkFilters.any {
-                            singleFile.absolutePath.lowercase(Locale.getDefault()).matches(it.lowercase(Locale.getDefault()).toRegex())
-                        }) {
+                    } else if (aDJunkFilters.any { filePath.matches(it.toRegex()) }) {
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.AD_JUNK,
                             select = true
                         )
                         junkDetailsList.add(item)
                         itemChaneObserver.postValue(item)
-                    } else if (singleFile.absolutePath.endsWith(".apk", true) || singleFile.absolutePath.endsWith(".aab", true)) {
+                    } else if (filePath.endsWith(".apk", true) || filePath.endsWith(".aab", true)) {
                         val item = JunkDetails(
                             fileName = singleFile.name,
-                            filePath = singleFile.absolutePath,
+                            filePath = filePath,
                             fileSize = CommonUtils.getFileSize(singleFile),
                             junkType = JunkType.APK_FILES,
                             select = true
@@ -191,27 +181,21 @@ class JunkScanningViewModel : ViewModel() {
 
 
     private suspend fun createCacheJunkFilter() = withContext(Dispatchers.IO + SupervisorJob()) {
-        cacheFiles.forEach { cacheFilters.add(CommonUtils.getFileJunkRegex(it)) }
         cacheFolders.forEach { cacheFilters.add(CommonUtils.getFolderJunkRegex(it)) }
-        Log.e("---->>",cacheFilters.toString())
     }
 
     private suspend fun createLogJunkFilter() = withContext(Dispatchers.IO + SupervisorJob()) {
-        logFiles.forEach { logFilters.add(CommonUtils.getFileJunkRegex(it)) }
         logFolders.forEach { logFilters.add(CommonUtils.getFolderJunkRegex(it)) }
-        Log.e("---->>",logFilters.toString())
     }
 
     private suspend fun createTempJunkFilter() = withContext(Dispatchers.IO + SupervisorJob()) {
         tempFiles.forEach { tempFilters.add(CommonUtils.getFileJunkRegex(it)) }
         tempFolders.forEach { tempFilters.add(CommonUtils.getFolderJunkRegex(it)) }
-        Log.e("---->>",tempFilters.toString())
     }
 
     private suspend fun createADJunkFilter() = withContext(Dispatchers.IO + SupervisorJob()) {
         aDJunkFiles.forEach { aDJunkFilters.add(CommonUtils.getFileJunkRegex(it)) }
         aDJunkFolders.forEach { aDJunkFilters.add(CommonUtils.getFolderJunkRegex(it)) }
-        Log.e("---->>",aDJunkFilters.toString())
     }
 
 }

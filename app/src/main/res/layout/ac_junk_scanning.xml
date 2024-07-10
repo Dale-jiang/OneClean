@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
             android:includeFontPadding="false"
-            android:text="28.23"
+            android:text="0KB"
             android:textColor="@color/color_613617"
             android:textSize="36sp"
             android:textStyle="bold" />
@@ -55,7 +55,8 @@
             android:text="MB"
             android:textColor="@color/color_b27f5a"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatTextView

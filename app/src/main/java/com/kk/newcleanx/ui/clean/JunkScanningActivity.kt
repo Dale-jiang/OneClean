@@ -7,11 +7,13 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.clean.vm.JunkScanningViewModel
@@ -65,8 +67,29 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
                 binding.tvPath.text = it
             }
 
-            itemChaneObserver.observe(this@JunkScanningActivity) {
-                binding.tvJunkSize.text = viewModel.junkDetailsList.sumOf { it.fileSize }.formatStorageSize()
+            itemChaneObserver.observe(this@JunkScanningActivity) { item ->
+
+                binding.run {
+                    when (item.junkType) {
+                        JunkType.APP_CACHE -> tvCacheSize.text =
+                            viewModel.junkDetailsList.filter { it.junkType == JunkType.APP_CACHE }.sumOf { it.fileSize }.formatStorageSize()
+
+                        JunkType.LOG_FILES -> tvLogSize.text =
+                            viewModel.junkDetailsList.filter { it.junkType == JunkType.LOG_FILES }.sumOf { it.fileSize }.formatStorageSize()
+
+                        JunkType.TEMP_FILES -> tvTempSize.text =
+                            viewModel.junkDetailsList.filter { it.junkType == JunkType.TEMP_FILES }.sumOf { it.fileSize }.formatStorageSize()
+
+                        JunkType.AD_JUNK -> tvAdSize.text =
+                            viewModel.junkDetailsList.filter { it.junkType == JunkType.AD_JUNK }.sumOf { it.fileSize }.formatStorageSize()
+
+                        JunkType.APK_FILES -> tvApkSize.text =
+                            viewModel.junkDetailsList.filter { it.junkType == JunkType.APK_FILES }.sumOf { it.fileSize }.formatStorageSize()
+                    }
+
+                    tvJunkSize.text = viewModel.junkDetailsList.sumOf { it.fileSize }.formatStorageSize()
+
+                }
             }
 
             scanningCompletedObserver.observe(this@JunkScanningActivity) {
