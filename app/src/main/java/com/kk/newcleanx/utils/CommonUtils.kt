@@ -3,6 +3,7 @@ package com.kk.newcleanx.utils
 import android.app.usage.StorageStatsManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Environment
 import android.os.StatFs
@@ -15,6 +16,21 @@ import java.util.LinkedList
 
 object CommonUtils {
 
+
+     fun getApkIcon(apkFilePath: String): Drawable? = let {
+        try {
+            val packageManager = app.packageManager
+            val packageInfo = packageManager.getPackageArchiveInfo(apkFilePath, PackageManager.GET_ACTIVITIES)
+            packageInfo?.applicationInfo?.apply {
+                sourceDir = apkFilePath
+                publicSourceDir = apkFilePath
+                return@let packageManager.getApplicationIcon(this)
+            }
+            return@let null
+        } catch (e: Throwable) {
+            return@let null
+        }
+    }
 
     fun getFileSize(file: File): Long = let {
         val pool = LinkedList<File>().also { it.offer(file) }

@@ -11,8 +11,10 @@ import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetails
 import com.kk.newcleanx.data.local.JunkDetailsParent
 import com.kk.newcleanx.data.local.JunkDetailsType
+import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.ItemJunkScanningResultBinding
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
+import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.imageIcon
 import com.kk.newcleanx.utils.nameString
@@ -82,6 +84,11 @@ class JunkScanningResultAdapter(private val context: Context, private val select
                     itemApkIcon.isInvisible = true
                     tvApk.text = item.fileName
                     tvApkSize.text = item.fileSize.formatStorageSize()
+
+                    if (item.junkType == JunkType.APK_FILES && CommonUtils.getApkIcon(item.filePath) != null) {
+                        itemApkIcon.isInvisible = false
+                        itemApkIcon.setImageDrawable(CommonUtils.getApkIcon(item.filePath))
+                    }
 
                     if ((holder.layoutPosition == junkDataList.size - 1) || (junkDataList.getOrNull(holder.layoutPosition + 1) is JunkDetailsParent)) {
                         clContainer.setBackgroundResource(R.drawable.shape_no_top_border)
