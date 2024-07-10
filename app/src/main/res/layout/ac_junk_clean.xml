@@ -48,7 +48,7 @@
         app:lottie_autoPlay="true"
         app:lottie_fileName="anim_fan.json"
         app:lottie_loop="true"
-        app:lottie_speed="1.0"
+        app:lottie_speed="1.6"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -67,16 +67,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
+        android:fontFamily="@font/montserrat"
         android:includeFontPadding="false"
         android:text="@string/clean_finished"
         android:textColor="@color/color_1b8258"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_circle" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:fontFamily="@font/montserrat"
+        android:includeFontPadding="false"
+        android:textColor="@color/color_1b8258"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_circle"
+        tools:text="46%" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -88,7 +106,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_finished" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_percent" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -96,9 +114,8 @@
         android:layout_width="wrap_content"
         android:layout_height="49dp"
         android:layout_marginBottom="108dp"
-        android:background="@drawable/shape_btn_gradient_bg_r24"
+        android:background="@drawable/ripple_clean_continue_btn"
         android:fontFamily="@font/montserrat"
-        android:foreground="?selectableItemBackgroundBorderless"
         android:gravity="center"
         android:minWidth="210dp"
         android:text="@string/string_continue"
