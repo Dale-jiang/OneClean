@@ -1,12 +1,9 @@
 package com.kk.newcleanx.ui.functions.clean
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
@@ -16,14 +13,14 @@ import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.junkCleanTimeTag
 import com.kk.newcleanx.databinding.AcJunkCleanBinding
-import com.kk.newcleanx.ui.base.BaseActivity
-import com.kk.newcleanx.ui.functions.clean.vm.JunkCleanViewModel
+import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
+import com.kk.newcleanx.ui.functions.clean.vm.JunkCleanViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class JunkCleanActivity : BaseActivity<AcJunkCleanBinding>() {
+class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
     companion object {
         fun start(context: Context) {
@@ -36,11 +33,9 @@ class JunkCleanActivity : BaseActivity<AcJunkCleanBinding>() {
     }
 
     private val viewModel by viewModels<JunkCleanViewModel>()
-    private val handler = Handler(Looper.getMainLooper())
-    private var isCompleted = false
-    private var animator: ValueAnimator? = null
     private var mProgress = 0
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
@@ -61,7 +56,11 @@ class JunkCleanActivity : BaseActivity<AcJunkCleanBinding>() {
                 finish()
             }
 
-            startProgress()
+            startProgress(endDuration = 600, minWaitTime = 2000) {
+                mProgress = it
+                binding.tvPercent.text = "${mProgress}%"
+            }
+
             viewModel.cleanJunk()
 
             viewModel.completeObserver.observe(this@JunkCleanActivity) {
@@ -86,44 +85,6 @@ class JunkCleanActivity : BaseActivity<AcJunkCleanBinding>() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun startProgress() {
-        val startTime = System.currentTimeMillis()
-        val maxTime = 10000L
-        val progressUpdateInterval = 50L
-
-        handler.post(object : Runnable {
-
-            override fun run() {
-                val elapsedTime = System.currentTimeMillis() - startTime
-                mProgress = if (elapsedTime < maxTime) {
-                    (elapsedTime.toFloat() / maxTime * 80).toInt()
-                } else {
-                    80
-                }
-                binding.tvPercent.text = "${mProgress}%"
-                if (isCompleted && elapsedTime > 2000) {
-                    animateProgressTo100(mProgress)
-                } else {
-                    handler.postDelayed(this, progressUpdateInterval)
-                }
-            }
-        })
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun animateProgressTo100(progress: Int) {
-        animator = ValueAnimator.ofInt(progress, 100)
-        animator?.apply {
-            duration = 600
-            addUpdateListener { animation ->
-                val value = animation.animatedValue as Int
-                binding.tvPercent.text = "${value}%"
-                mProgress = value
-            }
-            start()
-        }
-    }
 
     private fun onBackClicked() {
         CustomAlertDialog(this).showDialog(title = getString(R.string.string_tips),

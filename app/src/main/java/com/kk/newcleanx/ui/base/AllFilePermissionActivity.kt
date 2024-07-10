@@ -25,6 +25,10 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
     protected var mBlack: (Boolean) -> Unit = {}
     protected var mProgressBlack: (Int) -> Unit = {}
 
+    private val handler = Handler(Looper.getMainLooper())
+    protected var isCompleted = false
+    private var animator: ValueAnimator? = null
+
     private val permissionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         isToSettings = false
         if (CommonUtils.hasAllStoragePermission()) {
@@ -89,13 +93,13 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
                                            })
     }
 
-
-    private val handler = Handler(Looper.getMainLooper())
-    protected var isCompleted = false
-    private var animator: ValueAnimator? = null
-
     protected fun startProgress(
-        maxTime: Long = 10000L, progressUpdateInterval: Long = 50L, elapsedProgress: Int = 80, endDuration: Long = 500, block: (Int) -> Unit
+        maxTime: Long = 10000L,
+        progressUpdateInterval: Long = 50L,
+        elapsedProgress: Int = 80,
+        endDuration: Long = 500,
+        minWaitTime: Long = 0L,
+        block: (Int) -> Unit
     ) {
         this.mProgressBlack = block
         val startTime = System.currentTimeMillis()
@@ -107,7 +111,7 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
                 } else elapsedProgress
 
                 mProgressBlack(progress)
-                if (isCompleted) {
+                if (isCompleted && elapsedTime > minWaitTime) {
                     animateProgressTo100(endDuration, progress)
                 } else {
                     handler.postDelayed(this, progressUpdateInterval)
