@@ -1,4 +1,4 @@
-package com.kk.newcleanx.ui.clean.vm
+package com.kk.newcleanx.ui.functions.clean.vm
 
 import android.os.Environment
 import androidx.lifecycle.MutableLiveData

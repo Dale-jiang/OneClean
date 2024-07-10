@@ -1,4 +1,4 @@
-package com.kk.newcleanx.ui.clean
+package com.kk.newcleanx.ui.functions.clean
 
 import android.content.Context
 import android.content.Intent
@@ -12,7 +12,7 @@ import com.kk.newcleanx.data.local.JunkDetails
 import com.kk.newcleanx.data.local.junkDataList
 import com.kk.newcleanx.databinding.AcJunkScanningResultBinding
 import com.kk.newcleanx.ui.base.BaseActivity
-import com.kk.newcleanx.ui.clean.adapter.JunkScanningResultAdapter
+import com.kk.newcleanx.ui.functions.clean.adapter.JunkScanningResultAdapter
 import com.kk.newcleanx.utils.formatStorageSize
 
 class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {

@@ -54,22 +54,27 @@
             android:theme="@style/Theme.Transparent" />
 
         <activity
-            android:name=".ui.clean.JunkScanningActivity"
+            android:name="com.kk.newcleanx.ui.functions.clean.JunkScanningActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.clean.JunkScanningResultActivity"
+            android:name="com.kk.newcleanx.ui.functions.clean.JunkScanningResultActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.clean.JunkCleanActivity"
+            android:name="com.kk.newcleanx.ui.functions.clean.JunkCleanActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.common.CleanResultActivity"
+            android:configChanges="density|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.functions.empty.EmptyFolderActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>

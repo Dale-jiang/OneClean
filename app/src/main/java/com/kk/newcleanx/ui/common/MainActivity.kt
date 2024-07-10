@@ -15,7 +15,7 @@ import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.clean.JunkScanningActivity
+import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize

@@ -1,4 +1,4 @@
-package com.kk.newcleanx.ui.clean
+package com.kk.newcleanx.ui.functions.clean
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -16,7 +16,7 @@ import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.clean.vm.JunkScanningViewModel
+import com.kk.newcleanx.ui.functions.clean.vm.JunkScanningViewModel
 import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.utils.formatStorageSize

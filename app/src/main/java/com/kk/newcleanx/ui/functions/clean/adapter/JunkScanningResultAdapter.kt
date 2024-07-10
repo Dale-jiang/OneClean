@@ -1,4 +1,4 @@
-package com.kk.newcleanx.ui.clean.adapter
+package com.kk.newcleanx.ui.functions.clean.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
