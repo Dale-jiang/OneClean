@@ -17,3 +17,5 @@ val main_list_data = arrayListOf(
 enum class JunkType() {
     LOG_FILES(), TEMP_FILES(), APP_CACHE(), AD_JUNK(), APK_FILES()
 }
+
+val junkDataList = mutableListOf<JunkDetailsType>()

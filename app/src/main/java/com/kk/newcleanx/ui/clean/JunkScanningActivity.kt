@@ -7,13 +7,14 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkType
+import com.kk.newcleanx.data.local.junkDataList
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.clean.vm.JunkScanningViewModel
@@ -96,8 +97,17 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
                 binding.tvTip.text = getString(R.string.string_junk)
                 isCompleted = true
                 setStopAnim()
+                viewModel.createJunkDataList()
             }
 
+            createJunkDataListObserver.observe(this@JunkScanningActivity) {
+
+                if (it) {
+                    Toast.makeText(this@JunkScanningActivity, "next${junkDataList.size}", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@JunkScanningActivity, "无数据", Toast.LENGTH_LONG).show()
+                }
+            }
 
         }
 

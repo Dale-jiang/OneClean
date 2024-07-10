@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kk.newcleanx.data.local.JunkDetails
+import com.kk.newcleanx.data.local.JunkDetailsParent
+import com.kk.newcleanx.data.local.JunkDetailsType
 import com.kk.newcleanx.data.local.JunkType
+import com.kk.newcleanx.data.local.junkDataList
 import com.kk.newcleanx.utils.CommonUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,6 +39,7 @@ class JunkScanningViewModel : ViewModel() {
     val pathChaneObserver = MutableLiveData<String>()
     val scanningCompletedObserver = MutableLiveData<Boolean>()
     val itemChaneObserver = MutableLiveData<JunkDetails>()
+    val createJunkDataListObserver = MutableLiveData<Boolean>()
 
     fun getAllJunk() {
         scanningJob?.cancel()
@@ -196,6 +200,90 @@ class JunkScanningViewModel : ViewModel() {
     private suspend fun createADJunkFilter() = withContext(Dispatchers.IO + SupervisorJob()) {
         aDJunkFiles.forEach { aDJunkFilters.add(CommonUtils.getFileJunkRegex(it)) }
         aDJunkFolders.forEach { aDJunkFilters.add(CommonUtils.getFolderJunkRegex(it)) }
+    }
+
+    fun createJunkDataList() {
+
+        if (junkDetailsList.isEmpty()) {
+            createJunkDataListObserver.postValue(false)
+        } else {
+
+            viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
+
+                junkDataList.clear()
+
+                val task1 = async {
+                    withContext(Dispatchers.IO) {
+                        val tempCacheList = mutableListOf<JunkDetailsType>()
+                        val cacheList = junkDetailsList.filter { it.junkType == JunkType.APP_CACHE }.toMutableList()
+                        if (cacheList.isNotEmpty()) {
+                            tempCacheList.add(JunkDetailsParent(cacheList, false, cacheList.sumOf { it.fileSize }, JunkType.APP_CACHE, true))
+                            tempCacheList.addAll(cacheList)
+                        }
+                        tempCacheList
+                    }
+                }
+
+                val task2 = async {
+                    withContext(Dispatchers.IO) {
+                        val tempList = mutableListOf<JunkDetailsType>()
+                        val apkList = junkDetailsList.filter { it.junkType == JunkType.APK_FILES }.toMutableList()
+                        if (apkList.isNotEmpty()) {
+                            tempList.add(JunkDetailsParent(apkList, false, apkList.sumOf { it.fileSize }, JunkType.APK_FILES, true))
+                            tempList.addAll(apkList)
+                        }
+                        tempList
+                    }
+                }
+
+                val task3 = async {
+                    withContext(Dispatchers.IO) {
+                        val tempList = mutableListOf<JunkDetailsType>()
+                        val logList = junkDetailsList.filter { it.junkType == JunkType.LOG_FILES }.toMutableList()
+                        if (logList.isNotEmpty()) {
+                            tempList.add(JunkDetailsParent(logList, false, logList.sumOf { it.fileSize }, JunkType.LOG_FILES, true))
+                            tempList.addAll(logList)
+                        }
+                        tempList
+                    }
+                }
+
+                val task4 = async {
+                    withContext(Dispatchers.IO) {
+                        val tempList = mutableListOf<JunkDetailsType>()
+                        val adList = junkDetailsList.filter { it.junkType == JunkType.AD_JUNK }.toMutableList()
+                        if (adList.isNotEmpty()) {
+                            tempList.add(JunkDetailsParent(adList, false, adList.sumOf { it.fileSize }, JunkType.AD_JUNK, true))
+                            tempList.addAll(adList)
+                        }
+                        tempList
+                    }
+                }
+
+                val task5 = async {
+                    withContext(Dispatchers.IO) {
+                        val tempTempList = mutableListOf<JunkDetailsType>()
+                        val tempList = junkDetailsList.filter { it.junkType == JunkType.TEMP_FILES }.toMutableList()
+                        if (tempList.isNotEmpty()) {
+                            tempTempList.add(JunkDetailsParent(tempList, false, tempList.sumOf { it.fileSize }, JunkType.AD_JUNK, true))
+                            tempTempList.addAll(tempList)
+                        }
+                        tempTempList
+                    }
+                }
+
+                junkDataList.addAll(task1.await())
+                junkDataList.addAll(task2.await())
+                junkDataList.addAll(task3.await())
+                junkDataList.addAll(task4.await())
+                junkDataList.addAll(task5.await())
+
+                withContext(Dispatchers.Main) {
+                    createJunkDataListObserver.postValue(true)
+                }
+            }
+        }
+
     }
 
 }
