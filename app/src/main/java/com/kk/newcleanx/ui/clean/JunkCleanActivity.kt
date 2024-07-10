@@ -14,6 +14,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.junkCleanTimeTag
 import com.kk.newcleanx.databinding.AcJunkCleanBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.clean.vm.JunkCleanViewModel
@@ -74,6 +75,7 @@ class JunkCleanActivity : BaseActivity<AcJunkCleanBinding>() {
                     tvFinished.isVisible = true
                     tvPercent.isVisible = false
                     toolbar.ivBack.isInvisible = true
+                    junkCleanTimeTag = System.currentTimeMillis()
                 }
             }
 

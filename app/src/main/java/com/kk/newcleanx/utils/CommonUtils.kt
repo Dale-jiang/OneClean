@@ -11,13 +11,18 @@ import android.os.storage.StorageManager
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.junkCleanTimeTag
 import java.io.File
 import java.util.LinkedList
 
 object CommonUtils {
 
 
-     fun getApkIcon(apkFilePath: String): Drawable? = let {
+    fun checkIfCanClean(): Boolean = let {
+        System.currentTimeMillis() - junkCleanTimeTag >= 2 * 60 * 1000
+    }
+
+    fun getApkIcon(apkFilePath: String): Drawable? = let {
         try {
             val packageManager = app.packageManager
             val packageInfo = packageManager.getPackageArchiveInfo(apkFilePath, PackageManager.GET_ACTIVITIES)
