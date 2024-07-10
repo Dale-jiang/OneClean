@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
@@ -20,6 +21,8 @@ import com.kk.newcleanx.ui.clean.vm.JunkScanningViewModel
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.startRotateAnim
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() {
 
@@ -100,13 +103,16 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
             }
 
             createJunkDataListObserver.observe(this@JunkScanningActivity) {
-
-                if (it) {
-                    JunkScanningResultActivity.start(this@JunkScanningActivity)
-                    finish()
-                } else { // TODO:  
-                    Toast.makeText(this@JunkScanningActivity, "无数据", Toast.LENGTH_LONG).show()
+                lifecycleScope.launch {
+                    while (binding.progressBar.progress < 100) delay(50L)
+                    if (it) {
+                        JunkScanningResultActivity.start(this@JunkScanningActivity)
+                        finish()
+                    } else { // TODO:
+                        Toast.makeText(this@JunkScanningActivity, "无数据", Toast.LENGTH_LONG).show()
+                    }
                 }
+
             }
 
         }
@@ -145,8 +151,8 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
 
     private fun startProgress() {
         val startTime = System.currentTimeMillis()
-        val maxTime = 10000L // 10 seconds
-        val progressUpdateInterval = 50L // 100 milliseconds
+        val maxTime = 10000L
+        val progressUpdateInterval = 50L
 
         handler.post(object : Runnable {
             override fun run() {
