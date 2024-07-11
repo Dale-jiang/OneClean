@@ -36,7 +36,7 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
             toolbar.tvTitle.text = getString(R.string.empty_folders)
             recyclerView.adapter = adapter
 
-            startProgress(minWaitTime = 3000L) {
+            startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
                     clLoading.isVisible = false
                     viewLottie.cancelAnimation()
