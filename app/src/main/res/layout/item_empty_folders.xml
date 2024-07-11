@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_item"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:fontFamily="@font/montserrat"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="5dp"
+        android:textColor="@color/color_7f868d"
+        android:textSize="11sp"
+        android:includeFontPadding="false"
+        app:layout_constraintEnd_toStartOf="@+id/itemSelect"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        tools:text="layout_constraintTop_toBottomOflayout_constraintTop_toBottomOflayout_constraintTop_toBottomOf" />
+
+    <View
+        android:id="@+id/bottomLine"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/shape_dash_line" />
+</androidx.appcompat.widget.LinearLayoutCompat>

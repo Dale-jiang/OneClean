@@ -13,23 +13,110 @@
         android:background="@drawable/shape_page_bg"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="153dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/white_point" />
-
     <include
         android:id="@+id/toolbar"
         layout="@layout/layout_toolbar" />
 
+
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_marginHorizontal="22dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/shape_alpha_fff_r85"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="125dp"
+        android:layout_height="107dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@mipmap/ic_folders" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/view_top"
+        app:layout_constraintStart_toStartOf="@+id/view_top"
+        app:layout_constraintTop_toTopOf="@+id/view_top">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:includeFontPadding="false"
+            android:text="0"
+            android:textColor="@color/color_ff0f3536"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:includeFontPadding="false"
+            android:text="@string/empty_folders"
+            android:textColor="@color/color_ff9ec3c4"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginBottom="35dp"
+        android:background="@drawable/shape_empty_folders_bg"
+        app:layout_constraintBottom_toTopOf="@+id/btn_clean"
+        app:layout_constraintTop_toBottomOf="@+id/view_top">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="20"
+            tools:listitem="@layout/item_empty_folders" />
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/btn_clean"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:layout_marginBottom="78dp"
+        android:background="@drawable/ripple_clean_continue_btn"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:minWidth="210dp"
+        android:text="@string/string_clean"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_loading"
-        android:background="@color/color_f2f6fc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:background="@color/color_f2f6fc"
+        android:visibility="visible"
+        tools:visibility="gone">
 
         <View
             android:layout_width="match_parent"

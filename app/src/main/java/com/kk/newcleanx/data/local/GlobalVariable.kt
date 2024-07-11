@@ -23,4 +23,5 @@ enum class CleanType() {
 }
 
 val junkDataList = mutableListOf<JunkDetailsType>()
+val emptyFoldersDataList = mutableListOf<String>()
 
