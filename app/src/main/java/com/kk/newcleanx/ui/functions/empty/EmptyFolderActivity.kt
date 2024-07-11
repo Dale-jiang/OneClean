@@ -67,6 +67,15 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
                 isCompleted = true
                 adapter.initData(emptyFoldersDataList)
                 binding.tvNum.text = "${emptyFoldersDataList.size}"
+                if (emptyFoldersDataList.size <= 0) {
+                    binding.ivEmpty.isVisible = true
+                    binding.btnClean.isEnabled = false
+                    binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
+                } else {
+                    binding.ivEmpty.isVisible = false
+                    binding.btnClean.isEnabled = true
+                    binding.btnClean.setBackgroundResource(R.drawable.ripple_clean_continue_btn)
+                }
             }
         }
     }

@@ -90,6 +90,14 @@
             tools:itemCount="20"
             tools:listitem="@layout/item_empty_folders" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_empty"
+            android:layout_width="147dp"
+            android:layout_height="108dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:srcCompat="@mipmap/ic_empty_folders_no_data" />
+
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
