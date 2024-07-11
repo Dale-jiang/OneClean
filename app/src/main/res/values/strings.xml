@@ -71,4 +71,5 @@
     <string name="string_full">Full</string>
     <string name="string_wireless">Wireless</string>
     <string name="not_plugged">Not Plugged</string>
+    <string name="big_files">Big Files</string>
 </resources>
