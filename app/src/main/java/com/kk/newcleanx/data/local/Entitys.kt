@@ -26,4 +26,4 @@ data class JunkDetailsParent(
 data class BigFileFilter(val nameId: Int, var select: Boolean = false)
 
 @Keep
-data class BigFile(val id: Long, val name: String, val path: String, val size: Long, val date: Long, val mimeType: String)
+data class BigFile(val id: Long, val name: String, val path: String, val size: Long, val date: Long, val mimeType: String, var select: Boolean = false)

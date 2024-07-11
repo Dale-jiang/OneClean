@@ -120,17 +120,24 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="47dp"
+            android:background="@color/color_f2f3f3" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="47dp"
+            android:layout_marginTop="48dp"
             android:clipToPadding="false"
             android:paddingBottom="75dp"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="20" />
+            tools:itemCount="20"
+            tools:listitem="@layout/item_big_file_clean" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_empty"

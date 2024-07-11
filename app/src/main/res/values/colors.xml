@@ -49,5 +49,8 @@
     <color name="color_ffab2c">#FFAB2C</color>
     <color name="color_30e18a">#30E18A</color>
     <color name="color_0f2336">#0F2336</color>
+    <color name="color_f2f3f3">#F2F3F3</color>
+    <color name="color_ff0f2336">#FF0F2336</color>
+    <color name="color_adb2ba">#ADB2BA</color>
 
 </resources>
