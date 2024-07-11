@@ -56,8 +56,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
                 }
             }
 
-            isCompleted = true
-
+            viewModel.getAllBigFiles()
 
             layoutType.setOnClickListener {
                 if (typeFilter == 0) {
@@ -94,6 +93,15 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
     }
 
     private fun initObserver() {
+
+        viewModel.apply {
+
+            completeObserver.observe(this@BigFileCleanActivity) {
+                isCompleted = true
+            }
+
+        }
+
 
     }
 
