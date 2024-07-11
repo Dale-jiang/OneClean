@@ -58,7 +58,9 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
             }
 
             btnContinue.setOnClickListener {
-                CleanResultActivity.start(this@JunkCleanActivity)
+                if (type != CleanType.BigFileType) {
+                    CleanResultActivity.start(this@JunkCleanActivity)
+                }
                 finish()
             }
 
@@ -67,13 +69,22 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
                 binding.tvPercent.text = "${mProgress}%"
             }
 
-            // TODO:
-            if (type == CleanType.JunkType) {
-                tvTip.text = getString(R.string.junk_cleaning)
-                viewModel.cleanJunk()
-            } else if (type == CleanType.EmptyFolderType) {
-                tvTip.text = getString(R.string.empty_folders_cleaning)
-                viewModel.cleanEmptyFolders()
+            when (type) {
+                CleanType.JunkType -> {
+                    tvTip.text = getString(R.string.junk_cleaning)
+                    viewModel.cleanJunk()
+                }
+
+                CleanType.EmptyFolderType -> {
+                    tvTip.text = getString(R.string.empty_folders_cleaning)
+                    viewModel.cleanEmptyFolders()
+                }
+
+                CleanType.BigFileType -> {
+                    viewModel.cleanBigFiles()
+                }
+
+                else -> {}
             }
 
             viewModel.completeObserver.observe(this@JunkCleanActivity) {
@@ -91,7 +102,9 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
                     tvFinished.isVisible = true
                     tvPercent.isVisible = false
                     toolbar.ivBack.isInvisible = true
-                    junkCleanTimeTag = System.currentTimeMillis()
+                    if (type == CleanType.JunkType) {
+                        junkCleanTimeTag = System.currentTimeMillis()
+                    }
                 }
             }
 

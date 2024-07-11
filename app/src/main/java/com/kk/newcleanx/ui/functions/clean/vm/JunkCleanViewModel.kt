@@ -3,6 +3,7 @@ package com.kk.newcleanx.ui.functions.clean.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kk.newcleanx.data.local.JunkDetails
+import com.kk.newcleanx.data.local.allBigFiles
 import com.kk.newcleanx.data.local.emptyFoldersDataList
 import com.kk.newcleanx.data.local.junkDataList
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +33,16 @@ class JunkCleanViewModel : ViewModel() {
             }
             completeObserver.postValue(true)
             emptyFoldersDataList.clear()
+        }
+    }
+
+    fun cleanBigFiles() {
+        CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
+            allBigFiles.forEach {
+                if (it.select) File(it.path).deleteRecursively()
+            }
+            completeObserver.postValue(true)
+            allBigFiles.removeIf { it.select }
         }
     }
 
