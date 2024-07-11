@@ -25,6 +25,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_filter"
             android:layout_width="match_parent"
             android:layout_height="47dp">
 
@@ -129,8 +130,7 @@
             android:paddingBottom="75dp"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="20"
-            tools:listitem="@layout/item_empty_folders" />
+            tools:itemCount="20" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_empty"

@@ -72,4 +72,28 @@
     <string name="string_wireless">Wireless</string>
     <string name="not_plugged">Not Plugged</string>
     <string name="big_files">Big Files</string>
+
+    <string name="big_file_all">All</string>
+    <string name="big_file_photo">Photo</string>
+    <string name="big_file_video">Video</string>
+    <string name="big_file_audio">Audio</string>
+    <string name="big_file_docs">Docs</string>
+    <string name="big_file_zip">Zip</string>
+    <string name="big_file_apk">Apk</string>
+    <string name="big_file_others">Others</string>
+
+    <string name="big_file_10">10MB</string>
+    <string name="big_file_50">50MB</string>
+    <string name="big_file_100">100MB</string>
+    <string name="big_file_500">500MB</string>
+    <string name="big_file_1000">1GB</string>
+
+    <string name="big_file_all_time">All Time</string>
+    <string name="big_file_one_week">One Week</string>
+    <string name="big_file_one_month">One Month</string>
+    <string name="big_file_three_month">Three Months</string>
+    <string name="big_file_six_month">Six Months</string>
+    <string name="big_file_one_year">One Year</string>
+
+
 </resources>
