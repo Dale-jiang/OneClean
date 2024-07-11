@@ -40,6 +40,7 @@
     <string name="screen_accuracy">Screen Accuracy</string>
     <string name="multi_touch">Multi Touch</string>
     <string name="string_support">Support</string>
+    <string name="string_no_support">Not Support</string>
     <string name="string_battery">Battery</string>
     <string name="health_status">Health Status</string>
     <string name="current_capacity">Current Capacity</string>
@@ -57,4 +58,6 @@
     <string name="light_sensor">Light Sensor</string>
     <string name="distance_sensor">Distance Sensor</string>
     <string name="temperature_sensor">Temperature Sensor</string>
+    <string name="string_storage_size">Storage: %1$s/%2$s</string>
+    <string name="string_memory_size">Memory: %1$s/%2$s</string>
 </resources>

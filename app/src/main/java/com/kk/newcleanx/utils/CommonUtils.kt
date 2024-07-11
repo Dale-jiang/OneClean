@@ -1,5 +1,7 @@
 package com.kk.newcleanx.utils
 
+import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.usage.StorageStatsManager
 import android.content.Context
 import android.content.pm.PackageManager
@@ -17,6 +19,16 @@ import java.util.LinkedList
 
 object CommonUtils {
 
+    @SuppressLint("PrivateApi")
+    fun getTotalCapacity(context: Context): Double = let {
+        val profileClazz = "com.android.internal.os.PowerProfile"
+        try {
+            val mPowerProfile = Class.forName(profileClazz).getConstructor(Context::class.java).newInstance(context)
+            Class.forName(profileClazz).getMethod("getBatteryCapacity").invoke(mPowerProfile) as Double
+        } catch (e: Exception) {
+            0.0
+        }
+    }
 
     fun checkIfCanClean(): Boolean = let {
         System.currentTimeMillis() - junkCleanTimeTag >= 2 * 60 * 1000
@@ -63,6 +75,15 @@ object CommonUtils {
         ".+" + file.replace(".", "\\.") + "$"
     }
 
+    fun getTotalRamMemory(): Pair<Long, Long> = let {
+        val activityManager = app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memoryInfo)
+        val totalMemory = memoryInfo.totalMem
+        val availMemory = memoryInfo.availMem
+        val usedMemory = totalMemory - availMemory
+        (totalMemory to usedMemory)
+    }
 
     fun getTotalStorageByManager(): Long = let {
         try {

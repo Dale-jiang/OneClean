@@ -183,7 +183,6 @@
                     android:layout_marginTop="4dp"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="50"
                     app:indicatorColor="@color/color_4b88ff"
                     app:layout_constrainedWidth="true"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -192,7 +191,8 @@
                     app:layout_constraintWidth_percent="0.6"
                     app:trackColor="@color/color_f1f6f8"
                     app:trackCornerRadius="5dp"
-                    app:trackThickness="8dp" />
+                    app:trackThickness="8dp"
+                    tools:progress="50" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -206,6 +206,7 @@
                         app:srcCompat="@drawable/arm_memory" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_ram"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -227,7 +228,6 @@
                     android:layout_marginTop="4dp"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="50"
                     app:indicatorColor="@color/color_ffab2c"
                     app:layout_constrainedWidth="true"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -236,7 +236,8 @@
                     app:layout_constraintWidth_percent="0.6"
                     app:trackColor="@color/color_f1f6f8"
                     app:trackCornerRadius="5dp"
-                    app:trackThickness="8dp" />
+                    app:trackThickness="8dp"
+                    tools:progress="50" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
