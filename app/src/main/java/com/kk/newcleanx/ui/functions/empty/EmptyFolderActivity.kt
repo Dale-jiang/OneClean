@@ -7,9 +7,11 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.emptyFoldersDataList
 import com.kk.newcleanx.databinding.AcEmptyFolderBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
+import com.kk.newcleanx.ui.common.JunkCleanActivity
 import com.kk.newcleanx.ui.functions.empty.adapter.EmptyFoldersListAdapter
 import com.kk.newcleanx.ui.functions.empty.vm.EmptyFolderViewModel
 
@@ -45,7 +47,8 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
             viewModel.getEmptyFoldersList()
 
             btnClean.setOnClickListener {
-
+                JunkCleanActivity.start(this@EmptyFolderActivity, CleanType.EmptyFolderType)
+                finish()
             }
 
             toolbar.ivBack.setOnClickListener {

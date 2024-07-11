@@ -44,7 +44,7 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
         super.onCreate(savedInstanceState)
         binding.apply {
 
-            val type = intent?.getSerializableExtra("myEnum") as? CleanType
+            val type = intent?.getSerializableExtra(INTENT_KEY) as? CleanType
 
             toolbar.tvTitle.text = ""
             toolbar.ivBack.setOnClickListener {
@@ -69,7 +69,11 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
             // TODO:
             if (type == CleanType.JunkType) {
+                tvTip.text = getString(R.string.junk_cleaning)
                 viewModel.cleanJunk()
+            } else if (type == CleanType.EmptyFolderType) {
+                tvTip.text = getString(R.string.empty_folders_cleaning)
+                viewModel.cleanEmptyFolders()
             }
 
             viewModel.completeObserver.observe(this@JunkCleanActivity) {

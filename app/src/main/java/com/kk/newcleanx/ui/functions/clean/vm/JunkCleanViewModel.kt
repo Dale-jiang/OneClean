@@ -3,6 +3,7 @@ package com.kk.newcleanx.ui.functions.clean.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kk.newcleanx.data.local.JunkDetails
+import com.kk.newcleanx.data.local.emptyFoldersDataList
 import com.kk.newcleanx.data.local.junkDataList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,16 @@ class JunkCleanViewModel : ViewModel() {
             }
             completeObserver.postValue(true)
             junkDataList.clear()
+        }
+    }
+
+    fun cleanEmptyFolders() {
+        CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
+            emptyFoldersDataList.forEach {
+                File(it).deleteRecursively()
+            }
+            completeObserver.postValue(true)
+            emptyFoldersDataList.clear()
         }
     }
 
