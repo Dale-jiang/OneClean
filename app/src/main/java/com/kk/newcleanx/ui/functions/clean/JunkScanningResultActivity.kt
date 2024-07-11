@@ -8,10 +8,12 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.JunkDetails
 import com.kk.newcleanx.data.local.junkDataList
 import com.kk.newcleanx.databinding.AcJunkScanningResultBinding
 import com.kk.newcleanx.ui.base.BaseActivity
+import com.kk.newcleanx.ui.common.JunkCleanActivity
 import com.kk.newcleanx.ui.functions.clean.adapter.JunkScanningResultAdapter
 import com.kk.newcleanx.utils.formatStorageSize
 
@@ -49,7 +51,7 @@ class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
             onBackPressedDispatcher.addCallback { finish() }
 
             btnClean.setOnClickListener {
-                JunkCleanActivity.start(this@JunkScanningResultActivity)
+                JunkCleanActivity.start(this@JunkScanningResultActivity, CleanType.JunkType)
                 finish()
             }
 

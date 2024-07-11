@@ -64,7 +64,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.kk.newcleanx.ui.functions.clean.JunkCleanActivity"
+            android:name="com.kk.newcleanx.ui.common.JunkCleanActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 

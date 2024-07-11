@@ -1,4 +1,4 @@
-package com.kk.newcleanx.ui.functions.clean
+package com.kk.newcleanx.ui.common
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,20 +11,24 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.CleanType
+import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.data.local.junkCleanTimeTag
 import com.kk.newcleanx.databinding.AcJunkCleanBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.ui.functions.clean.vm.JunkCleanViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, JunkCleanActivity::class.java))
+        fun start(context: Context, type: CleanType) {
+            context.startActivity(Intent(context, JunkCleanActivity::class.java).apply {
+                putExtra(INTENT_KEY, type)
+            })
         }
     }
 
@@ -39,6 +43,8 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
+
+            val type = intent?.getSerializableExtra("myEnum") as? CleanType
 
             toolbar.tvTitle.text = ""
             toolbar.ivBack.setOnClickListener {
@@ -61,7 +67,10 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
                 binding.tvPercent.text = "${mProgress}%"
             }
 
-            viewModel.cleanJunk()
+            // TODO:
+            if (type == CleanType.JunkType) {
+                viewModel.cleanJunk()
+            }
 
             viewModel.completeObserver.observe(this@JunkCleanActivity) {
                 lifecycleScope.launch {

@@ -18,4 +18,9 @@ enum class JunkType() {
     LOG_FILES(), TEMP_FILES(), APP_CACHE(), AD_JUNK(), APK_FILES()
 }
 
+enum class CleanType() {
+    JunkType(), EmptyFolderType(), BigFileType()
+}
+
 val junkDataList = mutableListOf<JunkDetailsType>()
+
