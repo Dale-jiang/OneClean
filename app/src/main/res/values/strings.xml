@@ -60,4 +60,15 @@
     <string name="temperature_sensor">Temperature Sensor</string>
     <string name="string_storage_size">Storage: %1$s/%2$s</string>
     <string name="string_memory_size">Memory: %1$s/%2$s</string>
+    <string name="string_good">Good</string>
+    <string name="string_overheat">Overheat</string>
+    <string name="string_dead">Dead</string>
+    <string name="over_voltage">Over Voltage</string>
+    <string name="unspecified_failure">Unspecified Failure</string>
+    <string name="string_unknown">Unknown</string>
+    <string name="string_discharging">Discharging</string>
+    <string name="not_charging">Not Charging</string>
+    <string name="string_full">Full</string>
+    <string name="string_wireless">Wireless</string>
+    <string name="not_plugged">Not Plugged</string>
 </resources>

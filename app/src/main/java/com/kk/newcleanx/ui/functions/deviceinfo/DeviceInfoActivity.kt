@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
@@ -34,6 +36,8 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
         return binding.toolbar.root
     }
 
+    private val mSensorManager by lazy { app.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
+    private val mWindowManager by lazy { app.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +54,9 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
             }
 
             btnClean.setOnClickListener {
-                JunkScanningActivity.start(this@DeviceInfoActivity)
+                requestAllFilePermission {
+                    if (it) JunkScanningActivity.start(this@DeviceInfoActivity)
+                }
             }
 
             toolbar.ivBack.setOnClickListener {
@@ -67,6 +73,7 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
         setMemoryInfo()
         setScreenInfo()
         setBatteryInfo()
+        setSensorInf()
         isCompleted = true
     }
 
@@ -91,9 +98,7 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
     @SuppressLint("SetTextI18n")
     private fun setScreenInfo() {
         runCatching {
-
-            val windowManager = app.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val display = windowManager.defaultDisplay
+            val display = mWindowManager.defaultDisplay
             val metrics = DisplayMetrics()
             display.getRealMetrics(metrics)
 
@@ -126,27 +131,27 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
                         val currentCapacity = level / scale.toFloat()
 
                         val healthStatus = when (health) {
-                            BatteryManager.BATTERY_HEALTH_GOOD -> "Good"
-                            BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Overheat"
-                            BatteryManager.BATTERY_HEALTH_DEAD -> "Dead"
-                            BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "Over Voltage"
-                            BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> "Unspecified Failure"
-                            else -> "Unknown"
+                            BatteryManager.BATTERY_HEALTH_GOOD -> getString(R.string.string_good)
+                            BatteryManager.BATTERY_HEALTH_OVERHEAT -> getString(R.string.string_overheat)
+                            BatteryManager.BATTERY_HEALTH_DEAD -> getString(R.string.string_dead)
+                            BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> getString(R.string.over_voltage)
+                            BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> getString(R.string.unspecified_failure)
+                            else -> getString(R.string.string_unknown)
                         }
 
 
                         val batteryStatus = when (status) {
                             BatteryManager.BATTERY_STATUS_CHARGING -> getString(R.string.str_charging)
-                            BatteryManager.BATTERY_STATUS_DISCHARGING -> "Discharging"
-                            BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "Not Charging"
-                            BatteryManager.BATTERY_STATUS_FULL -> "Full"
-                            else -> "Unknown"
+                            BatteryManager.BATTERY_STATUS_DISCHARGING -> getString(R.string.string_discharging)
+                            BatteryManager.BATTERY_STATUS_NOT_CHARGING -> getString(R.string.not_charging)
+                            BatteryManager.BATTERY_STATUS_FULL -> getString(R.string.string_full)
+                            else -> getString(R.string.string_unknown)
                         }
                         val chargePlug = when (plugged) {
                             BatteryManager.BATTERY_PLUGGED_AC -> "AC"
                             BatteryManager.BATTERY_PLUGGED_USB -> "USB"
-                            BatteryManager.BATTERY_PLUGGED_WIRELESS -> "Wireless"
-                            else -> "Not Plugged"
+                            BatteryManager.BATTERY_PLUGGED_WIRELESS -> getString(R.string.string_wireless)
+                            else -> getString(R.string.not_plugged)
                         }
 
                         binding.apply {
@@ -168,5 +173,27 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
         registerReceiver(batteryStatusReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
     }
 
+    private fun setSensorInf() {
+        binding.apply {
+            runCatching {
+                val accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+                val magneticField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null
+                val orientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION) != null
+                val gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null
+                val light = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null
+                val proximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY) != null
+                val temperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) != null
+
+                tvAccelerationSensor.text = if (accelerometer) getString(R.string.string_support) else getString(R.string.string_no_support)
+                tvMagneticFieldSensor.text = if (magneticField) getString(R.string.string_support) else getString(R.string.string_no_support)
+                tvOrientationSensor.text = if (orientation) getString(R.string.string_support) else getString(R.string.string_no_support)
+                tvGyroSensor.text = if (gyroscope) getString(R.string.string_support) else getString(R.string.string_no_support)
+                tvLightSensor.text = if (light) getString(R.string.string_support) else getString(R.string.string_no_support)
+                tvDistanceSensor.text = if (proximity) getString(R.string.string_support) else getString(R.string.string_no_support)
+                tvTemperatureSensor.text = if (temperature) getString(R.string.string_support) else getString(R.string.string_no_support)
+
+            }
+        }
+    }
 
 }
