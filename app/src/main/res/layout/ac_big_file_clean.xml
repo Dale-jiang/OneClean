@@ -154,7 +154,7 @@
         android:layout_width="wrap_content"
         android:layout_height="49dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/ripple_clean_continue_btn"
+        android:background="@drawable/shape_d9d9d9_r24"
         android:fontFamily="@font/montserrat"
         android:gravity="center"
         android:minWidth="210dp"

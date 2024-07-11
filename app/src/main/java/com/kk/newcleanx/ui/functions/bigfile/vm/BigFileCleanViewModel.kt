@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -48,9 +49,10 @@ class BigFileCleanViewModel : ViewModel() {
             MediaStore.Files.FileColumns.MIME_TYPE
         )
 
-        val selection = "${MediaStore.Images.Media.SIZE} >= ?" // val sortOrder = "${MediaStore.Files.FileColumns.SIZE} DESC"
-        val selectionArgs = arrayOf((10 * 10000 * 10000).toString())
-        val cursor: Cursor? = resolver.query(uri, projection, selection, selectionArgs, null)
+        val selection = "${MediaStore.Images.Media.SIZE} >= ?"
+        val sortOrder = "${MediaStore.Files.FileColumns.SIZE} DESC"
+        val selectionArgs = arrayOf((10 * 1000 * 1000).toString())
+        val cursor: Cursor? = resolver.query(uri, projection, selection, selectionArgs, sortOrder)
 
         cursor?.use {
 
@@ -69,7 +71,7 @@ class BigFileCleanViewModel : ViewModel() {
 
                 if (File(path).exists()) {
                     val name = path.substring(path.lastIndexOf("/") + 1, path.length)
-                    allBigFiles.add(BigFile(id, name, path, size, date, mimeType))
+                    allBigFiles.add(BigFile(id, name, path, size, date * 1000, mimeType))
                 }
 
             }

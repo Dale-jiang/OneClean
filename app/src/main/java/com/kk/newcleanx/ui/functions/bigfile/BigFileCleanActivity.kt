@@ -1,5 +1,6 @@
 package com.kk.newcleanx.ui.functions.bigfile
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -14,13 +15,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.CleanType
+import com.kk.newcleanx.data.local.allBigFiles
 import com.kk.newcleanx.databinding.AcBigFileCleanBinding
 import com.kk.newcleanx.databinding.LayoutBigFileFilterBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.JunkCleanActivity
+import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileCleanAdapter
 import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileFilterAdapter
 import com.kk.newcleanx.ui.functions.bigfile.vm.BigFileCleanViewModel
-import com.kk.newcleanx.ui.functions.empty.adapter.EmptyFoldersListAdapter
+import com.kk.newcleanx.utils.formatStorageSize
 
 class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() {
     companion object {
@@ -36,13 +39,12 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
     private val viewModel by viewModels<BigFileCleanViewModel>()
     private var popupWindow: PopupWindow? = null
     private var typeFilter = -1
-    private val adapter by lazy {
-        EmptyFoldersListAdapter(this)
-    }
+    private var adapter: BigFileCleanAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initAdapter()
         viewModel.createFilterList()
 
         binding.apply {
@@ -92,12 +94,35 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
         initObserver()
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun initAdapter() {
+        adapter = BigFileCleanAdapter(this, click = {
+
+        }, change = {
+
+            val size = allBigFiles.filter { it.select }.sumOf { it.size }
+
+            if (size <= 0) {
+                binding.btnClean.isEnabled = false
+                binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
+                binding.btnClean.text = getString(R.string.string_clean)
+            } else {
+                binding.btnClean.isEnabled = true
+                binding.btnClean.setBackgroundResource(R.drawable.ripple_clean_continue_btn)
+                binding.btnClean.text = "${getString(R.string.string_clean)}(${size.formatStorageSize()})"
+            }
+
+        })
+        binding.recyclerView.adapter = adapter
+    }
+
     private fun initObserver() {
 
         viewModel.apply {
 
             completeObserver.observe(this@BigFileCleanActivity) {
                 isCompleted = true
+                adapter?.initData(allBigFiles)
             }
 
         }
