@@ -17,6 +17,7 @@ import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
+import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
@@ -56,7 +57,11 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             when (it.type) {
                 BIG_FILE_CLEAN -> {}
                 APP_MANAGER -> {}
-                DEVICE_STATUS -> {}
+
+                DEVICE_STATUS -> {
+                    DeviceInfoActivity.start(this)
+                }
+
                 EMPTY_FOLDER -> {
                     requestAllFilePermission { success ->
                         if (success) EmptyFolderActivity.start(this)
