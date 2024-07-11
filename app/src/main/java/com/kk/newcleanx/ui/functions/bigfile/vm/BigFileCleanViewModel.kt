@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,11 +12,17 @@ import com.kk.newcleanx.data.local.BigFile
 import com.kk.newcleanx.data.local.BigFileFilter
 import com.kk.newcleanx.data.local.allBigFiles
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.audioTypeList
+import com.kk.newcleanx.data.local.docsTypeList
+import com.kk.newcleanx.data.local.imageTypeList
+import com.kk.newcleanx.data.local.videoTypeList
+import com.kk.newcleanx.data.local.zipTypeList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.Locale
 
 class BigFileCleanViewModel : ViewModel() {
 
@@ -25,13 +30,77 @@ class BigFileCleanViewModel : ViewModel() {
     val sizeList = mutableListOf<BigFileFilter>()
     val timeList = mutableListOf<BigFileFilter>()
 
-    val completeObserver = MutableLiveData<Boolean>()
+    val completeObserver = MutableLiveData<MutableList<BigFile>>()
 
     fun getAllBigFiles() {
         viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
             allBigFiles.clear()
             queryFiles()
-            completeObserver.postValue(true)
+            filterBigFiles()
+        }
+    }
+
+    fun filterBigFiles() {
+        val resultList = mutableListOf<BigFile>()
+        allBigFiles.forEach {
+            it.select = false
+            if (getFileTypeByPosition(getFileType(it.name)) && getFileSizeByPosition(it) && getFileTimeByPosition(it)) {
+                resultList.add(it)
+            }
+        }
+        completeObserver.postValue(resultList)
+    }
+
+    private fun getFileType(fileName: String): String {
+        return if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+            fileName.substring(fileName.lastIndexOf(".") + 1).lowercase(Locale.getDefault())
+        } else {
+            ""
+        }
+    }
+
+    private fun getFileTypeByPosition(fileType: String): Boolean {
+        return when (typeList.indexOfFirst { it.select }) {
+            0 -> true
+            1 -> imageTypeList.contains(fileType)
+            2 -> videoTypeList.contains(fileType)
+            3 -> audioTypeList.contains(fileType)
+            4 -> docsTypeList.contains(fileType)
+            5 -> zipTypeList.contains(fileType)
+            6 -> {
+                "apk".equals(fileType, true) || "aab".equals(fileType, true)
+            }
+
+            7 -> {
+                !imageTypeList.contains(fileType) && !videoTypeList.contains(fileType) && !audioTypeList.contains(fileType) && !docsTypeList.contains(fileType) && !zipTypeList.contains(
+                    fileType
+                ) && !"apk".equals(fileType, true) && !"aab".equals(fileType, true)
+            }
+
+            else -> false
+        }
+    }
+
+    private fun getFileSizeByPosition(bigFile: BigFile): Boolean {
+        return when (sizeList.indexOfFirst { it.select }) {
+            0 -> bigFile.size > 10L * 1000 * 1000
+            1 -> bigFile.size > 50L * 1000 * 1000
+            2 -> bigFile.size > 100L * 1000 * 1000
+            3 -> bigFile.size > 500L * 1000 * 1000
+            4 -> bigFile.size > 1000L * 1000 * 1000
+            else -> false
+        }
+    }
+
+    private fun getFileTimeByPosition(bigFile: BigFile): Boolean {
+        return when (timeList.indexOfFirst { it.select }) {
+            0 -> true
+            1 -> System.currentTimeMillis() - bigFile.date > 604800000L
+            2 -> System.currentTimeMillis() - bigFile.date > 1814400000
+            3 -> System.currentTimeMillis() - bigFile.date > 7257600000L
+            4 -> System.currentTimeMillis() - bigFile.date > 14515200000L
+            5 -> System.currentTimeMillis() - bigFile.date > 31449600000L
+            else -> false
         }
     }
 

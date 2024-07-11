@@ -117,18 +117,20 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
     }
 
     private fun initObserver() {
-
         viewModel.apply {
-
             completeObserver.observe(this@BigFileCleanActivity) {
+
                 isCompleted = true
-                adapter?.initData(allBigFiles)
+
+                binding.btnClean.isEnabled = false
+                binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
+                binding.btnClean.text = getString(R.string.string_clean)
+
+                adapter?.initData(it)
             }
-
         }
-
-
     }
+
 
     private fun showPopWindow(type: Int) {
         typeFilter = type
@@ -154,7 +156,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
                         binding.tvTime.text = ContextCompat.getString(this@BigFileCleanActivity, it.nameId)
                     }
                 }
-
+                viewModel.filterBigFiles()
                 popupWindow?.dismiss()
                 typeFilter = -1
             }
