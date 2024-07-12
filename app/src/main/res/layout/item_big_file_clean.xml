@@ -7,11 +7,13 @@
     android:minHeight="73dp">
 
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/iv_item"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="4dp"
+        app:round="12dp"
         app:srcCompat="@drawable/item_big_file_clean_icon" />
 
     <androidx.appcompat.widget.LinearLayoutCompat

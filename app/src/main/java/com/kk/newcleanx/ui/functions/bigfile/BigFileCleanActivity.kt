@@ -118,7 +118,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
     private fun initAdapter() {
         adapter = BigFileCleanAdapter(this, click = {
 
-            CustomAlertDialog(this).showDialog(title = it.name,
+            CustomAlertDialog(this).showDialog(title = "${it.name}---${it.mimeType}",
                                                message = it.path,
                                                positiveButtonText = getString(R.string.string_ok),
                                                negativeButtonText = "",
@@ -155,7 +155,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
                 binding.btnClean.isEnabled = false
                 binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
                 binding.btnClean.text = getString(R.string.string_clean)
-
+                binding.ivEmpty.isVisible = it.isEmpty()
                 adapter?.initData(it)
             }
         }

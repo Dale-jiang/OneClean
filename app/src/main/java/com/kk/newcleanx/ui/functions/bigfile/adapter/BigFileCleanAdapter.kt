@@ -5,10 +5,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.BigFile
 import com.kk.newcleanx.databinding.ItemBigFileCleanBinding
 import com.kk.newcleanx.utils.formatStorageSize
+import java.io.File
 
 class BigFileCleanAdapter(private val context: Context, private val click: (BigFile) -> Unit, private val change: () -> Unit) :
     RecyclerView.Adapter<BigFileCleanAdapter.ViewHolder>() {
@@ -38,6 +40,12 @@ class BigFileCleanAdapter(private val context: Context, private val click: (BigF
             tvName.text = data.name
             tvSize.text = data.size.formatStorageSize()
             ivSelect.setImageResource(if (data.select) R.drawable.scanning_item_complete else R.drawable.scanning_item_unselect)
+
+            if (data.mimeType.startsWith("image/", true) || data.mimeType.startsWith("video/", true)) {
+                Glide.with(context).load(File(data.path)).centerCrop().placeholder(R.drawable.item_big_file_clean_icon).into(ivItem)
+            } else {
+                Glide.with(context).load(R.drawable.item_big_file_clean_icon).into(ivItem)
+            }
 
             ivSelect.setOnClickListener {
                 data.select = !data.select
