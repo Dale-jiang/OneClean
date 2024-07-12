@@ -13,6 +13,9 @@ import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcCleanResultBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
+import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
+import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
+import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 
 class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
 
@@ -39,10 +42,21 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
 
         adapter = MainListAdapter(this) {
             when (it.type) {
-                BIG_FILE_CLEAN -> {}
+                BIG_FILE_CLEAN -> {
+                    BigFileCleanActivity.start(this)
+                    finish()
+                }
+
                 APP_MANAGER -> {}
-                DEVICE_STATUS -> {}
-                EMPTY_FOLDER -> {}
+                DEVICE_STATUS -> {
+                    DeviceInfoActivity.start(this)
+                    finish()
+                }
+
+                EMPTY_FOLDER -> {
+                    EmptyFolderActivity.start(this)
+                    finish()
+                }
             }
         }
 

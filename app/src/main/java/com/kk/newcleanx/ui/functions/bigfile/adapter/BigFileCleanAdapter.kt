@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.BigFile
 import com.kk.newcleanx.databinding.ItemBigFileCleanBinding
+import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
 import java.io.File
 
@@ -43,6 +44,8 @@ class BigFileCleanAdapter(private val context: Context, private val click: (BigF
 
             if (data.mimeType.startsWith("image/", true) || data.mimeType.startsWith("video/", true)) {
                 Glide.with(context).load(File(data.path)).centerCrop().placeholder(R.drawable.item_big_file_clean_icon).into(ivItem)
+            } else if (data.mimeType.startsWith("application/", true)) {
+                Glide.with(context).load(CommonUtils.getApkIcon(data.path)).placeholder(R.drawable.item_big_file_clean_icon).into(ivItem)
             } else {
                 Glide.with(context).load(R.drawable.item_big_file_clean_icon).into(ivItem)
             }
