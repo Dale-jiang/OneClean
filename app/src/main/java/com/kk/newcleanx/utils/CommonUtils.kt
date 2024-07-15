@@ -15,9 +15,21 @@ import androidx.core.content.ContextCompat
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.junkCleanTimeTag
 import java.io.File
+import java.util.Calendar
 import java.util.LinkedList
 
 object CommonUtils {
+
+    fun isSameDay(time: Long): Boolean = let {
+        val date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+        return time >= date && time < date + 86400000
+    }
+
 
     @SuppressLint("PrivateApi")
     fun getTotalCapacity(context: Context): Double = let {
