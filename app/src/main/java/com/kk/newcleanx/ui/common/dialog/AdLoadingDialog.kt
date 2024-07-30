@@ -21,7 +21,7 @@ class AdLoadingDialog(private val context: Context) {
 
         dialog.show()
         dialog.window?.setLayout(
-            context.getScreenWidth() - 46.dp2px(), WindowManager.LayoutParams.WRAP_CONTENT
+            context.getScreenWidth() - 180.dp2px(), WindowManager.LayoutParams.WRAP_CONTENT
         )
 
         return dialog

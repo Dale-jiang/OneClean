@@ -80,7 +80,7 @@ sealed class AdType {
         private fun onAdClose(activity: BaseActivity<*>?, close: () -> Unit = {}) {
             activity?.apply {
                 activity.lifecycleScope.launch {
-                    while (!activity.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(300L)
+                    while (!activity.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(100L)
                     close.invoke()
                 }
             } ?: close.invoke()
