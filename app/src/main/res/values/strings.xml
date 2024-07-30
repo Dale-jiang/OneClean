@@ -95,6 +95,7 @@
     <string name="big_file_six_month">Six Months</string>
     <string name="big_file_one_year">One Year</string>
     <string name="delete_big_file_tip">Are you sure you want to delete the selected file? Cannot be restored after deletion!</string>
+    <string name="ads_loading">Ads loading...</string>
 
 
 </resources>

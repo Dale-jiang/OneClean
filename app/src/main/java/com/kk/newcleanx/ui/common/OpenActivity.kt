@@ -8,6 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
+import com.kk.newcleanx.ui.common.dialog.AdLoadingDialog
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
