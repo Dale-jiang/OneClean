@@ -8,7 +8,7 @@ import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.ui.base.BaseActivity
 import kotlinx.coroutines.launch
 
-class FullScreenAdLoader(val Iwhere: String) : BaseLoader(Iwhere) {
+class FullScreenAdLoader(iWhere: String) : BaseLoader(iWhere) {
 
     fun initData(list: MutableList<AdItemList.AdItem>?) {
         mAdItems.apply {

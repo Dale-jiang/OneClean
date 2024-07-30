@@ -17,6 +17,9 @@ object ADManager {
     private var displayMax = 0
     private var clickMax = 0
 
+
+    val fm_launch = FullScreenAdLoader("fm_launch")
+
     fun initData(json: String = LOCAL_AD_JSON) {
         runCatching {
             adItemList = gson.fromJson(json, AdItemList::class.java)
@@ -27,7 +30,11 @@ object ADManager {
     }
 
     private fun dispatcherData() {
-
+        runCatching {
+            adItemList?.apply {
+                fm_launch.initData(this.fmLaunch)
+            }
+        }
     }
 
 
@@ -54,6 +61,12 @@ object ADManager {
         val overDisplay = if (CommonUtils.isSameDay(adDisplayTime)) adDisplayCount >= displayMax else false
         val overClick = if (CommonUtils.isSameDay(adClickTime)) adClickCount >= clickMax else false
         (overDisplay || overClick)
+    }
+
+    fun notBlocked(): Boolean {
+
+        //todo
+        return true
     }
 
 

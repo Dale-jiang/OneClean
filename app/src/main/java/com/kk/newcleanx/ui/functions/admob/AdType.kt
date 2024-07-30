@@ -28,7 +28,7 @@ sealed class AdType {
     abstract fun destroy()
     abstract fun isAdExpire(): Boolean
     fun onPaidEventListener(adValue: AdValue, responseInfo: ResponseInfo?) {
-
+        Log.e("onPaidEventListener", "------>>>>onPaidEventListener")
     }
 
     data class FullScreenAd(val adLoadTime: Long = System.currentTimeMillis()) : AdType() {
@@ -60,9 +60,7 @@ sealed class AdType {
                     override fun onAdLoaded(interstitialAd: InterstitialAd) = kotlin.run {
                         mAd = interstitialAd
                         interstitialAd.setOnPaidEventListener {
-                            onPaidEventListener(
-                                it, interstitialAd.responseInfo
-                            )
+                            onPaidEventListener(it, interstitialAd.responseInfo)
                         }
                         onLoaded.invoke(true, "")
                     }
@@ -107,7 +105,7 @@ sealed class AdType {
 
                 override fun onAdShowedFullScreenContent() {
                     Log.e("FullScreenAd==>", "$where ${adItem?.adType} - ${adItem?.adId} show ad success")
-                    ADManager.addClick()
+                    ADManager.addDisplay()
                 }
             }
 

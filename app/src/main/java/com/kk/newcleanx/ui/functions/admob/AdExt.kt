@@ -21,7 +21,8 @@ fun Context.loaAd(i: Int, loader: BaseLoader) {
                             it.adItem = item
                             it.where = loader.where
                         }
-                    } // "nat" -> NativeAd(adImpl.adPosition, item)
+                    }
+                    // "nat" -> NativeAd(adImpl.adPosition, item)
                     else -> null
                 }
             }
