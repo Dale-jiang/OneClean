@@ -1,16 +1,14 @@
 package com.kk.newcleanx.ui.functions.admob
 
 import android.content.Context
+import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.data.local.AdItemList
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.ui.base.BaseActivity
-import com.kk.newcleanx.ui.common.dialog.AdLoadingDialog
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class FullScreenAdLoader(iWhere: String) : BaseLoader(iWhere) {
+class NativeAdLoader(iWhere: String) : BaseLoader(iWhere) {
+
     fun initData(list: MutableList<AdItemList.AdItem>?) {
         mAdItems.apply {
             clear()
@@ -39,30 +37,28 @@ class FullScreenAdLoader(iWhere: String) : BaseLoader(iWhere) {
         context.loaAd(0, this)
     }
 
-    fun showFullScreenAd(
-        activity: BaseActivity<*>, posId: String = where, onClose: () -> Unit = {}
+
+    fun showNativeAd(
+        activity: BaseActivity<*>, parent: ViewGroup, posId: String = where, callback: (AdType) -> Unit
     ) {
-        if (adLoadList.isEmpty()) {
-            onClose.invoke()
-            return
+        if (adLoadList.isEmpty()) return
+        val ad = adLoadList.removeFirstOrNull()
+
+        if (ad is AdType.MyNativeAd) {
+            ad.showAd(activity, parent)
+            callback.invoke(ad)
         }
-        runCatching {
-            activity.lifecycleScope.launch {
-                val ad = adLoadList.removeFirstOrNull()
-                if (ad is AdType.FullScreenAd) {
-                    val dialog = AdLoadingDialog(activity).showDialog()
-                    delay(800)
-                    dialog.dismiss()
-                    ad.showAd(activity, null, onClose)
-                } else {
-                    onClose.invoke()
-                    return@launch
-                }
-                onLoaded = {}
-                loadAd(activity)
-            }
-        }
+
+        onLoaded = {}
+        loadAd(activity)
     }
 
+    fun waitAdLoading(context: Context, onLoad: (Boolean) -> Unit = {}) {
+        if (adLoadList.isNotEmpty()) onLoad.invoke(true)
+        else {
+            onLoaded = onLoad
+            loadAd(context)
+        }
+    }
 
 }

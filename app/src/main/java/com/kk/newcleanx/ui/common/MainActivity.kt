@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,8 @@ import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
+import com.kk.newcleanx.ui.functions.admob.ADManager
+import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
@@ -37,6 +40,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initAdapter()
+        showMainNatAd()
         binding.btnScan.setOnClickListener {
             requestAllFilePermission {
                 if (it) {
@@ -142,6 +146,24 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
     }
 
+
+    private var ad: AdType? = null
+
+    private fun showMainNatAd() {
+
+        if (ADManager.isOverAdMax()) return
+        ADManager.fm_main_nat.waitAdLoading(this) {
+            lifecycleScope.launch {
+                while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+                if (ADManager.fm_main_nat.canShow(this@MainActivity)) {
+                    ad?.destroy()
+                    ADManager.fm_main_nat.showNativeAd(this@MainActivity, binding.adFr, "nat") {
+                        ad = it
+                    }
+                }
+            }
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

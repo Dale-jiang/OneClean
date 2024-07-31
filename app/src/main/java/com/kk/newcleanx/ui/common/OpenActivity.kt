@@ -35,6 +35,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         super.onCreate(savedInstanceState)
 
         ADManager.fm_launch.loadAd(this)
+        ADManager.fm_main_nat.loadAd(this)
 
         onBackPressedDispatcher.addCallback {}
 

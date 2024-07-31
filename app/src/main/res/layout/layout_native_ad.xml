@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nativeAdView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_fff_ffb649_r10"
+    android:padding="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="148dp"
+        android:layout_gravity="center_horizontal">
+
+        <com.google.android.gms.ads.nativead.MediaView
+            android:id="@+id/media"
+            android:layout_width="200dp"
+            android:layout_height="148dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icon"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/media"
+            app:layout_constraintTop_toTopOf="@+id/media"
+            tools:src="@mipmap/ic_launcher" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="@color/main_text_color"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/des"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/media"
+            app:layout_constraintTop_toBottomOf="@+id/icon"
+            tools:text="amazonamazonamazonamazonamazon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/des"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="18dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="@color/color_acbbbc"
+            android:textSize="11sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/actionBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/media"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="podcastspodcastspodcastspodcastspodcasts now streaming !" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginTop="9dp"
+            android:background="@drawable/shape_btn_gradient_bg_r8"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:minWidth="64dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/media"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/media"
+            tools:text="install" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tip"
+            android:layout_width="25dp"
+            android:layout_height="16dp"
+            android:background="@drawable/shape_ffb649_r2"
+            android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="AD"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.gms.ads.nativead.NativeAdView>

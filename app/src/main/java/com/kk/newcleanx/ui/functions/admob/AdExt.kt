@@ -16,14 +16,21 @@ fun Context.loaAd(i: Int, loader: BaseLoader) {
         val baseAd = when (item.adPlatform) {
             "admob" -> {
                 when (item.adType) {
+
                     "op", "int" -> {
                         AdType.FullScreenAd(System.currentTimeMillis()).also {
                             it.adItem = item
                             it.where = loader.where
                         }
                     }
-                    // "nat" -> NativeAd(adImpl.adPosition, item)
+
+                    "nat" -> AdType.MyNativeAd(System.currentTimeMillis()).also {
+                        it.adItem = item
+                        it.where = loader.where
+                    }
+
                     else -> null
+
                 }
             }
 

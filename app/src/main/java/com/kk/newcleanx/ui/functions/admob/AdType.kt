@@ -2,9 +2,14 @@ package com.kk.newcleanx.ui.functions.admob
 
 import android.content.Context
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -13,8 +18,11 @@ import com.google.android.gms.ads.ResponseInfo
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.kk.newcleanx.data.local.AdItemList
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.databinding.LayoutNativeAdBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,7 +32,7 @@ sealed class AdType {
     var where: String? = null
     var adItem: AdItemList.AdItem? = null
     abstract fun loadAd(context: Context, onLoaded: (success: Boolean, msg: String?) -> Unit)
-    abstract fun showAd(activity: BaseActivity<*>, onClose: () -> Unit = {})
+    abstract fun showAd(activity: BaseActivity<*>, parent: ViewGroup?, onClose: () -> Unit = {})
     abstract fun destroy()
     abstract fun isAdExpire(): Boolean
     fun onPaidEventListener(adValue: AdValue, responseInfo: ResponseInfo?) {
@@ -87,7 +95,7 @@ sealed class AdType {
         }
 
 
-        override fun showAd(activity: BaseActivity<*>, onClose: () -> Unit) {
+        override fun showAd(activity: BaseActivity<*>, parent: ViewGroup?, onClose: () -> Unit) {
 
             val admobCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
@@ -128,14 +136,77 @@ sealed class AdType {
             }
         }
 
-        override fun destroy() {
-        }
+        override fun destroy() = Unit
 
         override fun isAdExpire(): Boolean {
             if (adItem == null) return false
             return System.currentTimeMillis() - adLoadTime >= adItem!!.adExpireTime * 1000L
         }
 
+    }
+
+
+    data class MyNativeAd(val adLoadTime: Long = System.currentTimeMillis()) : AdType() {
+
+        private var mAdNative: NativeAd? = null
+
+        private val mAdRequest = AdRequest.Builder().build()
+
+
+        override fun loadAd(context: Context, onLoaded: (success: Boolean, msg: String?) -> Unit) {
+
+            Log.e("MyNativeAd==>", "${where} ${adItem?.adType} - ${adItem?.adId} start load ad")
+            adItem?.apply {
+                AdLoader.Builder(app, adId).apply {
+                    forNativeAd { ad ->
+                        mAdNative = ad
+                        ad.setOnPaidEventListener { onPaidEventListener(it, ad.responseInfo) }
+                        onLoaded.invoke(true, "")
+                    }
+                    withAdListener(object : AdListener() {
+                        override fun onAdFailedToLoad(e: LoadAdError) = onLoaded.invoke(false, e.message)
+                        override fun onAdClicked() {
+                            ADManager.addClick()
+                        }
+
+                    })
+                    withNativeAdOptions(NativeAdOptions.Builder().apply {
+                        setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_LEFT)
+                    }.build())
+
+                }.build().loadAd(mAdRequest)
+            }
+        }
+
+        override fun showAd(activity: BaseActivity<*>, parent: ViewGroup?, onClose: () -> Unit) {
+            runCatching {
+                mAdNative?.run {
+                    val binding = LayoutNativeAdBinding.inflate(LayoutInflater.from(activity), parent, false)
+                    binding.nativeAdView.let { adView ->
+                        adView.iconView = binding.icon.apply { setImageDrawable(this@run.icon?.drawable) }
+                        adView.mediaView = binding.media.apply { mediaContent = this@run.mediaContent }
+                        adView.mediaView?.setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                        adView.headlineView = binding.title.apply { text = this@run.headline ?: "" }
+                        adView.bodyView = binding.des.apply { text = this@run.body ?: "" }
+                        adView.callToActionView = binding.actionBtn.apply { text = this@run.callToAction ?: "" }
+                        adView.setNativeAd(this)
+                    }
+                    parent?.removeAllViews()
+                    parent?.addView(binding.root)
+                    ADManager.addDisplay()
+                    Log.e("MyNativeAd==>", "${where} ${adItem?.adType} - ${adItem?.adId} show success")
+                }
+            }
+        }
+
+        override fun destroy() {
+            mAdNative?.destroy()
+        }
+
+        override fun isAdExpire(): Boolean {
+            if (adItem == null) return false
+            return System.currentTimeMillis() - adLoadTime >= adItem!!.adExpireTime * 1000L
+        }
     }
 
 }

@@ -11,7 +11,7 @@ import com.kk.newcleanx.utils.CommonUtils
 
 object ADManager {
 
-    var adItemList: AdItemList? = null
+    private var adItemList: AdItemList? = null
     private val gson: Gson by lazy { Gson() }
 
     private var displayMax = 0
@@ -19,6 +19,7 @@ object ADManager {
 
 
     val fm_launch = FullScreenAdLoader("fm_launch")
+    val fm_main_nat = NativeAdLoader("fm_main_nat")
 
     fun initData(json: String = LOCAL_AD_JSON) {
         runCatching {
@@ -33,6 +34,7 @@ object ADManager {
         runCatching {
             adItemList?.apply {
                 fm_launch.initData(this.fmLaunch)
+                fm_main_nat.initData(this.fmMainNat)
             }
         }
     }
