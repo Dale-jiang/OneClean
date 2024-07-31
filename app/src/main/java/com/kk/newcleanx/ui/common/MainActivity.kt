@@ -40,6 +40,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initAdapter()
+        setStorageInfo()
         showMainNatAd()
         binding.ivSetting.setOnClickListener {
             SettingActivity.start(this)
@@ -103,24 +104,31 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     }
 
 
-    @SuppressLint("SetTextI18n")
     private fun startLoading() {
         loadingJob?.cancel()
         loadingJob = lifecycleScope.launch(Dispatchers.Main) {
             binding.apply {
-
-                val total = CommonUtils.getTotalStorageByManager()
-                val use = CommonUtils.getUsedStorageByManager()
-
-                totalStorage.text = "/${total.formatStorageSize()}"
-                usedStorage.text = use.formatStorageSize()
-                val usePercent = ((use / total.toFloat()) * 100).toInt()
-                percent.text = "${usePercent}%"
-
+                val usePercent = setStorageInfo()
                 progressBar.isIndeterminate = true
                 delay(1960L)
                 setCircleProgress(usePercent)
             }
+        }
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun setStorageInfo(): Int {
+        binding.apply {
+            val total = CommonUtils.getTotalStorageByManager()
+            val use = CommonUtils.getUsedStorageByManager()
+
+            totalStorage.text = "/${total.formatStorageSize()}"
+            usedStorage.text = use.formatStorageSize()
+            val usePercent = ((use / total.toFloat()) * 100).toInt()
+            percent.text = "${usePercent}%"
+
+            return usePercent
         }
     }
 
@@ -151,7 +159,6 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
 
     private var ad: AdType? = null
-
     private fun showMainNatAd() {
 
         if (ADManager.isOverAdMax()) return
