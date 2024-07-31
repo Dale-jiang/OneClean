@@ -41,6 +41,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         super.onCreate(savedInstanceState)
         initAdapter()
         showMainNatAd()
+        binding.ivSetting.setOnClickListener {
+            SettingActivity.start(this)
+        }
         binding.btnScan.setOnClickListener {
             requestAllFilePermission {
                 if (it) {

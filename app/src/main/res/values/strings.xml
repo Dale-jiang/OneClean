@@ -97,6 +97,9 @@
     <string name="delete_big_file_tip">Are you sure you want to delete the selected file? Cannot be restored after deletion!</string>
     <string name="ads_loading">Ads loading...</string>
     <string name="this_action_can_contain_ads">This action can contain ads...</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="user_agreement">User Agreement</string>
+    <string name="string_setting">Setting</string>
 
 
 </resources>
