@@ -12,6 +12,7 @@ import com.kk.newcleanx.databinding.AcAppManagerBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.functions.appmanager.adapter.AppManagerAdapter
 import com.kk.newcleanx.ui.functions.appmanager.vm.AppManagerViewModel
+import com.kk.newcleanx.utils.isPackageInstalled
 import com.kk.newcleanx.utils.openAppDetails
 
 
@@ -28,6 +29,8 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
 
     private val viewModel by viewModels<AppManagerViewModel>()
     private var adapter: AppManagerAdapter? = null
+    private var mIndex = -1
+    private var mPackageName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +60,10 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
     }
 
     private fun initAdapter() {
-        adapter = AppManagerAdapter(this) {
-            this.openAppDetails(it.appPackageName)
+        adapter = AppManagerAdapter(this) { data, index ->
+            mPackageName = data.appPackageName
+            mIndex = index
+            this.openAppDetails(data.appPackageName)
         }
         binding.recyclerView.adapter = adapter
     }
@@ -74,6 +79,19 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
     override fun onResume() {
         super.onResume()
         isToSettingPage = false
+        checkList()
+    }
+
+
+    private fun checkList() {
+        runCatching {
+            if (mPackageName.isNotEmpty() && mIndex != -1) {
+                if (!isPackageInstalled(mPackageName)) {
+                    adapter?.getDataList()?.removeAt(mIndex)
+                    adapter?.notifyItemChanged(mIndex)
+                }
+            }
+        }
     }
 
 }

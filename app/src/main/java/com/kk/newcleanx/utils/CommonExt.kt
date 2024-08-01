@@ -2,6 +2,7 @@ package com.kk.newcleanx.utils
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Point
 import android.net.Uri
@@ -77,5 +78,14 @@ fun Context.openAppDetails(packageName: String) = run {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         intent.data = Uri.parse("package:$packageName")
         startActivity(intent)
+    }
+}
+
+fun Context.isPackageInstalled(packageName: String): Boolean = run {
+    try {
+        app.packageManager.getPackageInfo(packageName, 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
     }
 }

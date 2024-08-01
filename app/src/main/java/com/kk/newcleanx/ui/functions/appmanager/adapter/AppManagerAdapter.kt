@@ -9,7 +9,8 @@ import com.bumptech.glide.Glide
 import com.kk.newcleanx.data.local.AppInfo
 import com.kk.newcleanx.databinding.ItemAppManagerBinding
 
-class AppManagerAdapter(private val context: Context, private val uninstallClick: (AppInfo) -> Unit) : RecyclerView.Adapter<AppManagerAdapter.ViewHolder>() {
+class AppManagerAdapter(private val context: Context, private val uninstallClick: (AppInfo, Int) -> Unit) :
+    RecyclerView.Adapter<AppManagerAdapter.ViewHolder>() {
 
     private var mList: MutableList<AppInfo> = mutableListOf()
 
@@ -18,6 +19,10 @@ class AppManagerAdapter(private val context: Context, private val uninstallClick
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
+    }
+
+    fun getDataList(): MutableList<AppInfo> {
+        return mList
     }
 
     inner class ViewHolder(val binding: ItemAppManagerBinding) : RecyclerView.ViewHolder(binding.root)
@@ -37,7 +42,7 @@ class AppManagerAdapter(private val context: Context, private val uninstallClick
             Glide.with(context).load(data.appIcon).into(ivItem)
 
             tvUninstall.setOnClickListener {
-                uninstallClick.invoke(data)
+                uninstallClick.invoke(data, holder.layoutPosition)
             }
 
             root.setOnClickListener {
