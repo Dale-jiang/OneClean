@@ -16,7 +16,7 @@ import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetailsType
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.data.local.app
-import com.kk.newcleanx.data.local.isToSettingPage
+import com.kk.newcleanx.data.local.isToSettings
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -74,7 +74,7 @@ fun JunkDetailsType.nameString() = run {
 
 fun Context.openAppDetails(packageName: String) = run {
     runCatching {
-        isToSettingPage = true
+        isToSettings = true
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         intent.data = Uri.parse("package:$packageName")
         startActivity(intent)

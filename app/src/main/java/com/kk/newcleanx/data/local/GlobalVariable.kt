@@ -5,7 +5,6 @@ import com.kk.newcleanx.R
 
 lateinit var app: MyAPP
 var isToSettings = false
-var isToSettingPage = false
 
 val main_list_data = arrayListOf(
     MainFunction(R.string.free_up_space, -1, ""),

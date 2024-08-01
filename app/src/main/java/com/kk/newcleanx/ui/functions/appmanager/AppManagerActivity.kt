@@ -7,7 +7,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.kk.newcleanx.R
-import com.kk.newcleanx.data.local.isToSettingPage
+import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.databinding.AcAppManagerBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.functions.appmanager.adapter.AppManagerAdapter
@@ -78,7 +78,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
 
     override fun onResume() {
         super.onResume()
-        isToSettingPage = false
+        isToSettings = false
         checkList()
     }
 
