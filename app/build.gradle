@@ -3,8 +3,20 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id 'stringfog'
     //id 'com.google.gms.google-services'
     //id 'com.google.firebase.crashlytics'
+}
+
+import com.github.megatronking.stringfog.plugin.StringFogMode
+import com.github.megatronking.stringfog.plugin.kg.RandomKeyGenerator
+
+stringfog {
+    implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
+    enable true
+    fogPackages = ['com.kk.newcleanx']
+    kg new RandomKeyGenerator()
+    mode StringFogMode.bytes
 }
 
 android {
@@ -79,6 +91,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     //lottie
     implementation 'com.airbnb.android:lottie:6.4.1'
+    // StringFog
+    implementation 'com.github.megatronking.stringfog:xor:5.0.0'
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
@@ -93,5 +107,10 @@ dependencies {
 
     implementation "com.android.installreferrer:installreferrer:2.2"
     implementation 'com.google.android.gms:play-services-ads-identifier:18.1.0'
+
+    // UMP https://developers.google.com/admob/android/privacy
+    implementation("com.google.android.ump:user-messaging-platform:3.0.0")
+    // facebook
+    implementation 'com.facebook.android:facebook-android-sdk:17.0.0'
 
 }

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">One Clean</string>
+
+    <string name="facebook_app_id" translatable="false">1111</string>
+    <string name="facebook_client_token" translatable="false">2222</string>
+
     <string name="this_action_may_contains_ads">this action may contains ads</string>
     <string name="string_ok">OK</string>
     <string name="string_cancel">Cancel</string>
