@@ -63,9 +63,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.fragment:fragment-ktx:1.8.1'
-    implementation "androidx.activity:activity-ktx:1.9.0"
-    def lifecycle_version = "2.8.3"
+    implementation 'androidx.fragment:fragment-ktx:1.8.2'
+    implementation "androidx.activity:activity-ktx:1.9.1"
+    def lifecycle_version = "2.8.4"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${lifecycle_version}"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle_version}"
@@ -78,10 +78,10 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     //lottie
-    implementation 'com.airbnb.android:lottie:6.4.0'
+    implementation 'com.airbnb.android:lottie:6.4.1'
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation "com.google.firebase:firebase-analytics"
     implementation "com.google.firebase:firebase-config"
     //implementation "com.google.firebase:firebase-crashlytics"
@@ -89,7 +89,7 @@ dependencies {
     //admob
     implementation("com.google.android.gms:play-services-ads:23.2.0")
     implementation 'com.google.ads.mediation:facebook:6.17.0.0'
-    implementation 'com.google.ads.mediation:pangle:6.0.0.8.0'
+    implementation 'com.google.ads.mediation:pangle:6.1.0.6.0'
 
     implementation "com.android.installreferrer:installreferrer:2.2"
     implementation 'com.google.android.gms:play-services-ads-identifier:18.1.0'

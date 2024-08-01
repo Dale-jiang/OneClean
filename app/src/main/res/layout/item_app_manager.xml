@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="68dp">
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/iv_item"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="4dp"
+        app:round="12dp"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="90dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:textColor="@color/color_0e1440"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="large file clean.doc" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_uninstall"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/shape_f49f51_r6"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:minWidth="72dp"
+        android:paddingHorizontal="7dp"
+        android:text="@string/string_uninstall"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/shape_dash_line" />
+
+
+</FrameLayout>

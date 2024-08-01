@@ -60,7 +60,6 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
 
         binding.apply {
             toolbar.tvTitle.text = getString(R.string.big_files)
-            recyclerView.adapter = adapter
 
             startProgress(minWaitTime = 0L) {
                 if (it >= 100) {

@@ -100,6 +100,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="user_agreement">User Agreement</string>
     <string name="string_setting">Setting</string>
+    <string name="string_uninstall">Uninstall</string>
 
 
 </resources>

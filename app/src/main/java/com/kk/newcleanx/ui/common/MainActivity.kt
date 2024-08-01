@@ -19,6 +19,7 @@ import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
+import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
@@ -70,7 +71,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                     }
                 }
 
-                APP_MANAGER -> {}
+                APP_MANAGER -> {
+                    AppManagerActivity.start(this)
+                }
 
                 DEVICE_STATUS -> {
                     DeviceInfoActivity.start(this)
