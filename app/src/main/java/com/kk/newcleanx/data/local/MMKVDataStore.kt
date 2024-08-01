@@ -38,7 +38,7 @@ class MMKVStorageDelegate<T>(private val defaultValue: T) {
     }
 }
 
-var isFirstStartup by MMKVStorageDelegate(false)
+var isFirstStartup by MMKVStorageDelegate(true)
 var alreadyRequestStoragePermissions by MMKVStorageDelegate(false)
 var junkCleanTimeTag by MMKVStorageDelegate(0L)
 var adDisplayTime by MMKVStorageDelegate(0L)
