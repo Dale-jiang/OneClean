@@ -35,7 +35,7 @@ class AppLifecycleHelper : Application.ActivityLifecycleCallbacks {
                 return
             }
             activity.startActivity(Intent(activity, OpenActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             })
         } else isToSettings = false
 
