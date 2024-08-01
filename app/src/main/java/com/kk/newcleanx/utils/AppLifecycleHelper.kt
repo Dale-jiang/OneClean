@@ -63,6 +63,9 @@ class AppLifecycleHelper : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityDestroyed(activity: Activity) {
+        synchronized(any) {
+            activityStack.remove(activity)
+        }
     }
 
 }
