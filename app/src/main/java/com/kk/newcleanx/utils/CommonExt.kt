@@ -1,8 +1,11 @@
 package com.kk.newcleanx.utils
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Point
+import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.Animation
@@ -12,6 +15,7 @@ import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetailsType
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.isToSettingPage
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -64,5 +68,14 @@ fun JunkDetailsType.nameString() = run {
         JunkType.TEMP_FILES -> runCatching { app.getString(R.string.temp_files) }.getOrNull() ?: ""
         JunkType.AD_JUNK -> runCatching { app.getString(R.string.ad_junk) }.getOrNull() ?: ""
         JunkType.APK_FILES -> runCatching { app.getString(R.string.apk_files) }.getOrNull() ?: ""
+    }
+}
+
+fun Context.openAppDetails(packageName: String) = run {
+    runCatching {
+        isToSettingPage = true
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.parse("package:$packageName")
+        startActivity(intent)
     }
 }

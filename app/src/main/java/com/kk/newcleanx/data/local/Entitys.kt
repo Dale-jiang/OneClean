@@ -1,9 +1,11 @@
 package com.kk.newcleanx.data.local
 
+import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 @Keep
 data class MainFunction(var title: Int = -1, var iconId: Int = -1, var type: String = "")
@@ -31,6 +33,8 @@ data class BigFileFilter(val nameId: Int, var select: Boolean = false)
 @Keep
 data class BigFile(val id: Long, val name: String, val path: String, val size: Long, val date: Long, val mimeType: String, var select: Boolean = false)
 
+@Keep
+data class AppInfo(var appIcon: Drawable? = null, var appName: String = "", var appPackageName: String = "") : Serializable
 
 @Keep
 data class AdItemList(

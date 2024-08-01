@@ -5,14 +5,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.kk.newcleanx.data.local.AppInfo
 import com.kk.newcleanx.databinding.ItemAppManagerBinding
 
-class AppManagerAdapter(private val context: Context, private val uninstallClick: (String) -> Unit) : RecyclerView.Adapter<AppManagerAdapter.ViewHolder>() {
+class AppManagerAdapter(private val context: Context, private val uninstallClick: (AppInfo) -> Unit) : RecyclerView.Adapter<AppManagerAdapter.ViewHolder>() {
 
-    private var mList: MutableList<String> = mutableListOf()
+    private var mList: MutableList<AppInfo> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun initData(list: MutableList<String>) {
+    fun initData(list: MutableList<AppInfo>) {
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
@@ -30,11 +32,12 @@ class AppManagerAdapter(private val context: Context, private val uninstallClick
     override fun onBindViewHolder(holder: AppManagerAdapter.ViewHolder, position: Int) {
         holder.binding.apply {
 
-//            val data = mList[holder.layoutPosition]
-//            tvName.text = data
+            val data = mList[holder.layoutPosition]
+            tvName.text = data.appName
+            Glide.with(context).load(data.appIcon).into(ivItem)
 
             tvUninstall.setOnClickListener {
-
+                uninstallClick.invoke(data)
             }
 
             root.setOnClickListener {
