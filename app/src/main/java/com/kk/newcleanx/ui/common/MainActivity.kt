@@ -59,6 +59,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             }
         }
 
+        requestAllFilePermission {}
+
     }
 
     private fun initAdapter() {

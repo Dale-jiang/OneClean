@@ -18,7 +18,7 @@ object CoroutineHelper {
     private val iOScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val mainScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    fun launchIO(block: suspend CoroutineScope.() -> Unit): Job {
+    fun launchIO(block: suspend () -> Unit): Job {
         return iOScope.launch(customIODispatcher) {
             try {
                 block()
@@ -28,7 +28,7 @@ object CoroutineHelper {
         }
     }
 
-    fun launchMain(block: suspend CoroutineScope.() -> Unit): Job {
+    fun launchMain(block: suspend () -> Unit): Job {
         return mainScope.launch {
             try {
                 block()
