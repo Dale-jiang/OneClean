@@ -48,6 +48,9 @@ class AppLifecycleHelper : Application.ActivityLifecycleCallbacks {
     override fun onActivityStopped(activity: Activity) {
         activityReferences--
         activityJob?.cancel()
+
+        if (isToSettings) return
+
         if (activityReferences <= 0) {
             activityJob = CoroutineHelper.launchIO {
                 delay(3000L)

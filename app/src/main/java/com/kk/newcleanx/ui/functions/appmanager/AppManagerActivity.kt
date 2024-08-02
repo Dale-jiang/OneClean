@@ -97,7 +97,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
             if (mPackageName.isNotEmpty() && mIndex != -1) {
                 if (!isPackageInstalled(mPackageName)) {
                     adapter?.getDataList()?.removeAt(mIndex)
-                    adapter?.notifyItemChanged(mIndex)
+                    adapter?.notifyItemRemoved(mIndex)
                 }
             }
         }
