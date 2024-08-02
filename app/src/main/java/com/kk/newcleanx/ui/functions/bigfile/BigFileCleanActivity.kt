@@ -13,6 +13,8 @@ import android.widget.PopupWindow
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.allBigFiles
@@ -21,10 +23,13 @@ import com.kk.newcleanx.databinding.LayoutBigFileFilterBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.JunkCleanActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
+import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileCleanAdapter
 import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileFilterAdapter
 import com.kk.newcleanx.ui.functions.bigfile.vm.BigFileCleanViewModel
 import com.kk.newcleanx.utils.formatStorageSize
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() {
     companion object {
@@ -61,10 +66,12 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
         binding.apply {
             toolbar.tvTitle.text = getString(R.string.big_files)
 
-            startProgress(minWaitTime = 0L) {
+            startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
-                    clLoading.isVisible = false
-                    viewLottie.cancelAnimation()
+                    showFullAd {
+                        clLoading.isVisible = false
+                        viewLottie.cancelAnimation()
+                    }
                 }
             }
 
@@ -156,6 +163,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
                 binding.btnClean.text = getString(R.string.string_clean)
                 binding.ivEmpty.isVisible = it.isEmpty()
                 adapter?.initData(it)
+
             }
         }
     }
@@ -214,5 +222,27 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
         }
     }
 
+    private fun showFullAd(b: () -> Unit) {
+
+        if (ADManager.isOverAdMax()) {
+            b.invoke()
+            return
+        }
+
+        // log : oc_scan_int
+
+        lifecycleScope.launch {
+            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+            if (ADManager.ocScanIntLoader.canShow(this@BigFileCleanActivity)) {
+                ADManager.ocScanIntLoader.showFullScreenAd(this@BigFileCleanActivity, "oc_scan_int") {
+                    b.invoke()
+                }
+            } else {
+                ADManager.ocScanIntLoader.loadAd(this@BigFileCleanActivity)
+                b.invoke()
+            }
+        }
+
+    }
 
 }

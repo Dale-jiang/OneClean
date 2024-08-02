@@ -42,7 +42,6 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         super.onCreate(savedInstanceState)
         initAdapter()
         setStorageInfo()
-        showMainNatAd()
         binding.ivSetting.setOnClickListener {
             SettingActivity.start(this)
         }
@@ -104,6 +103,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onResume() {
         super.onResume()
         startLoading()
+        showMainNatAd()
     }
 
 
