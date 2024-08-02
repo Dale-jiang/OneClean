@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkType
@@ -15,6 +16,7 @@ import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
+import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.clean.vm.JunkScanningViewModel
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.startRotateAnim
@@ -101,12 +103,14 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
             createJunkDataListObserver.observe(this@JunkScanningActivity) {
                 lifecycleScope.launch {
                     while (binding.progressBar.progress < 100) delay(50L)
-                    if (it) {
-                        JunkScanningResultActivity.start(this@JunkScanningActivity)
-                        finish()
-                    } else {
-                        CleanResultActivity.start(this@JunkScanningActivity)
-                        finish()
+                    showFullAd{
+                        if (it) {
+                            JunkScanningResultActivity.start(this@JunkScanningActivity)
+                            finish()
+                        } else {
+                            CleanResultActivity.start(this@JunkScanningActivity)
+                            finish()
+                        }
                     }
                 }
 
@@ -156,6 +160,30 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
                                                finish()
                                            },
                                            onNegativeButtonClick = {})
+    }
+
+
+    private fun showFullAd(b: () -> Unit) {
+
+        if (ADManager.isOverAdMax()) {
+            b.invoke()
+            return
+        }
+
+        // log : oc_scan_int
+
+        lifecycleScope.launch {
+            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+            if (ADManager.ocScanIntLoader.canShow(this@JunkScanningActivity)) {
+                ADManager.ocScanIntLoader.showFullScreenAd(this@JunkScanningActivity, "oc_scan_int") {
+                    b.invoke()
+                }
+            } else {
+                ADManager.ocScanIntLoader.loadAd(this@JunkScanningActivity)
+                b.invoke()
+            }
+        }
+
     }
 
     override fun onDestroy() {

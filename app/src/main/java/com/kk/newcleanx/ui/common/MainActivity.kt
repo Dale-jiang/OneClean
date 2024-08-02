@@ -185,6 +185,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
         loadingJob?.cancel()
         loadingJob = null
+
+        ad?.destroy()
     }
 
 }

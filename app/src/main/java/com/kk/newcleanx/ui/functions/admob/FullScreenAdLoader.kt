@@ -51,7 +51,7 @@ class FullScreenAdLoader(iWhere: String) : BaseLoader(iWhere) {
                 val ad = adLoadList.removeFirstOrNull()
                 if (ad is AdType.FullScreenAd) {
                     val dialog = AdLoadingDialog(activity).showDialog()
-                    delay(800)
+                    delay(1500)
                     dialog.dismiss()
                     ad.showAd(activity, null, onClose)
                 } else {
