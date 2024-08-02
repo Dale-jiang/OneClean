@@ -52,7 +52,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             ADManager.ocCleanIntLoader.loadAd(this@OpenActivity)
 
             ADManager.ocScanNatLoader.loadAd(this@OpenActivity)
-            ADManager.ocScanNatLoader.loadAd(this@OpenActivity)
+            ADManager.ocCleanNatLoader.loadAd(this@OpenActivity)
             ADManager.ocMainNatLoader.loadAd(this@OpenActivity)
         }
     }
