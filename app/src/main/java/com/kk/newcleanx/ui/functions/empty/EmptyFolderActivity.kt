@@ -59,6 +59,10 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
                 finish()
             }
 
+            ivScanBack.setOnClickListener {
+                finish()
+            }
+
             toolbar.ivBack.setOnClickListener {
                 if (clLoading.isVisible) return@setOnClickListener
                 finish()

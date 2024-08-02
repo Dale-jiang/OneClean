@@ -69,6 +69,10 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
                 }
             }
 
+            ivScanBack.setOnClickListener {
+                finish()
+            }
+
             toolbar.ivBack.setOnClickListener {
                 if (clLoading.isVisible) return@setOnClickListener
                 finish()
