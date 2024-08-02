@@ -46,8 +46,14 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
     private fun loadingAd() {
         lifecycleScope.launch {
-            ADManager.fm_launch.loadAd(this@OpenActivity)
-            ADManager.fm_main_nat.loadAd(this@OpenActivity)
+
+            ADManager.ocLaunchLoader.loadAd(this@OpenActivity)
+            ADManager.ocScanIntLoader.loadAd(this@OpenActivity)
+            ADManager.ocCleanIntLoader.loadAd(this@OpenActivity)
+
+            ADManager.ocScanNatLoader.loadAd(this@OpenActivity)
+            ADManager.ocScanNatLoader.loadAd(this@OpenActivity)
+            ADManager.ocMainNatLoader.loadAd(this@OpenActivity)
         }
     }
 
@@ -73,7 +79,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     }
 
     private fun checkCondition(): Boolean {
-        return ADManager.fm_launch.canShow(this)
+        return ADManager.ocLaunchLoader.canShow(this)
     }
 
 
@@ -85,12 +91,12 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         }
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-            if (ADManager.fm_launch.canShow(this@OpenActivity)) {
-                ADManager.fm_launch.showFullScreenAd(this@OpenActivity, "fm_scan_int") {
+            if (ADManager.ocLaunchLoader.canShow(this@OpenActivity)) {
+                ADManager.ocLaunchLoader.showFullScreenAd(this@OpenActivity, "fm_scan_int") {
                     b.invoke()
                 }
             } else {
-                ADManager.fm_launch.loadAd(this@OpenActivity)
+                ADManager.ocLaunchLoader.loadAd(this@OpenActivity)
                 b.invoke()
             }
         }

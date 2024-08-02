@@ -18,8 +18,12 @@ object ADManager {
     private var clickMax = 0
 
 
-    val fm_launch = FullScreenAdLoader("fm_launch")
-    val fm_main_nat = NativeAdLoader("fm_main_nat")
+    val ocLaunchLoader = FullScreenAdLoader("oc_launch")
+    val ocScanIntLoader = FullScreenAdLoader("oc_scan_int")
+    val ocCleanIntLoader = FullScreenAdLoader("oc_clean_int")
+    val ocScanNatLoader = NativeAdLoader("oc_scan_nat")
+    val ocCleanNatLoader = NativeAdLoader("oc_clean_nat")
+    val ocMainNatLoader = NativeAdLoader("oc_main_nat")
 
     fun initData(json: String = LOCAL_AD_JSON) {
         runCatching {
@@ -33,8 +37,12 @@ object ADManager {
     private fun dispatcherData() {
         runCatching {
             adItemList?.apply {
-                fm_launch.initData(this.fmLaunch)
-                fm_main_nat.initData(this.fmMainNat)
+                ocLaunchLoader.initData(this.ocLaunch)
+                ocScanIntLoader.initData(this.ocScanInt)
+                ocCleanIntLoader.initData(this.ocCleanInt)
+                ocScanNatLoader.initData(this.ocScanNat)
+                ocCleanNatLoader.initData(this.ocCleanNat)
+                ocMainNatLoader.initData(this.ocMainNat)
             }
         }
     }
@@ -65,10 +73,10 @@ object ADManager {
         (overDisplay || overClick)
     }
 
-    fun notBlocked(): Boolean {
+    fun isBlocked(): Boolean {
 
         //todo
-        return true
+        return false
     }
 
 

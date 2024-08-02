@@ -14,65 +14,60 @@ const val EMPTY_FOLDER = "empty_folder"
 
 const val LOCAL_AD_JSON = """
     {
-  "suhbs": 150,
-  "uzols": 30,
-  "fm_launch": [
+  "uzek": 70,
+  "xihe": 15,
+  "oc_launch": [
     {
-      "aoos": "ca-app-pub-3940256099942544/8691691433",
-      "aubs": "admob",
-      "appij": "int",
-      "ysbbk": 3000,
-      "ijskj": 3
+      "kdhi": "ca-app-pub-3940256099942544/9257395921",
+      "iegw": "admob",
+      "zirhh": "op",
+      "zpejh": 13800,
+      "lasha": 3
     }
   ],
-    "fm_back_scan_int": [
+    "oc_scan_int": [
     {
-      "aoos": "ca-app-pub-3940256099942544/8691691433AA",
-      "aubs": "admob",
-      "appij": "int",
-      "ysbbk": 3000,
-      "ijskj": 2
-    },    {
-      "aoos": "ca-app-pub-3940256099942544/8691691433AA",
-      "aubs": "admob",
-      "appij": "int",
-      "ysbbk": 3000,
-      "ijskj": 3
-    },
-
-    {
-      "aoos": "ca-app-pub-3940256099942544/8691691433",
-      "aubs": "admob",
-      "appij": "int",
-      "ysbbk": 3000,
-      "ijskj": 1
+      "kdhi": "ca-app-pub-3940256099942544/8691691433",
+      "iegw": "admob",
+      "zirhh": "int",
+      "zpejh": 3000,
+      "lasha": 3
     }
   ],
-    "fm_done_clean_int": [
+  "oc_clean_int": [
     {
-      "aoos": "ca-app-pub-3940256099942544/8691691433",
-      "aubs": "admob",
-      "appij": "int",
-      "ysbbk": 3000,
-      "ijskj": 3
-     }
+      "kdhi": "ca-app-pub-3940256099942544/8691691433",
+      "iegw": "admob",
+      "zirhh": "int",
+      "zpejh": 3000,
+      "lasha": 3
+    }
   ],
-  "fm_main_nat": [
+  "oc_scan_nat": [
     {
-      "aoos": "ca-app-pub-3940256099942544/1044960115",
-      "aubs": "admob",
-      "appij": "nat",
-      "ysbbk": 3000,
-      "ijskj": 3
-     }
+      "kdhi": "ca-app-pub-3940256099942544/1044960115",
+      "iegw": "admob",
+      "zirhh": "nat",
+      "zpejh": 3000,
+      "lasha": 3
+    }
   ],
-  "fm_done_clean_nat": [
+  "oc_clean_nat": [
     {
-      "aoos": "ca-app-pub-3940256099942544/2247696110",
-      "aubs": "admob",
-      "appij": "nat",
-      "ysbbk": 3000,
-      "ijskj": 3
+      "kdhi": "ca-app-pub-3940256099942544/1044960115",
+      "iegw": "admob",
+      "zirhh": "nat",
+      "zpejh": 3000,
+      "lasha": 3
+    }
+  ],
+  "oc_main_nat": [
+    {
+      "kdhi": "ca-app-pub-3940256099942544/1044960115",
+      "iegw": "admob",
+      "zirhh": "nat",
+      "zpejh": 3000,
+      "lasha": 3
     }
   ]
 }

@@ -7,6 +7,7 @@ import com.google.firebase.initialize
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.utils.AppLifecycleHelper
+import com.kk.newcleanx.utils.remoteconfig.RemoteConfigHelper
 import com.tencent.mmkv.MMKV
 
 class MyAPP:Application() {
@@ -18,7 +19,7 @@ class MyAPP:Application() {
         registerActivityLifecycleCallbacks(AppLifecycleHelper())
         Firebase.initialize(this)
         MobileAds.initialize(this)
-        ADManager.initData()
+        RemoteConfigHelper.init()
     }
 
 }

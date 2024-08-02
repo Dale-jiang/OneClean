@@ -165,12 +165,12 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     private fun showMainNatAd() {
 
         if (ADManager.isOverAdMax()) return
-        ADManager.fm_main_nat.waitAdLoading(this) {
+        ADManager.ocMainNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-                if (ADManager.fm_main_nat.canShow(this@MainActivity)) {
+                if (ADManager.ocMainNatLoader.canShow(this@MainActivity)) {
                     ad?.destroy()
-                    ADManager.fm_main_nat.showNativeAd(this@MainActivity, binding.adFr, "nat") {
+                    ADManager.ocMainNatLoader.showNativeAd(this@MainActivity, binding.adFr, "nat") {
                         ad = it
                     }
                 }

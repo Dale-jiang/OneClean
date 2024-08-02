@@ -38,28 +38,30 @@ data class AppInfo(var appIcon: Drawable? = null, var appName: String = "", var 
 
 @Keep
 data class AdItemList(
-    @SerializedName("suhbs") val displayMax: Int = 0,
+    @SerializedName("uzek") val displayMax: Int = 0,
 
-    @SerializedName("uzols") val clickMax: Int = 0,
+    @SerializedName("xihe") val clickMax: Int = 0,
 
-    @SerializedName("fm_launch") val fmLaunch: MutableList<AdItem>?,
+    @SerializedName("oc_launch") val ocLaunch: MutableList<AdItem>?,
 
-    @SerializedName("fm_done_clean_int") val fmDoneCleanInt: MutableList<AdItem>?,
+    @SerializedName("oc_scan_int") val ocScanInt: MutableList<AdItem>?,
 
-    @SerializedName("fm_main_nat") val fmMainNat: MutableList<AdItem>?,
+    @SerializedName("oc_clean_int") val ocCleanInt: MutableList<AdItem>?,
 
-    @SerializedName("fm_done_clean_nat") val fmDoneCleanNat: MutableList<AdItem>?,
+    @SerializedName("oc_scan_nat") val ocScanNat: MutableList<AdItem>?,
 
-    @SerializedName("fm_back_scan_int") val fmBackScanInt: MutableList<AdItem>?
+    @SerializedName("oc_clean_nat") val ocCleanNat: MutableList<AdItem>?,
+
+    @SerializedName("oc_main_nat") val ocMainNat: MutableList<AdItem>?
 ) {
     @Keep
     @Parcelize
     data class AdItem(
-        @SerializedName("aoos") val adId: String,
-        @SerializedName("aubs") val adPlatform: String,
-        @SerializedName("appij") val adType: String,
-        @SerializedName("ysbbk") val adExpireTime: Int,
-        @SerializedName("ijskj") val adWeight: Int
+        @SerializedName("kdhi") val adId: String,
+        @SerializedName("iegw") val adPlatform: String,
+        @SerializedName("zirhh") val adType: String,
+        @SerializedName("zpejh") val adExpireTime: Int,
+        @SerializedName("lasha") val adWeight: Int
     ) : Parcelable
 
 }
