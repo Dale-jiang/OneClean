@@ -15,13 +15,19 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.databinding.AcDeviceInfoBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
+import com.kk.newcleanx.ui.functions.admob.ADManager
+import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Suppress("DEPRECATION")
@@ -46,10 +52,14 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
 
             toolbar.tvTitle.text = getString(R.string.device_status)
 
+            showNatAd()
+
             startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
-                    clLoading.isVisible = false
-                    viewLottie.cancelAnimation()
+                    showFullAd {
+                        clLoading.isVisible = false
+                        viewLottie.cancelAnimation()
+                    }
                 }
             }
 
@@ -194,6 +204,55 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
 
             }
         }
+    }
+
+
+    private fun showFullAd(b: () -> Unit) {
+
+        if (ADManager.isOverAdMax()) {
+            b.invoke()
+            return
+        }
+
+        // log : oc_scan_int
+
+        lifecycleScope.launch {
+            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+            if (ADManager.ocScanIntLoader.canShow(this@DeviceInfoActivity)) {
+                ADManager.ocScanIntLoader.showFullScreenAd(this@DeviceInfoActivity, "oc_scan_int") {
+                    b.invoke()
+                }
+            } else {
+                ADManager.ocScanIntLoader.loadAd(this@DeviceInfoActivity)
+                b.invoke()
+            }
+        }
+    }
+
+    private var ad: AdType? = null
+    private fun showNatAd() {
+
+        if (ADManager.isOverAdMax()) {
+            binding.adFr.isVisible = false
+            return
+        }
+        ADManager.ocScanNatLoader.waitAdLoading(this) {
+            lifecycleScope.launch {
+                while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+                if (ADManager.ocScanNatLoader.canShow(this@DeviceInfoActivity)) {
+                    ad?.destroy()
+                    binding.adFr.isVisible = true
+                    ADManager.ocScanNatLoader.showNativeAd(this@DeviceInfoActivity, binding.adFr, "oc_scan_nat") {
+                        ad = it
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ad?.destroy()
     }
 
 }

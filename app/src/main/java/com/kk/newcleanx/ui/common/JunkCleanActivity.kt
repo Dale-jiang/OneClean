@@ -61,7 +61,7 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
             btnContinue.setOnClickListener {
                 if (type != CleanType.BigFileType) {
-                    CleanResultActivity.start(this@JunkCleanActivity)
+                    CleanResultActivity.start(this@JunkCleanActivity, type)
                 }
                 finish()
             }

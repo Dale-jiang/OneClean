@@ -133,7 +133,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
                 if (ADManager.ocScanNatLoader.canShow(this@AppManagerActivity)) {
                     ad?.destroy()
-                    ADManager.ocScanNatLoader.showNativeAd(this@AppManagerActivity, binding.adFr, "nat") {
+                    ADManager.ocScanNatLoader.showNativeAd(this@AppManagerActivity, binding.adFr, "oc_scan_nat") {
                         ad = it
                     }
                 }

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.databinding.AcJunkScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
@@ -103,12 +104,12 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
             createJunkDataListObserver.observe(this@JunkScanningActivity) {
                 lifecycleScope.launch {
                     while (binding.progressBar.progress < 100) delay(50L)
-                    showFullAd{
+                    showFullAd {
                         if (it) {
                             JunkScanningResultActivity.start(this@JunkScanningActivity)
                             finish()
                         } else {
-                            CleanResultActivity.start(this@JunkScanningActivity)
+                            CleanResultActivity.start(this@JunkScanningActivity, CleanType.JunkType)
                             finish()
                         }
                     }

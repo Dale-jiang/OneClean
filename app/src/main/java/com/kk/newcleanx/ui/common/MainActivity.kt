@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.APP_MANAGER
 import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
+import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
@@ -51,7 +52,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                     if (CommonUtils.checkIfCanClean()) {
                         JunkScanningActivity.start(this)
                     } else {
-                        CleanResultActivity.start(this)
+                        CleanResultActivity.start(this, CleanType.JunkType)
                     }
                 }
 
