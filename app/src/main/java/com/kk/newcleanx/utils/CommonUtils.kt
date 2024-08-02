@@ -10,13 +10,19 @@ import android.os.Build
 import android.os.Environment
 import android.os.StatFs
 import android.os.storage.StorageManager
+import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.distinctId
 import com.kk.newcleanx.data.local.junkCleanTimeTag
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.Calendar
 import java.util.LinkedList
+import java.util.UUID
 
 object CommonUtils {
 
@@ -146,4 +152,27 @@ object CommonUtils {
     private fun hasStorageAccess(): Boolean = let {
         storagePermissions.all { ContextCompat.checkSelfPermission(app, it) == PackageManager.PERMISSION_GRANTED }
     }
+
+    fun createDistinctId(): String = let {
+        var uuid = distinctId
+        if (uuid.isEmpty()) {
+            uuid = UUID.randomUUID().toString().replace("-", "")
+            distinctId = uuid
+        }
+        uuid
+    }
+
+    @SuppressLint("HardwareIds")
+    fun createAndroidId() = let {
+        val id = Settings.Secure.getString(app.contentResolver, Settings.Secure.ANDROID_ID)
+        if ("9774d56d682e549c" == id) return ""
+        id ?: ""
+    }
+
+    fun createHttpClient() = let {
+        OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
+        }).build()
+    }
+
 }

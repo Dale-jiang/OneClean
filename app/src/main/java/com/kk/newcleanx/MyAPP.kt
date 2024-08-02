@@ -5,12 +5,12 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
 import com.kk.newcleanx.data.local.app
-import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.utils.AppLifecycleHelper
 import com.kk.newcleanx.utils.remoteconfig.RemoteConfigHelper
+import com.kk.newcleanx.utils.tba.TbaHelper
 import com.tencent.mmkv.MMKV
 
-class MyAPP:Application() {
+class MyAPP : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -20,6 +20,7 @@ class MyAPP:Application() {
         Firebase.initialize(this)
         MobileAds.initialize(this)
         RemoteConfigHelper.init()
+        TbaHelper.getAllUserInfo()
     }
 
 }
