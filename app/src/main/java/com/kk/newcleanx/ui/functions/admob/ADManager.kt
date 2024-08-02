@@ -7,6 +7,8 @@ import com.kk.newcleanx.data.local.adClickCount
 import com.kk.newcleanx.data.local.adClickTime
 import com.kk.newcleanx.data.local.adDisplayCount
 import com.kk.newcleanx.data.local.adDisplayTime
+import com.kk.newcleanx.data.local.buyUserTags
+import com.kk.newcleanx.data.local.installReferrerStr
 import com.kk.newcleanx.utils.CommonUtils
 
 object ADManager {
@@ -74,10 +76,8 @@ object ADManager {
     }
 
     fun isBlocked(): Boolean {
-
-        //todo
-        return false
+        if (CommonUtils.isBlackUser()) return true
+        return !buyUserTags.any { installReferrerStr.contains(it, true) }
     }
-
 
 }

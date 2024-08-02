@@ -22,6 +22,10 @@ val audioTypeList = arrayOf("mp3", "ogg", "flac", "mid", "wav", "m4a", "aac", "w
 val docsTypeList = arrayOf("doc", "docx", "xlsx", "pptx", "pdf", "txt", "rtf", "html", "xml", "csv", "xls", "ods", "ppt", "odp", "pages")
 val zipTypeList = arrayOf("zip", "rar", "7z", "xz", "gz", "bz2", "tar", "iso", "cab")
 
+
+val buyUserTags by lazy { setOf("adjust", "not%20set", "youtubeads", "bytedance", "%7B%22", "fb4a", "facebook", "gclid") }
+
+
 enum class JunkType {
     LOG_FILES, TEMP_FILES, APP_CACHE, AD_JUNK, APK_FILES
 }

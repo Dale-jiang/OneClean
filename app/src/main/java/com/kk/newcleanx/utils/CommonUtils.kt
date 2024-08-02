@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.cloakResult
 import com.kk.newcleanx.data.local.distinctId
 import com.kk.newcleanx.data.local.junkCleanTimeTag
 import okhttp3.OkHttpClient
@@ -25,6 +26,11 @@ import java.util.LinkedList
 import java.util.UUID
 
 object CommonUtils {
+
+
+    fun isBlackUser() = let {
+        cloakResult != "coronet"
+    }
 
     fun isSameDay(time: Long): Boolean = let {
         val date = Calendar.getInstance().apply {

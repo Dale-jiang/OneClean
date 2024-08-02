@@ -1,8 +1,12 @@
 package com.kk.newcleanx.utils.tba
 
 import android.util.Log
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.kk.newcleanx.BuildConfig
+import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.cloakResult
+import com.kk.newcleanx.data.local.installReferrerStr
 import com.kk.newcleanx.utils.CoroutineHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,10 +22,12 @@ import java.io.IOException
 object TbaHelper : TbaBase() {
 
     private var getCloakInfoJob: Job? = null
+    private var getReferrerJob: Job? = null
 
 
     fun getAllUserInfo() {
         getCloakInfo()
+        getReferrerInfo()
     }
 
     override fun getCloakInfo() {
@@ -30,15 +36,15 @@ object TbaHelper : TbaBase() {
         getCloakInfoJob = CoroutineHelper.launchIO {
             while (cloakResult.isBlank()) {
                 delay(1000L)
-                requestInfo()
+                requestCloakInfo()
                 delay(10000L)
             }
         }
     }
 
 
-    private fun requestInfo() {
-        try {
+    private fun requestCloakInfo() {
+        runCatching {
 
             val obj = JSONObject().apply { // put("put", app.packageName)
                 put("put", "com.optimi.clean.up.oneclean")
@@ -67,14 +73,47 @@ object TbaHelper : TbaBase() {
 
             })
 
-        } catch (e: Exception) {
-            Log.e("request==> ", "${e.message}==Exception")
         }
     }
 
 
     override fun getReferrerInfo() {
+        if (installReferrerStr.isNotBlank()) return
+        getCloakInfoJob?.cancel()
+        getCloakInfoJob = CoroutineHelper.launchIO {
+            while (cloakResult.isBlank()) {
+                delay(1000L)
+                requestReferrer()
+                delay(20000L)
+            }
+        }
+    }
 
+    private fun requestReferrer() {
+        runCatching {
+            val referrerClient = InstallReferrerClient.newBuilder(app).build()
+            referrerClient.startConnection(object : InstallReferrerStateListener {
+                override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                    runCatching {
+                        when (responseCode) {
+                            InstallReferrerClient.InstallReferrerResponse.OK -> {
+                                val referrerDetails = referrerClient.installReferrer
+                                val referrer = referrerDetails?.installReferrer ?: ""
+                                if (referrer.isNotBlank()) {
+                                    installReferrerStr = referrer
+                                    getReferrerJob?.cancel()
+                                }
+                            }
+
+                            else -> Unit
+                        }
+                        referrerClient.endConnection()
+                    }
+                }
+
+                override fun onInstallReferrerServiceDisconnected() = Unit
+            })
+        }
     }
 
 
