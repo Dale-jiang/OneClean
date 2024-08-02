@@ -35,6 +35,11 @@ import kotlin.math.ceil
 
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
+    companion object {
+        var showBackAd = false
+    }
+
+
     private var animator: Animator? = null
     private var adapter: MainListAdapter? = null
     private var loadingJob: Job? = null
@@ -106,7 +111,16 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onResume() {
         super.onResume()
         startLoading()
-        showMainNatAd()
+        lifecycleScope.launch {
+            delay(1000L)
+            showMainNatAd()
+        }
+
+        if (showBackAd) {
+            showBackAd = false
+            showFullAd { }
+        }
+
     }
 
 
@@ -161,6 +175,30 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             }
             animator?.start()
         }
+    }
+
+
+    private fun showFullAd(b: () -> Unit) {
+
+        if (ADManager.isOverAdMax() || ADManager.isBlocked()) {
+            b.invoke()
+            return
+        }
+
+        // log : oc_back_int
+
+        lifecycleScope.launch {
+            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+            if (ADManager.ocScanIntLoader.canShow(this@MainActivity)) {
+                ADManager.ocScanIntLoader.showFullScreenAd(this@MainActivity, "oc_back_int") {
+                    b.invoke()
+                }
+            } else {
+                ADManager.ocScanIntLoader.loadAd(this@MainActivity)
+                b.invoke()
+            }
+        }
+
     }
 
 

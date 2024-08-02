@@ -31,9 +31,7 @@ object TbaHelper : TbaBase() {
     }
 
     override fun getCloakInfo() {
-        Log.e("request==> ", "--->>>${cloakResult}")
         if (cloakResult.isNotBlank()) return
-        Log.e("request==> ", "requestCloakInfo0") // getCloakInfoJob?.cancel()
         getCloakInfoJob = CoroutineHelper.launchIO {
             Log.e("request==> ", "requestCloakInfo000")
             while (cloakResult.isBlank()) {
@@ -49,20 +47,14 @@ object TbaHelper : TbaBase() {
     private fun requestCloakInfo() {
         try {
 
-            Log.e("request==> ", "requestCloakInfo1")
-
             val obj = JSONObject().apply { // put("put", app.packageName)
                 put("put", "com.optimi.clean.up.oneclean")
                 put("rod", "backstop")
                 put("galactic", BuildConfig.VERSION_NAME)
             }
 
-            Log.e("request==> ", "requestCloakInfo2")
-
             val body = obj.toString().toRequestBody("application/json".toMediaTypeOrNull())
             val request = Request.Builder().post(body).url(cloakUrl).build()
-
-            Log.e("request==> ", "$obj")
 
             httpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -83,16 +75,15 @@ object TbaHelper : TbaBase() {
             })
 
         } catch (e: Exception) {
-            Log.e("request==> ", "requestCloakInfo9999")
             e.printStackTrace()
         }
     }
 
 
     override fun getReferrerInfo() {
-        if (installReferrerStr.isNotBlank()) return // getCloakInfoJob?.cancel()
+        if (installReferrerStr.isNotBlank()) return
         getCloakInfoJob = CoroutineHelper.launchIO {
-            while (installReferrerStr.isBlank() ) {
+            while (installReferrerStr.isBlank()) {
                 delay(1000L)
                 requestReferrer()
                 delay(20000L)
