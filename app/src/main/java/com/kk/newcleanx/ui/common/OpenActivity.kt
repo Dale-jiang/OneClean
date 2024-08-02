@@ -6,8 +6,10 @@ import android.os.CountDownTimer
 import androidx.activity.addCallback
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
+import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.data.local.isFirstStartup
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
@@ -63,11 +65,22 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     }
 
     private fun requestUMPInfo() {
-        val params = ConsentRequestParameters.Builder().build()
+
+        val paramsBuilder = ConsentRequestParameters.Builder()
+        if (BuildConfig.DEBUG) {
+            val debugSettings = ConsentDebugSettings.Builder(this).setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                .addTestDeviceHashedId("E0B0FE3B4C530E91951B4FC4C86CF0E9").build()
+            paramsBuilder.setConsentDebugSettings(debugSettings)
+        }
+
         val consentInformation = UserMessagingPlatform.getConsentInformation(this)
-        consentInformation.requestConsentInfoUpdate(this, params, {
+        consentInformation.requestConsentInfoUpdate(this, paramsBuilder.build(), {
             UserMessagingPlatform.loadAndShowConsentFormIfRequired(this) { doAdProgress() }
         }, { doAdProgress() })
+
+        if (BuildConfig.DEBUG) {
+            consentInformation.reset()
+        }
     }
 
 

@@ -18,6 +18,7 @@ import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.cloakResult
 import com.kk.newcleanx.data.local.distinctId
 import com.kk.newcleanx.data.local.junkCleanTimeTag
+import com.kk.newcleanx.utils.tba.ExceptionInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
@@ -178,7 +179,7 @@ object CommonUtils {
     fun createHttpClient() = let {
         OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
-        }).build()
+        }).addInterceptor(ExceptionInterceptor()).build()
     }
 
 }

@@ -100,13 +100,18 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
                         viewLottie.isVisible = false
                         viewLottie.cancelAnimation()
                         ivComplete.isVisible = true
-                        btnContinue.isVisible = true
+                        btnContinue.isVisible = false
                         tvTip.isVisible = false
                         tvFinished.isVisible = true
                         tvPercent.isVisible = false
                         toolbar.ivBack.isInvisible = true
                         if (type == CleanType.JunkType) {
                             junkCleanTimeTag = System.currentTimeMillis()
+                        }
+
+                        lifecycleScope.launch {
+                            delay(600)
+                            btnContinue.performClick()
                         }
                     }
 

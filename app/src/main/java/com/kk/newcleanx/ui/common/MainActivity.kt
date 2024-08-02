@@ -49,11 +49,13 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         initAdapter()
         setStorageInfo()
         binding.ivSetting.setOnClickListener {
+            showBackAd = true
             SettingActivity.start(this)
         }
         binding.btnScan.setOnClickListener {
             requestAllFilePermission {
                 if (it) {
+                    showBackAd = true
                     if (CommonUtils.checkIfCanClean()) {
                         JunkScanningActivity.start(this)
                     } else {
@@ -74,21 +76,29 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             when (it.type) {
                 BIG_FILE_CLEAN -> {
                     requestAllFilePermission { success ->
-                        if (success) BigFileCleanActivity.start(this)
+                        if (success) {
+                            showBackAd = true
+                            BigFileCleanActivity.start(this)
+                        }
                     }
                 }
 
                 APP_MANAGER -> {
+                    showBackAd = true
                     AppManagerActivity.start(this)
                 }
 
                 DEVICE_STATUS -> {
+                    showBackAd = true
                     DeviceInfoActivity.start(this)
                 }
 
                 EMPTY_FOLDER -> {
                     requestAllFilePermission { success ->
-                        if (success) EmptyFolderActivity.start(this)
+                        if (success) {
+                            showBackAd = true
+                            EmptyFolderActivity.start(this)
+                        }
                     }
                 }
             }
@@ -143,7 +153,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             val total = CommonUtils.getTotalStorageByManager()
             val use = CommonUtils.getUsedStorageByManager()
 
-            totalStorage.text = "/${total.formatStorageSize()}"
+            totalStorage.text = " / ${total.formatStorageSize()}"
             usedStorage.text = use.formatStorageSize()
             val usePercent = ((use / total.toFloat()) * 100).toInt()
             percent.text = "${usePercent}%"
