@@ -15,6 +15,5 @@ abstract class TbaBase {
     //    val mFacebookLog by lazy { AppEventsLogger.newLogger(app) }
 
     abstract fun getCloakInfo()
-    abstract fun getReferrerInfo()
 
 }
