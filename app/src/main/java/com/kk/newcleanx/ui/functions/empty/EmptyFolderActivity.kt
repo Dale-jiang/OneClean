@@ -6,20 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.emptyFoldersDataList
 import com.kk.newcleanx.databinding.AcEmptyFolderBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.JunkCleanActivity
-import com.kk.newcleanx.ui.functions.admob.ADManager
-import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.empty.adapter.EmptyFoldersListAdapter
 import com.kk.newcleanx.ui.functions.empty.vm.EmptyFolderViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
     companion object {
@@ -46,10 +40,8 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
 
             startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
-                    showFullAd {
-                        clLoading.isVisible = false
-                        viewLottie.cancelAnimation()
-                    }
+                    clLoading.isVisible = false
+                    viewLottie.cancelAnimation()
                 }
             }
             viewModel.getEmptyFoldersList()
@@ -70,7 +62,6 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
         }
 
         initObserver()
-        showNatAd()
 
     }
 
@@ -92,55 +83,5 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
             }
         }
     }
-
-
-    private fun showFullAd(b: () -> Unit) {
-
-        if (ADManager.isOverAdMax()) {
-            b.invoke()
-            return
-        }
-
-        // log : oc_scan_int
-
-        lifecycleScope.launch {
-            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-            if (ADManager.ocScanIntLoader.canShow(this@EmptyFolderActivity)) {
-                ADManager.ocScanIntLoader.showFullScreenAd(this@EmptyFolderActivity, "oc_scan_int") {
-                    b.invoke()
-                }
-            } else {
-                ADManager.ocScanIntLoader.loadAd(this@EmptyFolderActivity)
-                b.invoke()
-            }
-        }
-    }
-
-
-    private var ad: AdType? = null
-    private fun showNatAd() {
-
-        if (ADManager.isOverAdMax()) {
-            return
-        }
-        ADManager.ocScanNatLoader.waitAdLoading(this) {
-            lifecycleScope.launch {
-                while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-                if (ADManager.ocScanNatLoader.canShow(this@EmptyFolderActivity)) {
-                    ad?.destroy()
-                    binding.adFr.isVisible = true
-                    ADManager.ocScanNatLoader.showNativeAd(this@EmptyFolderActivity, binding.adFr, "oc_scan_nat") {
-                        ad = it
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        ad?.destroy()
-    }
-
 
 }

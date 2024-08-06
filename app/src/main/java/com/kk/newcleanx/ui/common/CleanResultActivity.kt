@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kk.newcleanx.data.local.APP_MANAGER
@@ -18,14 +16,10 @@ import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.databinding.AcCleanResultBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
-import com.kk.newcleanx.ui.functions.admob.ADManager
-import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
@@ -46,7 +40,6 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initAdapter()
-        showNatAd()
 
         val type = intent?.getSerializableExtra(INTENT_KEY) as? CleanType
         binding.apply {
@@ -101,29 +94,5 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
         }
         binding.recyclerView.adapter = adapter
     }
-
-
-    private var ad: AdType? = null
-    private fun showNatAd() {
-
-        if (ADManager.isOverAdMax()) return
-        ADManager.ocCleanNatLoader.waitAdLoading(this) {
-            lifecycleScope.launch {
-                while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-                if (ADManager.ocCleanNatLoader.canShow(this@CleanResultActivity)) {
-                    ad?.destroy()
-                    ADManager.ocCleanNatLoader.showNativeAd(this@CleanResultActivity, binding.adFr, "oc_clean_nat") {
-                        ad = it
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        ad?.destroy()
-    }
-
 
 }

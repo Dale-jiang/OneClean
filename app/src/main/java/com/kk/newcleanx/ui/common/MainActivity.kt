@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +17,6 @@ import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
-import com.kk.newcleanx.ui.functions.admob.ADManager
-import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
@@ -35,11 +32,6 @@ import kotlin.math.ceil
 
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
-    companion object {
-        var showBackAd = false
-    }
-
-
     private var animator: Animator? = null
     private var adapter: MainListAdapter? = null
     private var loadingJob: Job? = null
@@ -49,13 +41,11 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         initAdapter()
         setStorageInfo()
         binding.ivSetting.setOnClickListener {
-            showBackAd = true
             SettingActivity.start(this)
         }
         binding.btnScan.setOnClickListener {
             requestAllFilePermission {
                 if (it) {
-                    showBackAd = true
                     if (CommonUtils.checkIfCanClean()) {
                         JunkScanningActivity.start(this)
                     } else {
@@ -77,26 +67,22 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 BIG_FILE_CLEAN -> {
                     requestAllFilePermission { success ->
                         if (success) {
-                            showBackAd = true
                             BigFileCleanActivity.start(this)
                         }
                     }
                 }
 
                 APP_MANAGER -> {
-                    showBackAd = true
                     AppManagerActivity.start(this)
                 }
 
                 DEVICE_STATUS -> {
-                    showBackAd = true
                     DeviceInfoActivity.start(this)
                 }
 
                 EMPTY_FOLDER -> {
                     requestAllFilePermission { success ->
                         if (success) {
-                            showBackAd = true
                             EmptyFolderActivity.start(this)
                         }
                     }
@@ -121,16 +107,6 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onResume() {
         super.onResume()
         startLoading()
-        lifecycleScope.launch {
-            delay(1000L)
-            showMainNatAd()
-        }
-
-        if (showBackAd) {
-            showBackAd = false
-            showFullAd { }
-        }
-
     }
 
 
@@ -187,48 +163,6 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
     }
 
-
-    private fun showFullAd(b: () -> Unit) {
-
-        if (ADManager.isOverAdMax() || ADManager.isBlocked()) {
-            b.invoke()
-            return
-        }
-
-        // log : oc_back_int
-
-        lifecycleScope.launch {
-            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-            if (ADManager.ocScanIntLoader.canShow(this@MainActivity)) {
-                ADManager.ocScanIntLoader.showFullScreenAd(this@MainActivity, "oc_back_int") {
-                    b.invoke()
-                }
-            } else {
-                ADManager.ocScanIntLoader.loadAd(this@MainActivity)
-                b.invoke()
-            }
-        }
-
-    }
-
-
-    private var ad: AdType? = null
-    private fun showMainNatAd() {
-
-        if (ADManager.isOverAdMax()) return
-        ADManager.ocMainNatLoader.waitAdLoading(this) {
-            lifecycleScope.launch {
-                while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-                if (ADManager.ocMainNatLoader.canShow(this@MainActivity)) {
-                    ad?.destroy()
-                    ADManager.ocMainNatLoader.showNativeAd(this@MainActivity, binding.adFr, "nat") {
-                        ad = it
-                    }
-                }
-            }
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         animator?.cancel()
@@ -236,8 +170,6 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
         loadingJob?.cancel()
         loadingJob = null
-
-        ad?.destroy()
     }
 
 }

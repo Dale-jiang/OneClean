@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -57,7 +58,7 @@ class JunkScanningViewModel : ViewModel() {
         }
     }
 
-    private fun scanningJunk(file: File = Environment.getExternalStorageDirectory()) {
+    private suspend fun scanningJunk(file: File = Environment.getExternalStorageDirectory()) {
         val files = file.listFiles()
         if (files != null) {
             for (singleFile in files) {
@@ -65,6 +66,7 @@ class JunkScanningViewModel : ViewModel() {
                 if (singleFile.exists().not()) continue
                 val filePath = singleFile.absolutePath
                 pathChaneObserver.postValue(filePath)
+                delay(2)
 
                 if (singleFile.isDirectory) {
 
