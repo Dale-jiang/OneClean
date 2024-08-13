@@ -4,8 +4,8 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'stringfog'
-    //id 'com.google.gms.google-services'
-    //id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 import com.github.megatronking.stringfog.plugin.StringFogMode
@@ -24,11 +24,12 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.acecleanX"
+        applicationId "com.optimi.clean.up.oneclean"
         minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
+        //noinspection OldTargetApi
+        targetSdk 33
+        versionCode 2
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -97,7 +98,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation "com.google.firebase:firebase-analytics"
     implementation "com.google.firebase:firebase-config"
-    //implementation "com.google.firebase:firebase-crashlytics"
+    implementation "com.google.firebase:firebase-crashlytics"
 
     //admob
     implementation("com.google.android.gms:play-services-ads:23.3.0")

@@ -6,9 +6,9 @@ const val INTENT_KEY_1 = "intent_key_1"
 const val KEY_NOTICE_FUNCTION = "key_notice_function"
 
 const val BLANK_URL = "about:blank"
-const val USER_AGREEMENT_URL = "https://www.baidu.com"
-const val USER_PRIVACY_URL = "https://www.baidu.com"
 const val ANTIVIRUS_PRIVACY_URL = "https://www.trustlook.com/privacy-policy"
+const val USER_AGREEMENT_URL = "https://sites.google.com/view/oneclean-termsofservice"
+const val USER_PRIVACY_URL = "https://sites.google.com/view/oneclean-privacy-policy"
 
 const val BIG_FILE_CLEAN = "big_file_clean"
 const val APP_MANAGER = "app_manager"
@@ -81,61 +81,49 @@ const val LOCAL_NOTICE_TEXT_JSON = """
 
 const val LOCAL_AD_JSON = """
     {
-  "uzek": 70,
-  "xihe": 15,
-  "oc_launch": [
-    {
-      "kdhi": "ca-app-pub-3940256099942544/9257395921",
-      "iegw": "admob",
-      "zirhh": "op",
-      "zpejh": 13800,
-      "lasha": 3
-    }
-  ],
-    "oc_scan_int": [
-    {
-      "kdhi": "ca-app-pub-3940256099942544/8691691433",
-      "iegw": "admob",
-      "zirhh": "int",
-      "zpejh": 3000,
-      "lasha": 3
-    }
-  ],
-  "oc_clean_int": [
-    {
-      "kdhi": "ca-app-pub-3940256099942544/8691691433",
-      "iegw": "admob",
-      "zirhh": "int",
-      "zpejh": 3000,
-      "lasha": 3
-    }
-  ],
-  "oc_scan_nat": [
-    {
-      "kdhi": "ca-app-pub-3940256099942544/1044960115",
-      "iegw": "admob",
-      "zirhh": "nat",
-      "zpejh": 3000,
-      "lasha": 3
-    }
-  ],
-  "oc_clean_nat": [
-    {
-      "kdhi": "ca-app-pub-3940256099942544/1044960115",
-      "iegw": "admob",
-      "zirhh": "nat",
-      "zpejh": 3000,
-      "lasha": 3
-    }
-  ],
-  "oc_main_nat": [
-    {
-      "kdhi": "ca-app-pub-3940256099942544/1044960115",
-      "iegw": "admob",
-      "zirhh": "nat",
-      "zpejh": 3000,
-      "lasha": 3
-    }
-  ]
+	"uzek": 70,
+	"xihe": 15,
+	"oc_launch": [{
+		"kdhi": "ca-app-pub-5663304938951743/9005677038",
+		"iegw": "admob",
+		"zirhh": "op",
+		"zpejh": 13800,
+		"lasha": 3
+	}],
+	"oc_scan_int": [{
+		"kdhi": "ca-app-pub-5663304938951743/2157768473",
+		"iegw": "admob",
+		"zirhh": "int",
+		"zpejh": 3000,
+		"lasha": 3
+	}],
+	"oc_clean_int": [{
+		"kdhi": "ca-app-pub-5663304938951743/8531605132",
+		"iegw": "admob",
+		"zirhh": "int",
+		"zpejh": 3000,
+		"lasha": 3
+	}],
+	"oc_scan_nat": [{
+		"kdhi": "ca-app-pub-5663304938951743/2808505168",
+		"iegw": "admob",
+		"zirhh": "nat",
+		"zpejh": 3000,
+		"lasha": 3
+	}],
+	"oc_clean_nat": [{
+		"kdhi": "ca-app-pub-5663304938951743/9182341822",
+		"iegw": "admob",
+		"zirhh": "nat",
+		"zpejh": 3000,
+		"lasha": 3
+	}],
+	"oc_main_nat": [{
+		"kdhi": "ca-app-pub-5663304938951743/2616933474",
+		"iegw": "admob",
+		"zirhh": "nat",
+		"zpejh": 3000,
+		"lasha": 3
+	}]
 }
 """

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "477579053938",
+    "project_id": "oneclean-68f4b",
+    "storage_bucket": "oneclean-68f4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477579053938:android:6d618a84c5c5f1bcadebeb",
+        "android_client_info": {
+          "package_name": "com.optimi.clean.up.oneclean"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6jHg2F87Jh_xUpDJd1q3KQqIFrAIkNp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

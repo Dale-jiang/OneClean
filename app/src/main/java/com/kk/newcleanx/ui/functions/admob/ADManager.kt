@@ -31,7 +31,7 @@ object ADManager {
         runCatching {
             adItemList = gson.fromJson(json, AdItemList::class.java)
         }.onFailure {
-            adItemList = null
+            adItemList = gson.fromJson(LOCAL_AD_JSON, AdItemList::class.java)
         }
         dispatcherData()
     }
@@ -39,8 +39,10 @@ object ADManager {
     private fun dispatcherData() {
         runCatching {
             adItemList?.apply {
-                this@ADManager.displayMax = displayMax
-                this@ADManager.clickMax = clickMax
+
+               this@ADManager.displayMax = this.displayMax
+                this@ADManager.clickMax = this.clickMax
+                
                 ocLaunchLoader.initData(this.ocLaunch)
                 ocScanIntLoader.initData(this.ocScanInt)
                 ocCleanIntLoader.initData(this.ocCleanInt)
