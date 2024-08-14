@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -41,13 +40,6 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
-
-
-            lifecycleScope.launch {
-                delay(4000)
-
-
-            }
 
             toolbar.tvTitle.text = getString(R.string.string_antivirus)
             toolbar.ivBack.setOnClickListener {
@@ -110,11 +102,9 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
                 runCatching {
                     if (it == 888) {
                         showFullAd {
-                            if (virusRiskList.isEmpty()) {
-                                Toast.makeText(this@AntivirusScanningActivity, "没有病毒", Toast.LENGTH_LONG).show()
-                            } else {
-                                Toast.makeText(this@AntivirusScanningActivity, "有病毒", Toast.LENGTH_LONG).show()
-                            } // finish()
+                            if (virusRiskList.isEmpty()) AntivirusListActivity.start(this@AntivirusScanningActivity)
+                            else AntivirusListActivity.start(this@AntivirusScanningActivity)
+                            finish()
                         }
                     } else {
                         showAntivirusScanError { finish() }

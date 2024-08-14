@@ -191,4 +191,11 @@ object CommonUtils {
         }
     }
 
+    fun getFileNameFromPath(filePath: String) = let {
+        val file = File(filePath)
+        if (file.exists()) {
+            file.name
+        } else ""
+    }
+
 }

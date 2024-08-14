@@ -118,6 +118,12 @@
     <string name="string_scanning_stop_tip_virus">Are you sure you want to exit virus scanning? The current scanning progress will be lost after exiting.</string>
     <string name="please_try_again">Please Try Again</string>
     <string name="scan_error">Scan Error</string>
+    <string name="string_risk">Risk</string>
+    <string name="string_remove">Remove</string>
+    <string name="delete_failed">Delete Failed!</string>
+    <string name="sure_to_delete">Sure To Delete?</string>
+    <string name="threats_found">%1$d Threats Found</string>
+    <string name="string_confirm">Confirm</string>
 
 
 </resources>
