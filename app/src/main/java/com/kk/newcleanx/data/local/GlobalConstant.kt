@@ -11,6 +11,7 @@ const val BIG_FILE_CLEAN = "big_file_clean"
 const val APP_MANAGER = "app_manager"
 const val DEVICE_STATUS = "device_status"
 const val EMPTY_FOLDER = "empty_folder"
+const val SCAN_ANTIVIRUS = "scan_antivirus"
 
 const val LOCAL_AD_JSON = """
     {

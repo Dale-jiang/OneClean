@@ -106,5 +106,10 @@
     <string name="string_setting">Setting</string>
     <string name="string_uninstall">Uninstall</string>
 
+    <string name="string_antivirus">Antivirus</string>
+    <string name="engine_init">Engine Init</string>
+    <string name="str_virus">Virus</string>
+    <string name="string_malware">Malware</string>
+
 
 </resources>

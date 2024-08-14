@@ -39,6 +39,8 @@ object ADManager {
     private fun dispatcherData() {
         runCatching {
             adItemList?.apply {
+                this@ADManager.displayMax = displayMax
+                this@ADManager.clickMax = clickMax
                 ocLaunchLoader.initData(this.ocLaunch)
                 ocScanIntLoader.initData(this.ocScanInt)
                 ocCleanIntLoader.initData(this.ocCleanInt)

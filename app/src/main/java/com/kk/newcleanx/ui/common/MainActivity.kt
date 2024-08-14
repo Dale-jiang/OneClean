@@ -15,11 +15,13 @@ import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
 import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
+import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
+import com.kk.newcleanx.ui.functions.antivirus.AntivirusScanningActivity
 import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
@@ -74,6 +76,16 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
         adapter = MainListAdapter(this) {
             when (it.type) {
+
+                SCAN_ANTIVIRUS -> {
+                    requestAllFilePermission { success ->
+                        if (success) {
+                            showBackAd = true
+                            AntivirusScanningActivity.start(this)
+                        }
+                    }
+                }
+
                 BIG_FILE_CLEAN -> {
                     requestAllFilePermission { success ->
                         if (success) {
