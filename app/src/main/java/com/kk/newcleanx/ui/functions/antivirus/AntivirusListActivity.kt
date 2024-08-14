@@ -85,8 +85,9 @@ class AntivirusListActivity : AllFilePermissionActivity<AcAntivirusListBinding>(
             adapter.getDataList().removeAt(index)
             adapter.notifyItemRemoved(index)
             val num = adapter.getDataList().size
-            binding.tvNum.text = "$num"
-            if (num <= 0) { //todo
+            binding.tvNum.text = getString(R.string.threats_found, num)
+            if (num <= 0) {
+                AntivirusResultActivity.start(this@AntivirusListActivity, getString(R.string.all_threats_resolved))
                 finish()
             }
         }

@@ -124,6 +124,8 @@
     <string name="sure_to_delete">Sure To Delete?</string>
     <string name="threats_found">%1$d Threats Found</string>
     <string name="string_confirm">Confirm</string>
+    <string name="no_threats_found">No Threats Found</string>
+    <string name="all_threats_resolved">All Threats Resolved</string>
 
 
 </resources>

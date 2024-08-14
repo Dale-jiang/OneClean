@@ -1,24 +1,21 @@
-package com.kk.newcleanx.ui.common
+package com.kk.newcleanx.ui.functions.antivirus
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kk.newcleanx.data.local.APP_MANAGER
 import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
-import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.data.local.INTENT_KEY
-import com.kk.newcleanx.databinding.AcCleanResultBinding
+import com.kk.newcleanx.databinding.AcAntivirusResultBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.CleanResultListAdapter
-import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
@@ -28,13 +25,12 @@ import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Suppress("DEPRECATION")
-class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
+class AntivirusResultActivity : AllFilePermissionActivity<AcAntivirusResultBinding>() {
 
     companion object {
-        fun start(context: Context, type: CleanType?) {
-            context.startActivity(Intent(context, CleanResultActivity::class.java).apply {
-                putExtra(INTENT_KEY, type)
+        fun start(context: Context, str: String) {
+            context.startActivity(Intent(context, AntivirusResultActivity::class.java).apply {
+                putExtra(INTENT_KEY, str)
             })
         }
     }
@@ -49,14 +45,9 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
         initAdapter()
         showNatAd()
 
-        val type = intent?.getSerializableExtra(INTENT_KEY) as? CleanType
-        binding.apply {
+        val str = intent?.getStringExtra(INTENT_KEY) ?: ""
 
-            if (type != CleanType.JunkType) {
-                tvTips2.isVisible = false
-            }
-
-        }
+        if (str.isNotEmpty()) binding.tvTips1.text = str
 
         binding.toolbar.ivBack.setOnClickListener {
             finish()
@@ -111,9 +102,9 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
         ADManager.ocCleanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-                if (ADManager.ocCleanNatLoader.canShow(this@CleanResultActivity)) {
+                if (ADManager.ocCleanNatLoader.canShow(this@AntivirusResultActivity)) {
                     ad?.destroy()
-                    ADManager.ocCleanNatLoader.showNativeAd(this@CleanResultActivity, binding.adFr, "oc_clean_nat") {
+                    ADManager.ocCleanNatLoader.showNativeAd(this@AntivirusResultActivity, binding.adFr, "oc_clean_nat") {
                         ad = it
                     }
                 }

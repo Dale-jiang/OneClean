@@ -102,7 +102,7 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
                 runCatching {
                     if (it == 888) {
                         showFullAd {
-                            if (virusRiskList.isEmpty()) AntivirusListActivity.start(this@AntivirusScanningActivity)
+                            if (virusRiskList.isEmpty()) AntivirusResultActivity.start(this@AntivirusScanningActivity, getString(R.string.no_threats_found))
                             else AntivirusListActivity.start(this@AntivirusScanningActivity)
                             finish()
                         }
