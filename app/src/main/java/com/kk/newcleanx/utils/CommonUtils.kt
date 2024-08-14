@@ -182,4 +182,13 @@ object CommonUtils {
         }).addInterceptor(ExceptionInterceptor()).build()
     }
 
+    fun isPackageInstalled(packageName: String) = let {
+        try {
+            app.packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+
 }

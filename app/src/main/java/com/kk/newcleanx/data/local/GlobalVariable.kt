@@ -35,5 +35,6 @@ enum class CleanType {
 
 val junkDataList = mutableListOf<JunkDetailsType>()
 val emptyFoldersDataList = mutableListOf<String>()
-var allBigFiles = mutableListOf<BigFile>()
+val allBigFiles = mutableListOf<BigFile>()
+val virusRiskList = mutableListOf<VirusBean>()
 

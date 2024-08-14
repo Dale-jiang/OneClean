@@ -1,0 +1,63 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_fff_r12"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="13dp"
+            android:layout_marginTop="18dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/scan_error"
+            android:textColor="@color/color_ff630b"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dialogMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="13dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/montserrat"
+            android:includeFontPadding="false"
+            android:text="@string/please_try_again"
+            android:textColor="@color/color_616e6f"
+            android:textSize="12sp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/positiveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_btn_gradient_bg_r8"
+                android:fontFamily="@font/montserrat"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:minWidth="88dp"
+                android:text="@string/string_ok"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</FrameLayout>

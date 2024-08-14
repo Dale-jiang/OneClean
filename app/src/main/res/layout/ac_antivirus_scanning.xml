@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_circle"
-        app:lottie_autoPlay="true"
+        app:lottie_autoPlay="false"
         app:lottie_fileName="antivirus_green.json"
         app:lottie_imageAssetsFolder="antivirus_green"
         app:lottie_loop="true"

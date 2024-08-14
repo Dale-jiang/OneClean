@@ -112,8 +112,12 @@
     <string name="string_malware">Malware</string>
     <string name="data_collection_notice">Data Collection Notice</string>
 
-    <string name="trust_look_privacy_tips"><![CDATA[【OneClean】Trustlook’s anti-virus SDK collects installed app information, such as package names, signatures, and hashes, to scan for malware on the device. This data is sent to Trustlook’s cloud service for virus detection. For more details, please review Trustlook’s privacy policy:<a href=\'https://www.trustlook.com/privacy-policy\'>https://www.trustlook.com/privacy-policy</a>]]></string>
+    <string name="trust_look_privacy_tips"><![CDATA[【OneClean】Trustlook\'s antivirus SDK collects information about installed apps, including package names, signatures, and hashes, to scan for malware on the device. This data is sent to Trustlook\'s cloud service for virus detection. For more details, please review Trustlook\'s privacy policy:<a href=\'https://www.trustlook.com/privacy-policy\'>https://www.trustlook.com/privacy-policy</a>]]></string>
     <string name="string_agree">Agree</string>
+
+    <string name="string_scanning_stop_tip_virus">Are you sure you want to exit virus scanning? The current scanning progress will be lost after exiting.</string>
+    <string name="please_try_again">Please Try Again</string>
+    <string name="scan_error">Scan Error</string>
 
 
 </resources>

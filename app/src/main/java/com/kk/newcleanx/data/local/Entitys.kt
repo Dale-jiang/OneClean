@@ -67,6 +67,17 @@ data class AdItemList(
 }
 
 
+@Keep
+data class VirusBean(
+    val path: String,
+    val packageName: String,
+    val appName: String,
+    val icon: Drawable?,
+    val levelName: String,
+    val virusName: String,
+    val category: String,
+    val score: Int
+)
 
 
 

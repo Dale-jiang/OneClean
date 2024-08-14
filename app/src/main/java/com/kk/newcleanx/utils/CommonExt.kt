@@ -26,6 +26,7 @@ import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.hasShowAntivirusTips
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.databinding.DialogAntivirusNoticeBinding
+import com.kk.newcleanx.databinding.DialogVirusScanErrorBinding
 import com.kk.newcleanx.ui.common.WebViewActivity
 import kotlin.math.log10
 import kotlin.math.pow
@@ -143,4 +144,17 @@ fun Activity.showAntivirusNotice(done: (Boolean) -> Unit) {
     dialog.window?.setLayout(getScreenWidth() - 88.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
     dialog.show()
 
+}
+
+fun Activity.showAntivirusScanError(done: () -> Unit) {
+    val binding = DialogVirusScanErrorBinding.inflate(layoutInflater, window.decorView as ViewGroup, false)
+    val dialog = AlertDialog.Builder(this).setView(binding.root).setCancelable(false).create()
+    dialog.setCanceledOnTouchOutside(false)
+    binding.positiveButton.setOnClickListener {
+        dialog.dismiss()
+        done.invoke()
+    }
+    dialog.window?.decorView?.background = null
+    dialog.window?.setLayout(getScreenWidth() - 46.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
+    dialog.show()
 }
