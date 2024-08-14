@@ -1,5 +1,6 @@
 package com.kk.newcleanx.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -7,16 +8,25 @@ import android.content.res.Resources
 import android.graphics.Point
 import android.net.Uri
 import android.provider.Settings
+import android.text.Html
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
+import androidx.appcompat.app.AlertDialog
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetailsType
 import com.kk.newcleanx.data.local.JunkType
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.hasShowAntivirusTips
 import com.kk.newcleanx.data.local.isToSettings
+import com.kk.newcleanx.databinding.DialogAntivirusNoticeBinding
+import com.kk.newcleanx.ui.common.WebViewActivity
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -88,4 +98,49 @@ fun Context.isPackageInstalled(packageName: String): Boolean = run {
     } catch (e: PackageManager.NameNotFoundException) {
         false
     }
+}
+
+fun Activity.showAntivirusNotice(done: (Boolean) -> Unit) {
+
+    if (hasShowAntivirusTips) {
+        done.invoke(true)
+        return
+    }
+    val binding = DialogAntivirusNoticeBinding.inflate(layoutInflater, window.decorView as ViewGroup, false)
+    val dialog = AlertDialog.Builder(this).setView(binding.root).setCancelable(false).create()
+    dialog.setCanceledOnTouchOutside(false)
+
+    val spanned = Html.fromHtml(getString(R.string.trust_look_privacy_tips), Html.FROM_HTML_MODE_COMPACT)
+    val spannable = SpannableString(spanned)
+
+    val spans = spannable.getSpans(0, spanned.length, ClickableSpan::class.java)
+    for (span in spans) {
+        val start = spannable.getSpanStart(span)
+        val end = spannable.getSpanEnd(span)
+        val flags = spannable.getSpanFlags(span)
+        spannable.removeSpan(span)
+        spannable.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                WebViewActivity.start(this@showAntivirusNotice, "https://www.trustlook.com/privacy-policy")
+            }
+        }, start, end, flags)
+    }
+
+    binding.tvContent.text = spannable
+    binding.tvContent.movementMethod = LinkMovementMethod.getInstance()
+
+    binding.ivClose.setOnClickListener {
+        done.invoke(false)
+        dialog.dismiss()
+    }
+    binding.agree.setOnClickListener {
+        hasShowAntivirusTips = true
+        dialog.dismiss()
+        done.invoke(true)
+    }
+
+    dialog.window?.decorView?.background = null
+    dialog.window?.setLayout(getScreenWidth() - 88.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
+    dialog.show()
+
 }

@@ -29,6 +29,7 @@ import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.utils.showAntivirusNotice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -78,10 +79,14 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             when (it.type) {
 
                 SCAN_ANTIVIRUS -> {
-                    requestAllFilePermission { success ->
-                        if (success) {
-                            showBackAd = true
-                            AntivirusScanningActivity.start(this)
+                    showAntivirusNotice { res ->
+                        if (res) {
+                            requestAllFilePermission { success ->
+                                if (success) {
+                                    showBackAd = true
+                                    AntivirusScanningActivity.start(this)
+                                }
+                            }
                         }
                     }
                 }

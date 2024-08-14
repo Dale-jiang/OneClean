@@ -99,8 +99,8 @@
     <string name="big_file_six_month">Six Months</string>
     <string name="big_file_one_year">One Year</string>
     <string name="delete_big_file_tip">Are you sure you want to delete the selected file? Cannot be restored after deletion!</string>
-    <string name="ads_loading">Ads loading...</string>
-    <string name="this_action_can_contain_ads">This action can contain ads...</string>
+    <string name="ads_loading">Ads loading…</string>
+    <string name="this_action_can_contain_ads">This action can contain ads…</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="user_agreement">User Agreement</string>
     <string name="string_setting">Setting</string>
@@ -110,6 +110,10 @@
     <string name="engine_init">Engine Init</string>
     <string name="str_virus">Virus</string>
     <string name="string_malware">Malware</string>
+    <string name="data_collection_notice">Data Collection Notice</string>
+
+    <string name="trust_look_privacy_tips"><![CDATA[【OneClean】Trustlook’s anti-virus SDK collects installed app information, such as package names, signatures, and hashes, to scan for malware on the device. This data is sent to Trustlook’s cloud service for virus detection. For more details, please review Trustlook’s privacy policy:<a href=\'https://www.trustlook.com/privacy-policy\'>https://www.trustlook.com/privacy-policy</a>]]></string>
+    <string name="string_agree">Agree</string>
 
 
 </resources>

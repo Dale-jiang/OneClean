@@ -116,13 +116,17 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
 
-        <!--        <meta-data-->
-        <!--            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"-->
-        <!--            android:value="true" />-->
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+            android:value="true" />
 
         <meta-data
             android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
             android:value="true" />
+
+        <meta-data
+            android:name="com.trustlook.ApiKey"
+            android:value="902f837a9821f8dfa2348d2fdafb7a20745286e015a33ad42b6819e8" />
 
     </application>
 
