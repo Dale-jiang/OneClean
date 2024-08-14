@@ -10,12 +10,14 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.virusRiskList
 import com.kk.newcleanx.databinding.AcAntivirusScanningBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
+import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.antivirus.vm.AntivirusScanningViewModel
 import com.kk.newcleanx.utils.showAntivirusNotice
 import com.kk.newcleanx.utils.showAntivirusScanError
@@ -107,12 +109,13 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
             complete.observe(this@AntivirusScanningActivity) {
                 runCatching {
                     if (it == 888) {
-                        if (virusRiskList.isEmpty()) {
-                            Toast.makeText(this@AntivirusScanningActivity, "没有病毒", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(this@AntivirusScanningActivity, "有病毒", Toast.LENGTH_LONG).show()
-                        } // finish()
-
+                        showFullAd {
+                            if (virusRiskList.isEmpty()) {
+                                Toast.makeText(this@AntivirusScanningActivity, "没有病毒", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(this@AntivirusScanningActivity, "有病毒", Toast.LENGTH_LONG).show()
+                            } // finish()
+                        }
                     } else {
                         showAntivirusScanError { finish() }
                     }
@@ -168,6 +171,26 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
                                                finish()
                                            },
                                            onNegativeButtonClick = {})
+    }
+
+    private fun showFullAd(b: () -> Unit) {
+
+        if (ADManager.isOverAdMax()) {
+            b.invoke()
+            return
+        }
+
+        lifecycleScope.launch {
+            while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
+            if (ADManager.ocScanIntLoader.canShow(this@AntivirusScanningActivity)) {
+                ADManager.ocScanIntLoader.showFullScreenAd(this@AntivirusScanningActivity, "oc_scan_int") {
+                    b.invoke()
+                }
+            } else {
+                ADManager.ocScanIntLoader.loadAd(this@AntivirusScanningActivity)
+                b.invoke()
+            }
+        }
     }
 
 
