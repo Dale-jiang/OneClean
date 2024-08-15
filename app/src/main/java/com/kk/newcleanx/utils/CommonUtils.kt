@@ -23,6 +23,9 @@ import com.kk.newcleanx.data.local.distinctId
 import com.kk.newcleanx.data.local.junkCleanTimeTag
 import okhttp3.OkHttpClient
 import java.io.File
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.LinkedList
 import java.util.UUID
@@ -251,13 +254,12 @@ object CommonUtils {
         brands.any { brand.contains(it, true) }
     }
 
-    fun isAtLeastAndroid8() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }
-    fun isAtLeastAndroid10() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q }
-    fun isAtLeastAndroid11() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.R }
-    fun isAtLeastAndroid12() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.S }
-    fun isAtLeastAndroid13() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU }
+    fun isAtLeastAndroid8() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+    fun isAtLeastAndroid10() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+    fun isAtLeastAndroid11() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+    fun isAtLeastAndroid12() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    fun isAtLeastAndroid13() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun hasNotificationPermission() = let {
         if (isAtLeastAndroid13()) {
             ContextCompat.checkSelfPermission(app, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED

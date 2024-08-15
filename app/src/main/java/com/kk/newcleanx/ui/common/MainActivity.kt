@@ -1,9 +1,14 @@
 package com.kk.newcleanx.ui.common
 
+import android.Manifest
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,9 +21,13 @@ import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
+import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.isToSettings
+import com.kk.newcleanx.data.local.showNotificationPerDialogTime
 import com.kk.newcleanx.databinding.AcMainBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.MainListAdapter
+import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.antivirus.AntivirusScanningActivity
@@ -28,8 +37,12 @@ import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import com.kk.newcleanx.utils.CommonUtils
+import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
+import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
+import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid8
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.showAntivirusNotice
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -42,10 +55,26 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         var showBackAd = false
     }
 
-
     private var animator: Animator? = null
     private var adapter: MainListAdapter? = null
     private var loadingJob: Job? = null
+
+    private val notificationLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (hasNotificationPermission()) {
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
+        } else {
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "no"))
+        }
+    }
+
+    private val notificationSetLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        isToSettings = false
+        if (hasNotificationPermission()) {
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
+        } else {
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "no"))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +98,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             }
         }
 
-        requestAllFilePermission {}
-
+        if (!hasNotificationPermission()) {
+            requestNotificationPer()
+        }
     }
 
     private fun initAdapter() {
@@ -204,6 +234,38 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
     }
 
+    private fun requestNotificationPer() = run {
+        if (isAtLeastAndroid13() && !hasNotificationPermission() && ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+            notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            if (System.currentTimeMillis() - showNotificationPerDialogTime > 24 * 60 * 60 * 1000) {
+                showNotificationPerDialogTime = System.currentTimeMillis()
+                CustomAlertDialog(this).showDialog(title = getString(R.string.app_name),
+                        message = getString(R.string.request_notice_per_des),
+                        positiveButtonText = getString(R.string.got_it),
+                        negativeButtonText = "",
+                        onPositiveButtonClick = {
+                            it.dismiss()
+                            showNotificationPerSetting()
+                        },
+                        onNegativeButtonClick = {})
+            }
+        }
+    }
+
+
+    private fun showNotificationPerSetting() {
+        runCatching {
+            val intent = if (isAtLeastAndroid8()) {
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply { putExtra(Settings.EXTRA_APP_PACKAGE, app.packageName) }
+            } else Intent("android.settings.APP_NOTIFICATION_SETTINGS").apply {
+                putExtra("app_package", app.packageName)
+                putExtra("app_uid", app.applicationInfo.uid)
+            }
+            isToSettings = true
+            notificationSetLauncher.launch(intent)
+        }
+    }
 
     private fun showFullAd(b: () -> Unit) {
 

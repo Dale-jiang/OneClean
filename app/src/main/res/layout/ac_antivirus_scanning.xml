@@ -90,7 +90,6 @@
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
         android:maxLines="1"
-        android:text="/storage/emulated/0/DCMI/Screenshots/#1.jpg"
         android:textColor="@color/color_ff97bec3"
         android:textSize="11sp"
         android:textStyle="bold"
@@ -98,7 +97,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_status"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        tools:text="/storage/emulated/0/DCMI/Screenshots/#1.jpg" />
 
 
     <androidx.appcompat.widget.AppCompatImageView

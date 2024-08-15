@@ -126,6 +126,7 @@
     <string name="string_confirm">Confirm</string>
     <string name="no_threats_found">No Threats Found</string>
     <string name="all_threats_resolved">All Threats Resolved</string>
+    <string name="request_notice_per_des">Please enable notifications for important alerts.</string>
 
 
 </resources>

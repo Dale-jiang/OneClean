@@ -108,7 +108,6 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         }
     }
 
-
     private fun navigateToNextPage() {
         isFirstStartup = false
         val intent = Intent(this, MainActivity::class.java)
