@@ -45,8 +45,8 @@ object TbaHelper : TbaBase() {
     private var getReferrerJob: Job? = null
     private var googleInfoJob: Job? = null
 
-    private val maxRetries = 4
-    private val retryDelayMillis = 60000L
+    private const val MAX_RETRIES = 4
+    private const val RETRY_DELAY_MILLIS = 60000L
 
     fun getAllUserInfo() {
         getGoogleInfo()
@@ -177,7 +177,7 @@ object TbaHelper : TbaBase() {
 
     private suspend fun executeWithRetry(request: Request, tag: String) = run {
         var attempt = 0
-        while (attempt < maxRetries) {
+        while (attempt < MAX_RETRIES) {
             val deferred = CompletableDeferred<Response?>()
             httpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -208,9 +208,9 @@ object TbaHelper : TbaBase() {
             }
 
             attempt++
-            if (attempt < maxRetries) {
-                Log.e("runRequest==>", "$tag: Attempt: $attempt Retrying in $retryDelayMillis ms...")
-                delay(retryDelayMillis)
+            if (attempt < MAX_RETRIES) {
+                Log.e("runRequest==>", "$tag: Attempt: $attempt Retrying in $RETRY_DELAY_MILLIS ms...")
+                delay(RETRY_DELAY_MILLIS)
             }
 
         }

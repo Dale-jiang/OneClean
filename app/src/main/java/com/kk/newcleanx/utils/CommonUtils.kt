@@ -241,4 +241,13 @@ object CommonUtils {
             else -> "UNKNOWN"
         }
     }
+
+    fun isMiUI(): Boolean = let {
+        val brands = listOf("redmi", "xiaomi")
+        val manufacturer = Build.MANUFACTURER ?: ""
+        if (brands.any { manufacturer.contains(it, true) }) return true
+        val brand = Build.BRAND ?: ""
+        brands.any { brand.contains(it, true) }
+    }
+
 }

@@ -7,6 +7,7 @@ import com.google.firebase.initialize
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.utils.AppLifecycleHelper
 import com.kk.newcleanx.utils.remoteconfig.RemoteConfigHelper
+import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import com.tencent.mmkv.MMKV
 
@@ -20,6 +21,7 @@ class MyAPP : Application() {
         Firebase.initialize(this)
         MobileAds.initialize(this)
         RemoteConfigHelper.init()
+        startFrontNoticeService()
         TbaHelper.getAllUserInfo()
     }
 

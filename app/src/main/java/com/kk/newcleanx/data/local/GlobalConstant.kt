@@ -2,6 +2,7 @@ package com.kk.newcleanx.data.local
 
 
 const val INTENT_KEY = "intent_key"
+const val KEY_NOTICE_FUNCTION = "key_notice_function"
 
 const val BLANK_URL = "about:blank"
 const val USER_AGREEMENT_URL = "https://www.baidu.com"

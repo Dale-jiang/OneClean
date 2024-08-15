@@ -1,12 +1,14 @@
 package com.kk.newcleanx.utils
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Point
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Html
@@ -20,6 +22,7 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetailsType
 import com.kk.newcleanx.data.local.JunkType
@@ -30,6 +33,8 @@ import com.kk.newcleanx.databinding.DialogAntivirusNoticeBinding
 import com.kk.newcleanx.databinding.DialogVirusDeleteBinding
 import com.kk.newcleanx.databinding.DialogVirusScanErrorBinding
 import com.kk.newcleanx.ui.common.WebViewActivity
+import com.kk.newcleanx.ui.functions.notice.FrontNoticeManager
+import com.kk.newcleanx.ui.functions.notice.FrontNoticeService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +44,18 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlin.math.log10
 import kotlin.math.pow
+
+fun Context.startFrontNoticeService() = run {
+    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && this is Application)) {
+        runCatching {
+            FrontNoticeManager.showNotice()
+        }
+    } else {
+        runCatching {
+            ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
+        }
+    }
+}
 
 fun Int.dp2px(): Int = let {
     val scale = Resources.getSystem().displayMetrics.density

@@ -79,6 +79,10 @@ data class VirusBean(
     val score: Int
 )
 
+@Keep
+@Parcelize
+data class NoticeType(val toPage: String, val scene: String, val des: String) : Parcelable
+
 
 
 

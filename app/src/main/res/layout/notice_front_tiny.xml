@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/clean"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/string_clean"
+            android:src="@drawable/svg_notice_clean" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/antivirus"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/string_antivirus"
+            android:src="@drawable/svg_notice_antivirus" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/big_files"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/svg_notice_big_files"
+            android:contentDescription="@string/big_files" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_folder"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/svg_notice_empty_folders"
+            android:contentDescription="@string/empty_folders" />
+
+    </LinearLayout>
+
+</LinearLayout>
