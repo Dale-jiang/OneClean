@@ -1,9 +1,12 @@
 package com.kk.newcleanx.ui.common
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.ump.ConsentDebugSettings
@@ -14,12 +17,24 @@ import com.kk.newcleanx.data.local.isFirstStartup
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.functions.admob.ADManager
+import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
+import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
+import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class OpenActivity : BaseActivity<AcOpenBinding>() {
 
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val notificationLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (hasNotificationPermission()) {
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
+        } else {
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "no"))
+        }
+    }
 
     private val countDownTimer = object : CountDownTimer(10000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
@@ -37,11 +52,17 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         TbaHelper.postSessionEvent()
         TbaHelper.eventPost("loading_page")
+        startFrontNoticeService()
+
+        if (!hasNotificationPermission() && isAtLeastAndroid13()) {
+            notificationLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         onBackPressedDispatcher.addCallback {}
         lifecycleScope.launch {

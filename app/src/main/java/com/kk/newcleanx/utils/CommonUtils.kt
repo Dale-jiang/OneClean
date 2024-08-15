@@ -12,6 +12,7 @@ import android.os.StatFs
 import android.os.storage.StorageManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.ResponseInfo
@@ -248,6 +249,21 @@ object CommonUtils {
         if (brands.any { manufacturer.contains(it, true) }) return true
         val brand = Build.BRAND ?: ""
         brands.any { brand.contains(it, true) }
+    }
+
+    fun isAtLeastAndroid8() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }
+    fun isAtLeastAndroid10() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q }
+    fun isAtLeastAndroid11() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.R }
+    fun isAtLeastAndroid12() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.S }
+    fun isAtLeastAndroid13() = let { Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun hasNotificationPermission() = let {
+        if (isAtLeastAndroid13()) {
+            ContextCompat.checkSelfPermission(app, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        } else {
+            NotificationManagerCompat.from(app).areNotificationsEnabled()
+        }
     }
 
 }

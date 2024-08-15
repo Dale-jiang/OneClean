@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Point
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Html
@@ -46,7 +45,7 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 fun Context.startFrontNoticeService() = run {
-    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && this is Application)) {
+    if ((CommonUtils.isAtLeastAndroid12() && this is Application)) {
         runCatching {
             FrontNoticeManager.showNotice()
         }
