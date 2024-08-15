@@ -191,7 +191,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             showMainNatAd()
         }
 
-        if (showBackAd) {
+        if (showBackAd && noticeType == null) {
             showBackAd = false
             showFullAd { }
         }
@@ -221,7 +221,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 noticeType = null
             }
         } else {
-            if (!hasNotificationPermission()) {
+            if (!hasNotificationPermission() && !showBackAd) {
                 requestNotificationPer()
             }
         }
