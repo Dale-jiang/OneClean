@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Point
 import android.net.Uri
+import android.os.Bundle
 import android.provider.Settings
 import android.text.Html
 import android.text.SpannableString
@@ -29,6 +30,13 @@ import com.kk.newcleanx.databinding.DialogAntivirusNoticeBinding
 import com.kk.newcleanx.databinding.DialogVirusDeleteBinding
 import com.kk.newcleanx.databinding.DialogVirusScanErrorBinding
 import com.kk.newcleanx.ui.common.WebViewActivity
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -176,4 +184,36 @@ fun Activity.showAntivirusDelete(done: () -> Unit) {
     dialog.window?.decorView?.background = null
     dialog.window?.setLayout(getScreenWidth() - 46.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
     dialog.show()
+}
+
+fun HashMap<String, Any?>.toBundle(): Bundle? = let {
+    if (this.isNotEmpty()) {
+        val bundle = Bundle()
+        this.forEach { (t, u) ->
+            when (u) {
+                is String -> bundle.putString(t, u)
+                is Int -> bundle.putInt(t, u)
+                is Long -> bundle.putLong(t, u)
+                is Boolean -> bundle.putBoolean(t, u)
+                is Double -> bundle.putDouble(t, u)
+                is Float -> bundle.putFloat(t, u)
+            }
+        }
+        bundle
+    } else null
+}
+
+fun CoroutineScope.launchTicker(
+    first: Long,
+    interval: Long,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    functionNext: () -> Unit,
+) = launch(dispatcher) {
+    flow {
+        delay(first)
+        while (true) {
+            emit(Unit)
+            delay(interval)
+        }
+    }.flowOn(Dispatchers.IO).collect { functionNext() }
 }

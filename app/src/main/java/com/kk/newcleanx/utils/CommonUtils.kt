@@ -13,14 +13,13 @@ import android.os.storage.StorageManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.ResponseInfo
 import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.cloakResult
 import com.kk.newcleanx.data.local.distinctId
 import com.kk.newcleanx.data.local.junkCleanTimeTag
-import com.kk.newcleanx.utils.tba.ExceptionInterceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.Calendar
 import java.util.LinkedList
@@ -28,7 +27,7 @@ import java.util.UUID
 
 object CommonUtils {
 
-
+    fun isTestMode() = let { BuildConfig.DEBUG }
     fun isBlackUser() = let {
         cloakResult != "coronet"
     }
@@ -177,9 +176,7 @@ object CommonUtils {
     }
 
     fun createHttpClient() = let {
-        OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
-        }).addInterceptor(ExceptionInterceptor()).build()
+        OkHttpClient.Builder().build()
     }
 
     fun isPackageInstalled(packageName: String) = let {
@@ -191,11 +188,48 @@ object CommonUtils {
         }
     }
 
-    fun getFileNameFromPath(filePath: String) = let {
+    fun getFileNameFromPath(filePath: String): String = let {
         val file = File(filePath)
         if (file.exists()) {
             file.name
         } else ""
+    }
+
+    fun getFirInstallTime(): Long = let {
+        try {
+            app.packageManager.getPackageInfo(app.packageName, 0).firstInstallTime
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
+    fun getLastUpdateTime(): Long = let {
+        try {
+            app.packageManager.getPackageInfo(app.packageName, 0).lastUpdateTime
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
+    fun getAdapterClassName(responseInfo: ResponseInfo?) = kotlin.runCatching {
+        val mediationClzName = responseInfo?.mediationAdapterClassName ?: "admob"
+        when {
+            mediationClzName.contains("facebook", true) -> "facebook"
+            mediationClzName.contains("applovin", true) -> "applovin"
+            mediationClzName.contains("pangle", true) -> "pangle"
+            mediationClzName.contains("mbridge.msdk", true) -> "mintegral"
+            mediationClzName.contains("mintegral", true) -> "mintegral"
+            else -> "admob"
+        }
+    }.getOrNull() ?: "admob"
+
+    fun getAdTypeName(adType:String): String {
+        return when (adType) {
+            "int" -> "interstitial"
+            "op" -> "open"
+            "nat" -> "native"
+            else -> "unknown"
+        }
     }
 
 }
