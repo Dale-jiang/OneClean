@@ -13,10 +13,19 @@ import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import com.kk.newcleanx.BuildConfig
+import com.kk.newcleanx.data.local.CleanType
+import com.kk.newcleanx.data.local.INTENT_KEY
+import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
+import com.kk.newcleanx.data.local.NoticeType
 import com.kk.newcleanx.data.local.isFirstStartup
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.functions.admob.ADManager
+import com.kk.newcleanx.ui.functions.antivirus.AntivirusScanningActivity
+import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
+import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
+import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
+import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
 import com.kk.newcleanx.utils.startFrontNoticeService
@@ -24,6 +33,7 @@ import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class OpenActivity : BaseActivity<AcOpenBinding>() {
 
 
@@ -35,6 +45,9 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "no"))
         }
     }
+
+
+    private val noticeType by lazy { intent?.getParcelableExtra<NoticeType>(KEY_NOTICE_FUNCTION) }
 
     private val countDownTimer = object : CountDownTimer(10000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
@@ -94,7 +107,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         val paramsBuilder = ConsentRequestParameters.Builder()
         if (BuildConfig.DEBUG) {
             val debugSettings = ConsentDebugSettings.Builder(this).setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-                .addTestDeviceHashedId("E0B0FE3B4C530E91951B4FC4C86CF0E9").build()
+                    .addTestDeviceHashedId("E0B0FE3B4C530E91951B4FC4C86CF0E9").build()
             paramsBuilder.setConsentDebugSettings(debugSettings)
         }
 
@@ -109,9 +122,52 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     }
 
     private fun navigateToNextPage() {
-        isFirstStartup = false
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+
+        if (noticeType == null) { //open
+            isFirstStartup = false
+            MainActivity.start(this, null)
+        } else {
+
+            when (noticeType!!.toPage) {
+
+                "clean" -> {
+                    if (CommonUtils.hasAllStoragePermission()) {
+                        startActivities(
+                                arrayOf(
+                                        Intent(this, MainActivity::class.java),
+                                        if (CommonUtils.checkIfCanClean()) {
+                                            Intent(this, JunkScanningActivity::class.java)
+                                        } else {
+                                            Intent(this, CleanResultActivity::class.java).apply {
+                                                putExtra(INTENT_KEY, CleanType.JunkType)
+                                            }
+                                        }
+                                ))
+                    } else MainActivity.start(this, noticeType)
+                }
+
+                "antivirus" -> {
+                    if (CommonUtils.hasAllStoragePermission()) {
+                        startActivities(arrayOf(Intent(this, MainActivity::class.java), Intent(this, AntivirusScanningActivity::class.java)))
+                    } else MainActivity.start(this, noticeType)
+                }
+
+                "big_file" -> {
+                    if (CommonUtils.hasAllStoragePermission()) {
+                        startActivities(arrayOf(Intent(this, MainActivity::class.java), Intent(this, BigFileCleanActivity::class.java)))
+                    } else MainActivity.start(this, noticeType)
+                }
+
+                "empty_folder" -> {
+                    if (CommonUtils.hasAllStoragePermission()) {
+                        startActivities(arrayOf(Intent(this, MainActivity::class.java), Intent(this, EmptyFolderActivity::class.java)))
+                    } else MainActivity.start(this, noticeType)
+                }
+            }
+
+
+        }
+
         finish()
     }
 

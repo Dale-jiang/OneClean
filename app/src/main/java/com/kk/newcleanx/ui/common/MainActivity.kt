@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -20,6 +21,8 @@ import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
 import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.DEVICE_STATUS
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
+import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
+import com.kk.newcleanx.data.local.NoticeType
 import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.isToSettings
@@ -49,16 +52,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
+@Suppress("DEPRECATION")
 class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
     companion object {
         var showBackAd = false
+        fun start(context: Context, noticeType: NoticeType?) {
+            context.startActivity(Intent(context, MainActivity::class.java).apply {
+                noticeType?.apply {
+                    putExtra(KEY_NOTICE_FUNCTION, noticeType)
+                }
+            })
+        }
     }
 
     private var animator: Animator? = null
     private var adapter: MainListAdapter? = null
     private var loadingJob: Job? = null
 
+    private var noticeType: NoticeType? = null
     private val notificationLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (hasNotificationPermission()) {
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
@@ -76,8 +88,16 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        noticeType = intent.getParcelableExtra(KEY_NOTICE_FUNCTION)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        noticeType = intent?.getParcelableExtra(KEY_NOTICE_FUNCTION)
+
         initAdapter()
         setStorageInfo()
         binding.ivSetting.setOnClickListener {
@@ -98,10 +118,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             }
         }
 
-        if (!hasNotificationPermission()) {
-            requestNotificationPer()
-        }
     }
+
 
     private fun initAdapter() {
 
@@ -178,8 +196,36 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             showFullAd { }
         }
 
+        checkNoticeJump()
     }
 
+    private fun checkNoticeJump() {
+        if (noticeType != null) {
+            requestAllFilePermission {
+                if (it) {
+                    when (noticeType!!.toPage) {
+
+                        "clean" -> {
+                            if (CommonUtils.checkIfCanClean()) {
+                                JunkScanningActivity.start(this)
+                            } else {
+                                CleanResultActivity.start(this, CleanType.JunkType)
+                            }
+                        }
+
+                        "antivirus" -> AntivirusScanningActivity.start(this)
+                        "big_file" -> BigFileCleanActivity.start(this)
+                        "empty_folder" -> EmptyFolderActivity.start(this)
+                    }
+                }
+                noticeType = null
+            }
+        } else {
+            if (!hasNotificationPermission()) {
+                requestNotificationPer()
+            }
+        }
+    }
 
     private fun startLoading() {
         loadingJob?.cancel()

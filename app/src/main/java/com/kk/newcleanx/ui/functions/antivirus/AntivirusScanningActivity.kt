@@ -55,7 +55,7 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
                             viewModel.startScan()
                         } else finish()
                     }
-                }
+                } else finish()
             }
         }
 
@@ -153,14 +153,14 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
 
     private fun onBackClicked() {
         CustomAlertDialog(this).showDialog(title = getString(R.string.string_tips),
-                                           message = getString(R.string.string_scanning_stop_tip_virus),
-                                           positiveButtonText = getString(R.string.string_ok),
-                                           negativeButtonText = getString(R.string.string_cancel),
-                                           onPositiveButtonClick = {
-                                               it.dismiss()
-                                               finish()
-                                           },
-                                           onNegativeButtonClick = {})
+                message = getString(R.string.string_scanning_stop_tip_virus),
+                positiveButtonText = getString(R.string.string_ok),
+                negativeButtonText = getString(R.string.string_cancel),
+                onPositiveButtonClick = {
+                    it.dismiss()
+                    finish()
+                },
+                onNegativeButtonClick = {})
     }
 
     private fun showFullAd(b: () -> Unit) {
