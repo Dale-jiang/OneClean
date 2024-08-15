@@ -13,6 +13,7 @@ import android.os.storage.StorageManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.ResponseInfo
 import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.data.local.app
@@ -223,8 +224,8 @@ object CommonUtils {
         }
     }.getOrNull() ?: "admob"
 
-    fun getAdTypeName(adType:String): String {
-        return when (adType) {
+    fun getAdTypeName(adType: String) = let {
+        when (adType) {
             "int" -> "interstitial"
             "op" -> "open"
             "nat" -> "native"
@@ -232,4 +233,12 @@ object CommonUtils {
         }
     }
 
+    fun getPrecisionType(precisionTypeCode: Int) = let {
+        when (precisionTypeCode) {
+            AdValue.PrecisionType.ESTIMATED -> "ESTIMATED"
+            AdValue.PrecisionType.PUBLISHER_PROVIDED -> "PUBLISHER_PROVIDED"
+            AdValue.PrecisionType.PRECISE -> "PRECISE"
+            else -> "UNKNOWN"
+        }
+    }
 }

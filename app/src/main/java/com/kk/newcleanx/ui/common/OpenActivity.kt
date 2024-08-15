@@ -14,6 +14,7 @@ import com.kk.newcleanx.data.local.isFirstStartup
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.functions.admob.ADManager
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -38,6 +39,9 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        TbaHelper.postSessionEvent()
+        TbaHelper.eventPost("loading_page")
 
         onBackPressedDispatcher.addCallback {}
         lifecycleScope.launch {

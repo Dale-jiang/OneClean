@@ -19,8 +19,8 @@ abstract class TbaBase {
     protected val distinctId by lazy { CommonUtils.createDistinctId() }
     protected val androidId by lazy { CommonUtils.createAndroidId() }
     protected val httpClient by lazy { CommonUtils.createHttpClient() }
-    protected val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(app) }
-    protected val facebookLogger by lazy { AppEventsLogger.newLogger(app) }
+    val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(app) }
+    val facebookLogger by lazy { AppEventsLogger.newLogger(app) }
     protected abstract fun getGoogleInfo()
     protected abstract fun getCloakInfo()
     protected abstract fun getReferrerInfo()
@@ -30,5 +30,5 @@ abstract class TbaBase {
     protected abstract fun postInstall(referrerInfo: ReferrerDetails?)
     protected abstract fun postSession()
     protected abstract fun postAdImpression(obj: JSONObject)
-    protected abstract fun runRequest(bodyString: String, requestTag: String)
+    protected abstract suspend fun runRequest(bodyString: String, requestTag: String)
 }

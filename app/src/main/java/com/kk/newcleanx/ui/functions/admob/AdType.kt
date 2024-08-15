@@ -1,6 +1,7 @@
 package com.kk.newcleanx.ui.functions.admob
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -20,12 +21,16 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kk.newcleanx.data.local.AdItemList
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.databinding.LayoutNativeAdBinding
 import com.kk.newcleanx.ui.base.BaseActivity
+import com.kk.newcleanx.utils.CommonUtils
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Currency
 
 sealed class AdType {
 
@@ -36,7 +41,21 @@ sealed class AdType {
     abstract fun destroy()
     abstract fun isAdExpire(): Boolean
     fun onPaidEventListener(adValue: AdValue, responseInfo: ResponseInfo?) {
+
         Log.e("onPaidEventListener", "------>>>>onPaidEventListener")
+
+        val revenue: Double = adValue.valueMicros / 1000000.toDouble()
+        runCatching {
+            if (!CommonUtils.isTestMode()) {
+                TbaHelper.firebaseAnalytics.logEvent("ad_impression_revenue", Bundle().apply {
+                    putDouble(FirebaseAnalytics.Param.VALUE, revenue)
+                    putString(FirebaseAnalytics.Param.CURRENCY, "USD")
+                })
+                TbaHelper.facebookLogger.logPurchase(revenue.toBigDecimal(), Currency.getInstance("USD"))
+            }
+        }
+
+        TbaHelper.postAdImpressionEvent(adValue, responseInfo, this)
     }
 
     data class FullScreenAd(val adLoadTime: Long = System.currentTimeMillis()) : AdType() {

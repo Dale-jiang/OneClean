@@ -21,8 +21,10 @@ import com.kk.newcleanx.utils.CommonUtils.getAdTypeName
 import com.kk.newcleanx.utils.CommonUtils.getAdapterClassName
 import com.kk.newcleanx.utils.CommonUtils.getFirInstallTime
 import com.kk.newcleanx.utils.CommonUtils.getLastUpdateTime
+import com.kk.newcleanx.utils.CommonUtils.getPrecisionType
 import com.kk.newcleanx.utils.CoroutineHelper
 import com.kk.newcleanx.utils.toBundle
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import okhttp3.Call
@@ -42,6 +44,9 @@ object TbaHelper : TbaBase() {
     private var getCloakInfoJob: Job? = null
     private var getReferrerJob: Job? = null
     private var googleInfoJob: Job? = null
+
+    private val maxRetries = 3
+    private val retryDelayMillis = 60000L
 
     fun getAllUserInfo() {
         getGoogleInfo()
@@ -64,13 +69,14 @@ object TbaHelper : TbaBase() {
                 put("diane", ad.adItem?.adId ?: "")
                 put("ginn", ad.where)
                 put("sheathe", getAdTypeName(ad.adItem?.adType ?: ""))
+                put("corny", getPrecisionType(adValue.precisionType))
             }
             jsonObj.put("cacao", obj)
             postAdImpression(jsonObj)
         }
     }
 
-    fun eventPost(event: String, params: HashMap<String, Any?>) {
+    fun eventPost(event: String, params: HashMap<String, Any?> = hashMapOf()) {
         runCatching {
             Log.e("eventPost==>", if (params.isNotEmpty()) "EventName: $event, Params: $params" else "EventName: $event")
             if (!CommonUtils.isTestMode()) firebaseAnalytics.logEvent(event, params.toBundle())
@@ -85,7 +91,7 @@ object TbaHelper : TbaBase() {
             val jsonObj = buildCommonParams()
             jsonObj.put("upon", event)
             params.forEach { (t, u) -> jsonObj.put("${t}^zeiss", u) }
-            runRequest(jsonObj.toString(), "postEvent")
+            runRequest(jsonObj.toString(), event)
         }
 
     }
@@ -96,7 +102,7 @@ object TbaHelper : TbaBase() {
 
             put("shinbone", JSONObject().apply {
                 put("autopsy", Locale.getDefault().toString())
-                put("put", app.packageName)
+                put("put", "com.optimi.clean.up.oneclean")
                 put("naacp", UUID.randomUUID().toString())
             })
 
@@ -161,21 +167,53 @@ object TbaHelper : TbaBase() {
         }
     }
 
-    override fun runRequest(bodyString: String, requestTag: String) {
+    override suspend fun runRequest(bodyString: String, requestTag: String) {
 
         Log.e("runRequest==>", bodyString)
         val body = bodyString.toRequestBody("application/json".toMediaTypeOrNull())
         val request = Request.Builder().post(body).addHeader("physic", Build.VERSION.RELEASE ?: "").url(tbaUrl).build()
-        httpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("runRequest==>", "$requestTag: ${e.message}")
+        executeWithRetry(request, requestTag)
+    }
+
+    private suspend fun executeWithRetry(request: Request, tag: String) = run {
+        var attempt = 0
+        while (attempt < maxRetries) {
+            val deferred = CompletableDeferred<Response?>()
+            httpClient.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("runRequest==>", "$tag: ${e.message}")
+                    deferred.completeExceptionally(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.e("runRequest==>", "$tag: ${response.code}, ${response.body?.string() ?: ""}")
+                    if (response.isSuccessful) {
+                        deferred.complete(response)
+                    } else {
+                        deferred.complete(null)
+                    }
+                }
+            })
+
+            try {
+                val response = deferred.await()
+                if (response != null) {
+                    Log.e("runRequest==>", "$tag: Request success Response: no need retry}")
+                    return
+                } else {
+                    Log.e("runRequest==>", "$tag: Request failed with non-200 status code")
+                }
+            } catch (e: IOException) {
+                Log.e("runRequest==>", "$tag: Request failed: ${e.message}")
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                Log.e("runRequest==>", "$requestTag: ${response.code}, ${response.body?.string() ?: ""}")
+            attempt++
+            if (attempt < maxRetries) {
+                Log.e("runRequest==>", "$tag: Retrying in $retryDelayMillis ms...")
+                delay(retryDelayMillis)
             }
-        })
 
+        }
     }
 
     override fun getGoogleInfo() {
