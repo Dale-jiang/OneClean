@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.ANTIVIRUS_PRIVACY_URL
 import com.kk.newcleanx.data.local.USER_AGREEMENT_URL
 import com.kk.newcleanx.data.local.USER_PRIVACY_URL
 import com.kk.newcleanx.databinding.AcSettingBinding
@@ -35,6 +36,10 @@ class SettingActivity : AllFilePermissionActivity<AcSettingBinding>() {
         }
         binding.tvAgreement.setOnClickListener {
             WebViewActivity.start(this, USER_AGREEMENT_URL)
+        }
+
+        binding.tvAntivirus.setOnClickListener {
+            WebViewActivity.start(this, ANTIVIRUS_PRIVACY_URL)
         }
 
     }

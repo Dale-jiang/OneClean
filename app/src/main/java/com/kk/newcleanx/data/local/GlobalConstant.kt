@@ -7,6 +7,7 @@ const val KEY_NOTICE_FUNCTION = "key_notice_function"
 const val BLANK_URL = "about:blank"
 const val USER_AGREEMENT_URL = "https://www.baidu.com"
 const val USER_PRIVACY_URL = "https://www.baidu.com"
+const val ANTIVIRUS_PRIVACY_URL = "https://www.trustlook.com/privacy-policy"
 
 const val BIG_FILE_CLEAN = "big_file_clean"
 const val APP_MANAGER = "app_manager"

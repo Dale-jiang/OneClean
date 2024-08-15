@@ -64,5 +64,25 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/tv_privacy" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_antivirus"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ripple_main_function_btn"
+        android:drawableEnd="@drawable/arrow_right"
+        android:elevation="3dp"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/string_antivirus"
+        android:textColor="@color/main_text_color"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/tv_agreement" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
