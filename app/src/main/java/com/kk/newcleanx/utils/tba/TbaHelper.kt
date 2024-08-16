@@ -101,16 +101,16 @@ object TbaHelper : TbaBase() {
         return JSONObject().apply {
 
             put("shinbone", JSONObject().apply {
-                put("autopsy", Locale.getDefault().toString())
+                put("autopsy", "3_0")
                 put("put", "com.optimi.clean.up.oneclean")
                 put("naacp", UUID.randomUUID().toString())
             })
 
             put("returnee", JSONObject().apply {
-                put("jaime", androidId)
-                put("white", netOperator)
+                put("jaime", 1)
+                put("white", 40)
                 put("acapulco", System.currentTimeMillis())
-                put("succumb", Build.MANUFACTURER ?: "")
+                put("succumb", 10)
             })
 
             put("nourish", JSONObject().apply {
@@ -118,8 +118,8 @@ object TbaHelper : TbaBase() {
                 put("galactic", BuildConfig.VERSION_NAME)
                 put("bronze", distinctId)
                 put("rod", "backstop")
-                put("physic", Build.VERSION.RELEASE ?: "")
-                put("bandy", Build.MODEL ?: "")
+                put("physic", 0)
+                put("bandy", 2)
             })
 
             put("jacket", JSONObject().apply {

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -97,13 +98,12 @@ class AntivirusListActivity : AllFilePermissionActivity<AcAntivirusListBinding>(
         finish()
     }
 
-    @Suppress("DEPRECATION")
     private fun unInstallApp() {
         runCatching {
             isToSettings = true
-            val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
-            intent.data = Uri.parse("package:${packageNameTemp}")
-            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.parse("package:$packageName")
+            }
             unInstallLauncher.launch(intent)
         }
     }
