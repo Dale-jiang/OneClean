@@ -9,7 +9,6 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
 import com.kk.newcleanx.data.local.LOCAL_NOTICE_CONFIG_JSON
@@ -25,6 +24,7 @@ import com.kk.newcleanx.ui.common.OpenActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.activityReferences
 import com.kk.newcleanx.utils.tba.TbaHelper
+import org.json.JSONArray
 import kotlin.random.Random
 
 object NormalNoticeManager {
@@ -43,7 +43,8 @@ object NormalNoticeManager {
         }.onFailure {
             runCatching {
                 Log.e("initNoticeConfig==>", "initNoticeConfig---onFailure")
-                noticeConf = Gson().fromJson(LOCAL_NOTICE_CONFIG_JSON, NormalNoticeConfig::class.java)
+                noticeConf =
+                    Gson().fromJson(LOCAL_NOTICE_CONFIG_JSON, NormalNoticeConfig::class.java)
             }
         }
     }
@@ -51,75 +52,151 @@ object NormalNoticeManager {
     fun initNoticeText(json: String = LOCAL_NOTICE_TEXT_JSON) {
         runCatching {
             Log.e("initNoticeText==>", "initNoticeText---normal")
-            val type = object : TypeToken<MutableList<NormalNoticeTextItem>>() {}.type
-            val list = Gson().fromJson<MutableList<NormalNoticeTextItem>?>(json, type)
-            Log.e("initNoticeText==>", "initNoticeText---normal--$list")
-            Log.e("initNoticeText==>", "initNoticeText---normal--${list[0].functions}")
-            noticeTextList = list.map {
-                Log.e("initNoticeText==>", "initNoticeText---${it}")
-                when (it.functions) {
+
+            val jsonArray = JSONArray(json)
+            val list = mutableListOf<NormalNoticeTextItem>()
+
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+
+                val functions = jsonObject.getString("octtt")
+                val noticeDes = jsonObject.getJSONArray("occcc")
+                val desList = mutableListOf<String>()
+                for (j in 0 until noticeDes.length()) {
+                    desList.add(noticeDes.getString(j))
+                }
+                val btnStr = jsonObject.getString("ocbbb")
+                val item = when (functions) {
                     "clean" -> {
-                        it.smallIconId = R.drawable.svg_notice_clean
-                        it.largeIconId = R.mipmap.ic_notice_clean
+                        NormalNoticeTextItem(
+                            functions,
+                            desList,
+                            btnStr,
+                            R.mipmap.ic_notice_clean,
+                            R.drawable.svg_notice_clean
+                        )
                     }
 
                     "big" -> {
-                        it.smallIconId = R.drawable.svg_notice_big_files
-                        it.largeIconId = R.mipmap.ic_notice_big_file
+                        NormalNoticeTextItem(
+                            functions,
+                            desList,
+                            btnStr,
+                            R.mipmap.ic_notice_big_file,
+                            R.drawable.svg_notice_big_files
+                        )
                     }
 
                     "empty" -> {
-                        it.smallIconId = R.drawable.svg_notice_empty_folders
-                        it.largeIconId = R.mipmap.ic_notoce_empty_folder
+                        NormalNoticeTextItem(
+                            functions,
+                            desList,
+                            btnStr,
+                            R.mipmap.ic_notoce_empty_folder,
+                            R.drawable.svg_notice_empty_folders
+                        )
                     }
 
                     "virus" -> {
-                        it.smallIconId = R.drawable.svg_notice_antivirus
-                        it.largeIconId = R.mipmap.ic_notice_antivirus
+                        NormalNoticeTextItem(
+                            functions,
+                            desList,
+                            btnStr,
+                            R.mipmap.ic_notice_antivirus,
+                            R.drawable.svg_notice_antivirus
+                        )
                     }
 
                     else -> {
-                        it.smallIconId = R.drawable.svg_notice_clean
-                        it.largeIconId = R.mipmap.ic_notice_clean
+                        NormalNoticeTextItem(
+                            functions,
+                            desList,
+                            btnStr,
+                            R.mipmap.ic_notice_clean,
+                            R.drawable.svg_notice_clean
+                        )
                     }
                 }
-                it
-            }.toMutableList()
+
+                list.add(item)
+            }
+
+
+            Log.e("initNoticeText==>", "initNoticeText---normal--$list")
+            Log.e("initNoticeText==>", "initNoticeText---normal--${list[0].functions}")
+            noticeTextList = list
 
         }.onFailure {
             runCatching {
                 Log.e("initNoticeText==>", "initNoticeText---onFailure${it.message}", it)
-                val type = object : TypeToken<MutableList<NormalNoticeTextItem>>() {}.type
-                val list = Gson().fromJson<MutableList<NormalNoticeTextItem>?>(json, type)
-                noticeTextList = list.map {
-                    when (it.functions) {
+                val jsonArray = JSONArray(json)
+                val list = mutableListOf<NormalNoticeTextItem>()
+
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+
+                    val functions = jsonObject.getString("octtt")
+                    val noticeDes = jsonObject.getJSONArray("occcc")
+                    val desList = mutableListOf<String>()
+                    for (j in 0 until noticeDes.length()) {
+                        desList.add(noticeDes.getString(j))
+                    }
+                    val btnStr = jsonObject.getString("ocbbb")
+                    val item = when (functions) {
                         "clean" -> {
-                            it.smallIconId = R.drawable.svg_notice_clean
-                            it.largeIconId = R.mipmap.ic_notice_clean
+                            NormalNoticeTextItem(
+                                functions,
+                                desList,
+                                btnStr,
+                                R.mipmap.ic_notice_clean,
+                                R.drawable.svg_notice_clean
+                            )
                         }
 
                         "big" -> {
-                            it.smallIconId = R.drawable.svg_notice_big_files
-                            it.largeIconId = R.mipmap.ic_notice_big_file
+                            NormalNoticeTextItem(
+                                functions,
+                                desList,
+                                btnStr,
+                                R.mipmap.ic_notice_big_file,
+                                R.drawable.svg_notice_big_files
+                            )
                         }
 
                         "empty" -> {
-                            it.smallIconId = R.drawable.svg_notice_empty_folders
-                            it.largeIconId = R.mipmap.ic_notoce_empty_folder
+                            NormalNoticeTextItem(
+                                functions,
+                                desList,
+                                btnStr,
+                                R.mipmap.ic_notoce_empty_folder,
+                                R.drawable.svg_notice_empty_folders
+                            )
                         }
 
                         "virus" -> {
-                            it.smallIconId = R.drawable.svg_notice_antivirus
-                            it.largeIconId = R.mipmap.ic_notice_antivirus
+                            NormalNoticeTextItem(
+                                functions,
+                                desList,
+                                btnStr,
+                                R.mipmap.ic_notice_antivirus,
+                                R.drawable.svg_notice_antivirus
+                            )
                         }
 
                         else -> {
-                            it.smallIconId = R.drawable.svg_notice_clean
-                            it.largeIconId = R.mipmap.ic_notice_clean
+                            NormalNoticeTextItem(
+                                functions,
+                                desList,
+                                btnStr,
+                                R.mipmap.ic_notice_clean,
+                                R.drawable.svg_notice_clean
+                            )
                         }
                     }
-                    it
-                }.toMutableList()
+
+                    list.add(item)
+                }
+                noticeTextList = list
             }
         }
     }
@@ -165,13 +242,13 @@ object NormalNoticeManager {
     fun showNormalNotice(type: String, noticeTextItem: NormalNoticeTextItem) {
         buildChannel()
         val builder = NotificationCompat.Builder(app, CHANNEL_ID)
-                .setSmallIcon(R.drawable.notice_small_icon)
-                .setAutoCancel(true)
-                .setGroupSummary(false)
-                .setGroup("NORMAL")
-                .setVibrate(null)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSmallIcon(R.drawable.notice_small_icon)
+            .setAutoCancel(true)
+            .setGroupSummary(false)
+            .setGroup("NORMAL")
+            .setVibrate(null)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
 
         val des = noticeTextItem.noticeDes.random()
@@ -180,18 +257,33 @@ object NormalNoticeManager {
         val largeViews = buildRemoteViews(true, noticeTextItem, noticeType)
         val tinyViews = buildRemoteViews(false, noticeTextItem, noticeType)
 
-        builder.setCustomContentView(tinyViews).setCustomHeadsUpContentView(tinyViews).setCustomBigContentView(largeViews)
+        builder.setCustomContentView(tinyViews).setCustomHeadsUpContentView(tinyViews)
+            .setCustomBigContentView(largeViews)
         runCatching {
-            NotificationManagerCompat.from(app).notify(if ("timer" == type) NOTIFICATION_TIMER_ID else NOTIFICATION_UNLOCK_ID, builder.build())
-            if ("timer" == type) timerNoticeLastShowTime = System.currentTimeMillis() else unlockNoticeLastShowTime = System.currentTimeMillis()
+            NotificationManagerCompat.from(app).notify(
+                if ("timer" == type) NOTIFICATION_TIMER_ID else NOTIFICATION_UNLOCK_ID,
+                builder.build()
+            )
+            if ("timer" == type) timerNoticeLastShowTime =
+                System.currentTimeMillis() else unlockNoticeLastShowTime =
+                System.currentTimeMillis()
         }
 
         runCatching {
-            TbaHelper.eventPost("pop_alltrigger", hashMapOf("func" to page, "text" to noticeType.des))
-            if ("timer"==type){
-                TbaHelper.eventPost("pop_trigger_timer", hashMapOf("func" to page, "text" to noticeType.des))
-            }else{
-                TbaHelper.eventPost("pop_trigger_unlock", hashMapOf("func" to page, "text" to noticeType.des))
+            TbaHelper.eventPost(
+                "pop_alltrigger",
+                hashMapOf("func" to page, "text" to noticeType.des)
+            )
+            if ("timer" == type) {
+                TbaHelper.eventPost(
+                    "pop_trigger_timer",
+                    hashMapOf("func" to page, "text" to noticeType.des)
+                )
+            } else {
+                TbaHelper.eventPost(
+                    "pop_trigger_unlock",
+                    hashMapOf("func" to page, "text" to noticeType.des)
+                )
             }
         }
 
@@ -199,13 +291,13 @@ object NormalNoticeManager {
 
     private fun buildChannel() = run {
         NotificationManagerCompat.from(app).createNotificationChannel(
-                NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
-                        .setSound(null, null)
-                        .setLightsEnabled(false)
-                        .setVibrationEnabled(false)
-                        .setShowBadge(true)
-                        .setName(CHANNEL_ID)
-                        .build()
+            NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setSound(null, null)
+                .setLightsEnabled(false)
+                .setVibrationEnabled(false)
+                .setShowBadge(true)
+                .setName(CHANNEL_ID)
+                .build()
         )
     }
 
@@ -216,13 +308,25 @@ object NormalNoticeManager {
             putExtra(KEY_NOTICE_FUNCTION, noticeType)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
-        PendingIntent.getActivity(app, Random.nextInt(1200, 8000), intent, PendingIntent.FLAG_IMMUTABLE)
+        PendingIntent.getActivity(
+            app,
+            Random.nextInt(1200, 8000),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
 
-    private fun buildRemoteViews(isLarge: Boolean, item: NormalNoticeTextItem, noticeType: NoticeType): RemoteViews = let {
+    private fun buildRemoteViews(
+        isLarge: Boolean,
+        item: NormalNoticeTextItem,
+        noticeType: NoticeType
+    ): RemoteViews = let {
 
-        RemoteViews(app.packageName, if (isLarge) R.layout.notice_normal_large else R.layout.notice_normal_tiny).apply {
+        RemoteViews(
+            app.packageName,
+            if (isLarge) R.layout.notice_normal_large else R.layout.notice_normal_tiny
+        ).apply {
             setTextViewText(R.id.tv_des, noticeType.des)
             setTextViewText(R.id.tv_btn, item.btnStr)
             setImageViewResource(R.id.iv_logo, if (isLarge) item.largeIconId else item.smallIconId)
