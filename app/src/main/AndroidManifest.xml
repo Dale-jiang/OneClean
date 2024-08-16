@@ -178,7 +178,7 @@
 
         <meta-data
             android:name="com.trustlook.ApiKey"
-            android:value="902f837a9821f8dfa2348d2fdafb7a20745286e015a33ad42b6819e8" />
+            android:value="b3481752ec24c85c2252f641d65fad37387a438d9de013ecd195d35a" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
