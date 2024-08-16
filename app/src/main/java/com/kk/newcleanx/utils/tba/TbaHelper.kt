@@ -107,10 +107,10 @@ object TbaHelper : TbaBase() {
             })
 
             put("returnee", JSONObject().apply {
-                put("jaime", 1)
-                put("white", 40)
+                put("jaime", "1")
+                put("white", "40")
                 put("acapulco", System.currentTimeMillis())
-                put("succumb", 10)
+                put("succumb", "10")
             })
 
             put("nourish", JSONObject().apply {
@@ -118,8 +118,8 @@ object TbaHelper : TbaBase() {
                 put("galactic", BuildConfig.VERSION_NAME)
                 put("bronze", distinctId)
                 put("rod", "backstop")
-                put("physic", 0)
-                put("bandy", 2)
+                put("physic", "0")
+                put("bandy", "2")
             })
 
             put("jacket", JSONObject().apply {

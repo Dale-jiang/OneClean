@@ -102,7 +102,7 @@ class AntivirusListActivity : AllFilePermissionActivity<AcAntivirusListBinding>(
         runCatching {
             isToSettings = true
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:$packageName")
+                data = Uri.parse("package:$packageNameTemp")
             }
             unInstallLauncher.launch(intent)
         }
