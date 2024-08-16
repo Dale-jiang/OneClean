@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.ui.common.MainActivity
 import com.kk.newcleanx.ui.common.OpenActivity
@@ -37,7 +38,10 @@ class AppLifecycleHelper : Application.ActivityLifecycleCallbacks {
             activity.startActivity(Intent(activity, OpenActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             })
-        } else isToSettings = false
+        } else{
+            isToSettings = false
+            Log.e("=========>>>>","isToSettings==${isToSettings}")
+        }
 
     }
 

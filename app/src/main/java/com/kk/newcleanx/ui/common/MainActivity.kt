@@ -80,7 +80,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     }
 
     private val notificationSetLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        isToSettings = false
+//        isToSettings = false
         if (hasNotificationPermission()) {
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
         } else {

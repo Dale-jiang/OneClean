@@ -92,7 +92,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
 
     override fun onResume() {
         super.onResume()
-        isToSettings = false
+//        isToSettings = false
         checkList()
     }
 

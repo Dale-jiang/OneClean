@@ -30,7 +30,7 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
     private var animator: ValueAnimator? = null
 
     private val permissionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        isToSettings = false
+       // isToSettings = false
         if (CommonUtils.hasAllStoragePermission()) {
             mBlack(true)
         } else mBlack(false)
@@ -136,6 +136,6 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
         handler.removeCallbacksAndMessages(null)
         animator?.cancel()
         animator = null
-        isToSettings = false
+//        isToSettings = false
     }
 }
