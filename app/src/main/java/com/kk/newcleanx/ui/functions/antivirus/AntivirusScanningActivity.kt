@@ -20,6 +20,7 @@ import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.antivirus.vm.AntivirusScanningViewModel
 import com.kk.newcleanx.utils.showAntivirusNotice
 import com.kk.newcleanx.utils.showAntivirusScanError
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -102,11 +103,19 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
                 runCatching {
                     if (it == 888) {
                         showFullAd {
-                            if (virusRiskList.isEmpty()) AntivirusResultActivity.start(this@AntivirusScanningActivity, getString(R.string.no_threats_found))
-                            else AntivirusListActivity.start(this@AntivirusScanningActivity)
+                            if (virusRiskList.isEmpty()){
+                                TbaHelper.eventPost("antivirus_res_page", hashMapOf("res" to "no"))
+                                AntivirusResultActivity.start(this@AntivirusScanningActivity, getString(R.string.no_threats_found))
+                            }
+                            else{
+                                TbaHelper.eventPost("antivirus_res_page", hashMapOf("res" to "yes"))
+                                AntivirusListActivity.start(this@AntivirusScanningActivity)
+                            }
                             finish()
                         }
                     } else {
+                        TbaHelper.eventPost("antivirus_scan_error", hashMapOf("code" to it))
+                        TbaHelper.eventPost("antivirus_scan_error_popshow")
                         showAntivirusScanError { finish() }
                     }
                 }

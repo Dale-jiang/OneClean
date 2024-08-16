@@ -24,6 +24,7 @@ import com.kk.newcleanx.data.local.unlockNoticeLastShowTime
 import com.kk.newcleanx.ui.common.OpenActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.activityReferences
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlin.random.Random
 
 object NormalNoticeManager {
@@ -172,13 +173,26 @@ object NormalNoticeManager {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        val largeViews = buildRemoteViews(true, type, noticeTextItem)
-        val tinyViews = buildRemoteViews(false, type, noticeTextItem)
+
+        val des = noticeTextItem.noticeDes.random()
+        val page = formatJumpStr(noticeTextItem.functions)
+        val noticeType = NoticeType(page, "normal_notice", type, des)
+        val largeViews = buildRemoteViews(true, noticeTextItem, noticeType)
+        val tinyViews = buildRemoteViews(false, noticeTextItem, noticeType)
 
         builder.setCustomContentView(tinyViews).setCustomHeadsUpContentView(tinyViews).setCustomBigContentView(largeViews)
         runCatching {
             NotificationManagerCompat.from(app).notify(if ("timer" == type) NOTIFICATION_TIMER_ID else NOTIFICATION_UNLOCK_ID, builder.build())
             if ("timer" == type) timerNoticeLastShowTime = System.currentTimeMillis() else unlockNoticeLastShowTime = System.currentTimeMillis()
+        }
+
+        runCatching {
+            TbaHelper.eventPost("pop_alltrigger", hashMapOf("func" to page, "text" to noticeType.des))
+            if ("timer"==type){
+                TbaHelper.eventPost("pop_trigger_timer", hashMapOf("func" to page, "text" to noticeType.des))
+            }else{
+                TbaHelper.eventPost("pop_trigger_unlock", hashMapOf("func" to page, "text" to noticeType.des))
+            }
         }
 
     }
@@ -206,16 +220,10 @@ object NormalNoticeManager {
     }
 
 
-    private fun buildRemoteViews(isLarge: Boolean, type: String, item: NormalNoticeTextItem): RemoteViews = let {
+    private fun buildRemoteViews(isLarge: Boolean, item: NormalNoticeTextItem, noticeType: NoticeType): RemoteViews = let {
 
         RemoteViews(app.packageName, if (isLarge) R.layout.notice_front_large else R.layout.notice_normal_tiny).apply {
-
-            val des = item.noticeDes.random()
-            val page = formatJumpStr(item.functions)
-            val noticeType = NoticeType(page, "normal_notice", type, des)
-            Log.e("buildClickPendingIntent==>", "buildClickPendingIntent---${page}")
-
-            setTextViewText(R.id.tv_des, des)
+            setTextViewText(R.id.tv_des, noticeType.des)
             setTextViewText(R.id.tv_btn, item.btnStr)
             setImageViewResource(R.id.iv_logo, if (isLarge) item.largeIconId else item.smallIconId)
             setOnClickPendingIntent(R.id.root, buildClickPendingIntent(noticeType))

@@ -92,17 +92,25 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     private fun cancelNormalNotice() {
         if (noticeType != null) {
             when (noticeType!!.scene) {
-                "front_notice" -> Log.e("front_notice==>", "front_notice pop_click")
+                "front_notice" -> {
+                    TbaHelper.eventPost("open_type", hashMapOf("octype" to "bar"))
+                }
+
                 else -> {
-                    Log.e("normal_notice==>", "normal_notice pop_click")
                     runCatching {
+                        TbaHelper.eventPost("open_type", hashMapOf("octype" to "pop"))
+                        TbaHelper.eventPost("pop_allclick", hashMapOf("func" to noticeType!!.toPage, "text" to noticeType!!.des))
                         if ("timer" == noticeType!!.sceneSecond) {
+                            TbaHelper.eventPost("pop_click_timer", hashMapOf("func" to noticeType!!.toPage, "text" to noticeType!!.des))
                             NotificationManagerCompat.from(app).cancel(NormalNoticeManager.NOTIFICATION_TIMER_ID)
-                        } else NotificationManagerCompat.from(app).cancel(NormalNoticeManager.NOTIFICATION_UNLOCK_ID)
+                        } else {
+                            TbaHelper.eventPost("pop_click_unlock", hashMapOf("func" to noticeType!!.toPage, "text" to noticeType!!.des))
+                            NotificationManagerCompat.from(app).cancel(NormalNoticeManager.NOTIFICATION_UNLOCK_ID)
+                        }
                     }
                 }
             }
-        }
+        } else TbaHelper.eventPost("open_type", hashMapOf("octype" to "open"))
     }
 
     private fun loadingAd() {
@@ -169,6 +177,11 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
                 "antivirus" -> {
                     if (CommonUtils.hasAllStoragePermission()) {
+                        if ("front_notice"==noticeType!!.scene){
+                            TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "bar"))
+                        }else{
+                            TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "pop"))
+                        }
                         startActivities(arrayOf(Intent(this, MainActivity::class.java), Intent(this, AntivirusScanningActivity::class.java)))
                     } else MainActivity.start(this, noticeType)
                 }

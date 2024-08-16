@@ -96,6 +96,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        TbaHelper.eventPost("home_page")
         noticeType = intent?.getParcelableExtra(KEY_NOTICE_FUNCTION)
 
         initAdapter()
@@ -105,6 +106,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             SettingActivity.start(this)
         }
         binding.btnScan.setOnClickListener {
+
+            TbaHelper.eventPost("ho_clean")
+
             requestAllFilePermission {
                 if (it) {
                     showBackAd = true
@@ -132,6 +136,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                             requestAllFilePermission { success ->
                                 if (success) {
                                     showBackAd = true
+                                    TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "home"))
                                     AntivirusScanningActivity.start(this)
                                 }
                             }
@@ -140,6 +145,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 }
 
                 BIG_FILE_CLEAN -> {
+                    TbaHelper.eventPost("ho_big")
                     requestAllFilePermission { success ->
                         if (success) {
                             showBackAd = true
@@ -149,16 +155,19 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 }
 
                 APP_MANAGER -> {
+                    TbaHelper.eventPost("ho_appmanager")
                     showBackAd = true
                     AppManagerActivity.start(this)
                 }
 
                 DEVICE_STATUS -> {
+                    TbaHelper.eventPost("ho_device")
                     showBackAd = true
                     DeviceInfoActivity.start(this)
                 }
 
                 EMPTY_FOLDER -> {
+                    TbaHelper.eventPost("ho_empty")
                     requestAllFilePermission { success ->
                         if (success) {
                             showBackAd = true
@@ -213,8 +222,17 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                             }
                         }
 
-                        "antivirus" -> AntivirusScanningActivity.start(this)
+                        "antivirus" -> {
+                            if ("front_notice" == noticeType!!.scene) {
+                                TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "bar"))
+                            } else {
+                                TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "pop"))
+                            }
+                            AntivirusScanningActivity.start(this)
+                        }
+
                         "big_file" -> BigFileCleanActivity.start(this)
+
                         "empty_folder" -> EmptyFolderActivity.start(this)
                     }
                 }
