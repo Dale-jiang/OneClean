@@ -56,3 +56,16 @@
     boolean isLimitAdTrackingEnabled();
 }
 -keep public class com.android.installreferrer.**{ *; }
+
+
+-keep class com.kk.newcleanx.data.local.** { *; }
+
+-keep class com.google.gson.** { *; }
+
+-keepattributes *Annotation*
+
+-keep @com.google.gson.annotations.SerializedName class * { *; }
+-keep @com.google.gson.annotations.Expose class * { *; }
+-keep @com.google.gson.annotations.Since class * { *; }
+-keep @com.google.gson.annotations.Until class * { *; }
+

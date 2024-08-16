@@ -16,7 +16,7 @@ private val any = Any()
 private val activityStack = LinkedList<Activity>()
 private var activityJob: Job? = null
 private var isHotStart = false
-private var activityReferences = 0
+var activityReferences = 0
 
 class AppLifecycleHelper : Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

@@ -59,11 +59,11 @@ object FrontNoticeManager {
     fun showNotice(): Notification = run {
         buildChannel()
         val largeViews = buildRemoteViews(true)
-        val smallViews = buildRemoteViews(false)
+        val tinyViews = buildRemoteViews(false)
         val builder = NotificationCompat.Builder(app, CHANNEL_ID).setSmallIcon(R.drawable.notice_small_icon).setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE).setOnlyAlertOnce(true).setGroupSummary(false).setGroup("FRONT").setSound(null).setOngoing(true)
         if (CommonUtils.isMiUI() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            builder.setCustomContentView(smallViews).setCustomBigContentView(largeViews).setCustomHeadsUpContentView(largeViews)
+            builder.setCustomContentView(tinyViews).setCustomBigContentView(largeViews).setCustomHeadsUpContentView(largeViews)
         } else {
             builder.setCustomContentView(largeViews).setCustomBigContentView(largeViews).setCustomHeadsUpContentView(largeViews)
         }

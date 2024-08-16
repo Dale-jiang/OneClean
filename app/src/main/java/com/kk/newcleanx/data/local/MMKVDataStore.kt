@@ -52,3 +52,6 @@ var hasShowAntivirusTips by MMKVStorageDelegate(false)
 var gaidString by MMKVStorageDelegate("")
 var enableLimitAdTracker by MMKVStorageDelegate(true)
 var showNotificationPerDialogTime by MMKVStorageDelegate(0L)
+
+var timerNoticeLastShowTime by MMKVStorageDelegate(0L)
+var unlockNoticeLastShowTime by MMKVStorageDelegate(0L)

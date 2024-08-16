@@ -163,6 +163,8 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
                         startActivities(arrayOf(Intent(this, MainActivity::class.java), Intent(this, EmptyFolderActivity::class.java)))
                     } else MainActivity.start(this, noticeType)
                 }
+
+                else -> MainActivity.start(this, null)
             }
 
 
