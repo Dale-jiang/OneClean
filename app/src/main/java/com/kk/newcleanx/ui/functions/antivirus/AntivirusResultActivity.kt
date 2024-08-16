@@ -22,6 +22,7 @@ import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -99,12 +100,13 @@ class AntivirusResultActivity : AllFilePermissionActivity<AcAntivirusResultBindi
     private fun showNatAd() {
 
         if (ADManager.isOverAdMax()) return
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_nat"))
         ADManager.ocScanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
                 if (ADManager.ocScanNatLoader.canShow(this@AntivirusResultActivity)) {
                     ad?.destroy()
-                    ADManager.ocScanNatLoader.showNativeAd(this@AntivirusResultActivity, binding.adFr, "oc_clean_nat") {
+                    ADManager.ocScanNatLoader.showNativeAd(this@AntivirusResultActivity, binding.adFr, "oc_scan_nat") {
                         ad = it
                     }
                 }

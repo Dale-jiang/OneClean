@@ -28,6 +28,7 @@ import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileCleanAdapter
 import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileFilterAdapter
 import com.kk.newcleanx.ui.functions.bigfile.vm.BigFileCleanViewModel
 import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -234,6 +235,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
         }
 
         // log : oc_scan_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
 
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

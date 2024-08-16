@@ -339,6 +339,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         }
 
         // log : oc_back_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_back_int"))
 
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
@@ -359,12 +360,13 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     private fun showMainNatAd() {
 
         if (ADManager.isOverAdMax()) return
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_main_nat"))
         ADManager.ocMainNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
                 if (ADManager.ocMainNatLoader.canShow(this@MainActivity)) {
                     ad?.destroy()
-                    ADManager.ocMainNatLoader.showNativeAd(this@MainActivity, binding.adFr, "nat") {
+                    ADManager.ocMainNatLoader.showNativeAd(this@MainActivity, binding.adFr, "oc_main_nat") {
                         ad = it
                     }
                 }

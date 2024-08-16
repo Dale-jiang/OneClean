@@ -177,9 +177,9 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
                 "antivirus" -> {
                     if (CommonUtils.hasAllStoragePermission()) {
-                        if ("front_notice"==noticeType!!.scene){
+                        if ("front_notice" == noticeType!!.scene) {
                             TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "bar"))
-                        }else{
+                        } else {
                             TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "pop"))
                         }
                         startActivities(arrayOf(Intent(this, MainActivity::class.java), Intent(this, AntivirusScanningActivity::class.java)))
@@ -218,10 +218,13 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             b.invoke()
             return
         }
+
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))
+
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
             if (ADManager.ocLaunchLoader.canShow(this@OpenActivity)) {
-                ADManager.ocLaunchLoader.showFullScreenAd(this@OpenActivity, "fm_scan_int") {
+                ADManager.ocLaunchLoader.showFullScreenAd(this@OpenActivity, "oc_launch") {
                     b.invoke()
                 }
             } else {

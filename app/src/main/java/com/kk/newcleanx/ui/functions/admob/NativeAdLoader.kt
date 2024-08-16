@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import com.kk.newcleanx.data.local.AdItemList
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.ui.base.BaseActivity
+import com.kk.newcleanx.utils.tba.TbaHelper
 
 class NativeAdLoader(iWhere: String) : BaseLoader(iWhere) {
 
@@ -46,6 +47,7 @@ class NativeAdLoader(iWhere: String) : BaseLoader(iWhere) {
 
         if (ad is AdType.MyNativeAd) {
             ad.showAd(activity, parent)
+            TbaHelper.eventPost("oc_ad_impression", hashMapOf("ad_pos_id" to posId))
             callback.invoke(ad)
         }
 

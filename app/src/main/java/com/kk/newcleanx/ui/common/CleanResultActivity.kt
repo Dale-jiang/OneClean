@@ -25,6 +25,7 @@ import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -108,6 +109,7 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
     private fun showNatAd() {
 
         if (ADManager.isOverAdMax()) return
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_clean_nat"))
         ADManager.ocCleanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

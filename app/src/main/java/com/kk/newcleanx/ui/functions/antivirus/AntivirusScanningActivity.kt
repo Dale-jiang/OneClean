@@ -178,7 +178,7 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
             b.invoke()
             return
         }
-
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
             if (ADManager.ocScanIntLoader.canShow(this@AntivirusScanningActivity)) {

@@ -18,6 +18,7 @@ import com.kk.newcleanx.ui.functions.appmanager.adapter.AppManagerAdapter
 import com.kk.newcleanx.ui.functions.appmanager.vm.AppManagerViewModel
 import com.kk.newcleanx.utils.isPackageInstalled
 import com.kk.newcleanx.utils.openAppDetails
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -115,6 +116,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
         }
 
         // log : oc_scan_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
 
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
@@ -132,6 +134,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
     private var ad: AdType? = null
     private fun showMainNatAd() {
         if (ADManager.isOverAdMax()) return
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_nat"))
         ADManager.ocScanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

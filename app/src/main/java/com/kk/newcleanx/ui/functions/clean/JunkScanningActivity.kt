@@ -21,6 +21,7 @@ import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.clean.vm.JunkScanningViewModel
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.startRotateAnim
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -172,6 +173,7 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
         }
 
         // log : oc_scan_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
 
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

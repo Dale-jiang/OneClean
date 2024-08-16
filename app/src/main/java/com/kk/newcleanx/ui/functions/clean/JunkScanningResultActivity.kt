@@ -20,6 +20,7 @@ import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.clean.adapter.JunkScanningResultAdapter
 import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -84,6 +85,7 @@ class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
     private fun showNatAd() {
 
         if (ADManager.isOverAdMax()) return
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_nat"))
         ADManager.ocScanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

@@ -26,6 +26,7 @@ import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -219,6 +220,7 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
         }
 
         // log : oc_scan_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
 
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
@@ -240,6 +242,7 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
             binding.adFr.isVisible = false
             return
         }
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_nat"))
         ADManager.ocScanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

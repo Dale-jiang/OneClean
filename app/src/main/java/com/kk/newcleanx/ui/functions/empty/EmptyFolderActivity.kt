@@ -18,6 +18,7 @@ import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.empty.adapter.EmptyFoldersListAdapter
 import com.kk.newcleanx.ui.functions.empty.vm.EmptyFolderViewModel
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -102,7 +103,7 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
         }
 
         // log : oc_scan_int
-
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
             if (ADManager.ocScanIntLoader.canShow(this@EmptyFolderActivity)) {
@@ -123,6 +124,7 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
         if (ADManager.isOverAdMax()) {
             return
         }
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_nat"))
         ADManager.ocScanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)

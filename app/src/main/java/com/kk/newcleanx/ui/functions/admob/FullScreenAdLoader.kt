@@ -7,6 +7,7 @@ import com.kk.newcleanx.data.local.AdItemList
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.common.dialog.AdLoadingDialog
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ class FullScreenAdLoader(iWhere: String) : BaseLoader(iWhere) {
     }
 
     fun showFullScreenAd(
-        activity: BaseActivity<*>, posId: String = where, onClose: () -> Unit = {}
+            activity: BaseActivity<*>, posId: String = where, onClose: () -> Unit = {}
     ) {
         if (adLoadList.isEmpty()) {
             onClose.invoke()
@@ -54,6 +55,7 @@ class FullScreenAdLoader(iWhere: String) : BaseLoader(iWhere) {
                     delay(1500)
                     dialog.dismiss()
                     ad.showAd(activity, null, onClose)
+                    TbaHelper.eventPost("oc_ad_impression", hashMapOf("ad_pos_id" to posId))
                 } else {
                     onClose.invoke()
                     return@launch

@@ -20,6 +20,7 @@ import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.clean.vm.JunkCleanViewModel
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -143,6 +144,7 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
         }
 
         // log : oc_clean_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_clean_int"))
 
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
