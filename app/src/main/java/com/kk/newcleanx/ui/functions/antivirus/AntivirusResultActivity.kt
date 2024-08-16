@@ -99,12 +99,12 @@ class AntivirusResultActivity : AllFilePermissionActivity<AcAntivirusResultBindi
     private fun showNatAd() {
 
         if (ADManager.isOverAdMax()) return
-        ADManager.ocCleanNatLoader.waitAdLoading(this) {
+        ADManager.ocScanNatLoader.waitAdLoading(this) {
             lifecycleScope.launch {
                 while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-                if (ADManager.ocCleanNatLoader.canShow(this@AntivirusResultActivity)) {
+                if (ADManager.ocScanNatLoader.canShow(this@AntivirusResultActivity)) {
                     ad?.destroy()
-                    ADManager.ocCleanNatLoader.showNativeAd(this@AntivirusResultActivity, binding.adFr, "oc_clean_nat") {
+                    ADManager.ocScanNatLoader.showNativeAd(this@AntivirusResultActivity, binding.adFr, "oc_clean_nat") {
                         ad = it
                     }
                 }
