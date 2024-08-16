@@ -196,8 +196,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
         super.onResume()
         startLoading()
         lifecycleScope.launch {
-            delay(1000L)
-            showMainNatAd()
+            delay(if (showBackAd) 3000L else 1000L)
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED))
+                showMainNatAd()
         }
 
         if (showBackAd && noticeType == null) {

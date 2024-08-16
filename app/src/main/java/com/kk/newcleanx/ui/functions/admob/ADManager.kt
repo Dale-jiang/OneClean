@@ -78,7 +78,6 @@ object ADManager {
     }
 
     fun isBlocked(): Boolean {
-        return false
         if (CommonUtils.isBlackUser()) return true
         return !buyUserTags.any { installReferrerStr.contains(it, true) }
     }
