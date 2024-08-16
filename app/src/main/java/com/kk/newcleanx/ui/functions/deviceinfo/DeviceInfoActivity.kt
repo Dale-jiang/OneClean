@@ -53,13 +53,12 @@ class DeviceInfoActivity : AllFilePermissionActivity<AcDeviceInfoBinding>() {
 
             toolbar.tvTitle.text = getString(R.string.device_status)
 
-            showNatAd()
-
             startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
                     showFullAd {
                         clLoading.isVisible = false
                         viewLottie.cancelAnimation()
+                        showNatAd()
                     }
                 }
             }

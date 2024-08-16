@@ -50,6 +50,7 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
                     showFullAd {
                         clLoading.isVisible = false
                         viewLottie.cancelAnimation()
+                        showNatAd()
                     }
                 }
             }
@@ -71,7 +72,6 @@ class EmptyFolderActivity : AllFilePermissionActivity<AcEmptyFolderBinding>() {
         }
 
         initObserver()
-        showNatAd()
 
     }
 

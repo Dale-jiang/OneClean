@@ -222,7 +222,7 @@ object NormalNoticeManager {
 
     private fun buildRemoteViews(isLarge: Boolean, item: NormalNoticeTextItem, noticeType: NoticeType): RemoteViews = let {
 
-        RemoteViews(app.packageName, if (isLarge) R.layout.notice_front_large else R.layout.notice_normal_tiny).apply {
+        RemoteViews(app.packageName, if (isLarge) R.layout.notice_normal_large else R.layout.notice_normal_tiny).apply {
             setTextViewText(R.id.tv_des, noticeType.des)
             setTextViewText(R.id.tv_btn, item.btnStr)
             setImageViewResource(R.id.iv_logo, if (isLarge) item.largeIconId else item.smallIconId)

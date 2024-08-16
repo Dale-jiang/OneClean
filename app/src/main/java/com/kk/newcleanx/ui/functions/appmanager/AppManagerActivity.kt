@@ -43,7 +43,6 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
         super.onCreate(savedInstanceState)
 
         initAdapter()
-        showMainNatAd()
         viewModel.getAppInfoList()
 
         binding.apply {
@@ -55,6 +54,7 @@ class AppManagerActivity : AllFilePermissionActivity<AcAppManagerBinding>() {
                     showFullAd {
                         clLoading.isVisible = false
                         viewLottie.cancelAnimation()
+                        showMainNatAd()
                     }
                 }
             }

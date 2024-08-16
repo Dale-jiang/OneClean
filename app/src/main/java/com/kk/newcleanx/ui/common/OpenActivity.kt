@@ -82,6 +82,10 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             notificationLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
 
+        if (hasNotificationPermission()){
+            TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
+        }
+
         onBackPressedDispatcher.addCallback {}
         lifecycleScope.launch {
             if (isFirstStartup) requestUMPInfo() else doAdProgress()
