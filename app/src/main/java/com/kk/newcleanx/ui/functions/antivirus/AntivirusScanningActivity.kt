@@ -174,7 +174,7 @@ class AntivirusScanningActivity : AllFilePermissionActivity<AcAntivirusScanningB
 
     private fun showFullAd(b: () -> Unit) {
 
-        if (ADManager.isOverAdMax()) {
+        if (ADManager.isOverAdMax()|| ADManager.isBlocked()) {
             b.invoke()
             return
         }
