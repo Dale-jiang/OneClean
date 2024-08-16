@@ -24,8 +24,8 @@ object FrontNoticeManager {
 
     private fun buildChannel() = run {
         NotificationManagerCompat.from(app).createNotificationChannel(
-            NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_DEFAULT).setSound(null, null).setLightsEnabled(false)
-                .setVibrationEnabled(false).setShowBadge(false).setName(CHANNEL_ID).build()
+                NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_DEFAULT).setSound(null, null).setLightsEnabled(false)
+                        .setVibrationEnabled(false).setShowBadge(false).setName(CHANNEL_ID).build()
         )
     }
 
@@ -39,10 +39,10 @@ object FrontNoticeManager {
                 setTextViewText(R.id.tv_empty_folder, app.getString(R.string.empty_folders))
             }
 
-            setOnClickPendingIntent(R.id.clean, buildClickPendingIntent(NoticeType("clean", "front_notice", "")))
-            setOnClickPendingIntent(R.id.antivirus, buildClickPendingIntent(NoticeType("antivirus", "front_notice", "")))
-            setOnClickPendingIntent(R.id.big_files, buildClickPendingIntent(NoticeType("big_file", "front_notice", "")))
-            setOnClickPendingIntent(R.id.empty_folder, buildClickPendingIntent(NoticeType("empty_folder", "front_notice", "")))
+            setOnClickPendingIntent(R.id.clean, buildClickPendingIntent(NoticeType("clean", "front_notice")))
+            setOnClickPendingIntent(R.id.antivirus, buildClickPendingIntent(NoticeType("antivirus", "front_notice")))
+            setOnClickPendingIntent(R.id.big_files, buildClickPendingIntent(NoticeType("big_file", "front_notice")))
+            setOnClickPendingIntent(R.id.empty_folder, buildClickPendingIntent(NoticeType("empty_folder", "front_notice")))
         }
     }
 
@@ -61,7 +61,7 @@ object FrontNoticeManager {
         val largeViews = buildRemoteViews(true)
         val tinyViews = buildRemoteViews(false)
         val builder = NotificationCompat.Builder(app, CHANNEL_ID).setSmallIcon(R.drawable.notice_small_icon).setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE).setOnlyAlertOnce(true).setGroupSummary(false).setGroup("FRONT").setSound(null).setOngoing(true)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE).setOnlyAlertOnce(true).setGroupSummary(false).setGroup("FRONT").setSound(null).setOngoing(true)
         if (CommonUtils.isMiUI() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             builder.setCustomContentView(tinyViews).setCustomBigContentView(largeViews).setCustomHeadsUpContentView(largeViews)
         } else {

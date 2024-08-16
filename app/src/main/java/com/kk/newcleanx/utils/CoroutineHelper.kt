@@ -8,6 +8,8 @@ import kotlinx.coroutines.launch
 
 object CoroutineHelper {
 
+    val taskCheckScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
+
     private val iOScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
     private val mainScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.Main) }
 

@@ -32,14 +32,16 @@ object NormalNoticeManager {
     const val NOTIFICATION_UNLOCK_ID = 18850
 
     private const val CHANNEL_ID = "NORMAL_NOTICE"
-    private var noticeConf: NormalNoticeConfig? = null
-    private var noticeTextList: MutableList<NormalNoticeTextItem>? = null
+    var noticeConf: NormalNoticeConfig? = null
+    var noticeTextList: MutableList<NormalNoticeTextItem>? = null
 
     fun initNoticeConfig(json: String = LOCAL_NOTICE_CONFIG_JSON) {
         runCatching {
+            Log.e("initNoticeConfig==>", "initNoticeConfig---normal")
             noticeConf = Gson().fromJson(json, NormalNoticeConfig::class.java)
         }.onFailure {
             runCatching {
+                Log.e("initNoticeConfig==>", "initNoticeConfig---onFailure")
                 noticeConf = Gson().fromJson(LOCAL_NOTICE_CONFIG_JSON, NormalNoticeConfig::class.java)
             }
         }
@@ -47,9 +49,14 @@ object NormalNoticeManager {
 
     fun initNoticeText(json: String = LOCAL_NOTICE_TEXT_JSON) {
         runCatching {
+            Log.e("initNoticeText==>", "initNoticeText---normal")
             val type = object : TypeToken<MutableList<NormalNoticeTextItem>>() {}.type
-            noticeTextList = Gson().fromJson<MutableList<NormalNoticeTextItem>?>(json, type)?.map {
-                when (it.function) {
+            val list = Gson().fromJson<MutableList<NormalNoticeTextItem>?>(json, type)
+            Log.e("initNoticeText==>", "initNoticeText---normal--$list")
+            Log.e("initNoticeText==>", "initNoticeText---normal--${list[0].functions}")
+            noticeTextList = list.map {
+                Log.e("initNoticeText==>", "initNoticeText---${it}")
+                when (it.functions) {
                     "clean" -> {
                         it.smallIconId = R.drawable.svg_notice_clean
                         it.largeIconId = R.mipmap.ic_notice_clean
@@ -69,14 +76,22 @@ object NormalNoticeManager {
                         it.smallIconId = R.drawable.svg_notice_antivirus
                         it.largeIconId = R.mipmap.ic_notice_antivirus
                     }
+
+                    else -> {
+                        it.smallIconId = R.drawable.svg_notice_clean
+                        it.largeIconId = R.mipmap.ic_notice_clean
+                    }
                 }
                 it
-            }?.toMutableList()
+            }.toMutableList()
+
         }.onFailure {
             runCatching {
+                Log.e("initNoticeText==>", "initNoticeText---onFailure${it.message}", it)
                 val type = object : TypeToken<MutableList<NormalNoticeTextItem>>() {}.type
-                noticeTextList = Gson().fromJson<MutableList<NormalNoticeTextItem>?>(LOCAL_NOTICE_TEXT_JSON, type)?.map {
-                    when (it.function) {
+                val list = Gson().fromJson<MutableList<NormalNoticeTextItem>?>(json, type)
+                noticeTextList = list.map {
+                    when (it.functions) {
                         "clean" -> {
                             it.smallIconId = R.drawable.svg_notice_clean
                             it.largeIconId = R.mipmap.ic_notice_clean
@@ -96,9 +111,14 @@ object NormalNoticeManager {
                             it.smallIconId = R.drawable.svg_notice_antivirus
                             it.largeIconId = R.mipmap.ic_notice_antivirus
                         }
+
+                        else -> {
+                            it.smallIconId = R.drawable.svg_notice_clean
+                            it.largeIconId = R.mipmap.ic_notice_clean
+                        }
                     }
                     it
-                }?.toMutableList()
+                }.toMutableList()
             }
         }
     }
@@ -152,8 +172,8 @@ object NormalNoticeManager {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        val largeViews = buildRemoteViews(true, noticeTextItem)
-        val tinyViews = buildRemoteViews(false, noticeTextItem)
+        val largeViews = buildRemoteViews(true, type, noticeTextItem)
+        val tinyViews = buildRemoteViews(false, type, noticeTextItem)
 
         builder.setCustomContentView(tinyViews).setCustomHeadsUpContentView(tinyViews).setCustomBigContentView(largeViews)
         runCatching {
@@ -176,23 +196,29 @@ object NormalNoticeManager {
     }
 
 
-    private fun buildClickPendingIntent(type: String, des: String) = let {
+    private fun buildClickPendingIntent(noticeType: NoticeType) = let {
         val intent = Intent(app, OpenActivity::class.java).apply {
-            putExtra(KEY_NOTICE_FUNCTION, NoticeType(formatJumpStr(type), "normal_notice", des))
+            Log.e("buildClickPendingIntent==>", "buildClickPendingIntent---${noticeType}")
+            putExtra(KEY_NOTICE_FUNCTION, noticeType)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
-        PendingIntent.getActivity(app, Random.nextInt(1300, 7000), intent, PendingIntent.FLAG_IMMUTABLE)
+        PendingIntent.getActivity(app, Random.nextInt(1200, 8000), intent, PendingIntent.FLAG_IMMUTABLE)
     }
 
 
-    private fun buildRemoteViews(isLarge: Boolean, item: NormalNoticeTextItem): RemoteViews = let {
+    private fun buildRemoteViews(isLarge: Boolean, type: String, item: NormalNoticeTextItem): RemoteViews = let {
 
         RemoteViews(app.packageName, if (isLarge) R.layout.notice_front_large else R.layout.notice_normal_tiny).apply {
+
             val des = item.noticeDes.random()
+            val page = formatJumpStr(item.functions)
+            val noticeType = NoticeType(page, "normal_notice", type, des)
+            Log.e("buildClickPendingIntent==>", "buildClickPendingIntent---${page}")
+
             setTextViewText(R.id.tv_des, des)
             setTextViewText(R.id.tv_btn, item.btnStr)
             setImageViewResource(R.id.iv_logo, if (isLarge) item.largeIconId else item.smallIconId)
-            setOnClickPendingIntent(R.id.root, buildClickPendingIntent(item.function, des))
+            setOnClickPendingIntent(R.id.root, buildClickPendingIntent(noticeType))
         }
 
     }

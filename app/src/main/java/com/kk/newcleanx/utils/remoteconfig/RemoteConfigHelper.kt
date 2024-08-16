@@ -13,6 +13,8 @@ object RemoteConfigHelper : RemoteConfigBase() {
     override fun init() {
         if (BuildConfig.DEBUG) {
             ADManager.initData()
+            NormalNoticeManager.initNoticeConfig()
+            NormalNoticeManager.initNoticeText()
             return
         }
         getAllConfigs()

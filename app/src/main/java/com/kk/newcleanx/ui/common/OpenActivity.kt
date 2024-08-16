@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.ump.ConsentDebugSettings
@@ -17,6 +19,7 @@ import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
 import com.kk.newcleanx.data.local.NoticeType
+import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.isFirstStartup
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
@@ -25,6 +28,7 @@ import com.kk.newcleanx.ui.functions.antivirus.AntivirusScanningActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
+import com.kk.newcleanx.ui.functions.notice.NormalNoticeManager
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
@@ -69,6 +73,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        cancelNormalNotice()
         TbaHelper.postSessionEvent()
         TbaHelper.eventPost("loading_page")
         startFrontNoticeService()
@@ -82,6 +87,22 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             if (isFirstStartup) requestUMPInfo() else doAdProgress()
         }
 
+    }
+
+    private fun cancelNormalNotice() {
+        if (noticeType != null) {
+            when (noticeType!!.scene) {
+                "front_notice" -> Log.e("front_notice==>", "front_notice pop_click")
+                else -> {
+                    Log.e("normal_notice==>", "normal_notice pop_click")
+                    runCatching {
+                        if ("timer" == noticeType!!.sceneSecond) {
+                            NotificationManagerCompat.from(app).cancel(NormalNoticeManager.NOTIFICATION_TIMER_ID)
+                        } else NotificationManagerCompat.from(app).cancel(NormalNoticeManager.NOTIFICATION_UNLOCK_ID)
+                    }
+                }
+            }
+        }
     }
 
     private fun loadingAd() {
@@ -124,12 +145,12 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     private fun navigateToNextPage() {
 
         if (noticeType == null) { //open
+            Log.e("navigateToNextPage==>", "noticeType is null")
             isFirstStartup = false
             MainActivity.start(this, null)
         } else {
-
+            Log.e("navigateToNextPage==>", "noticeType= scene:${noticeType!!.scene} toPage:${noticeType!!.toPage}")
             when (noticeType!!.toPage) {
-
                 "clean" -> {
                     if (CommonUtils.hasAllStoragePermission()) {
                         startActivities(

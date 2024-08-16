@@ -5,6 +5,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.ui.functions.notice.NormalNoticeTask
 import com.kk.newcleanx.utils.AppLifecycleHelper
 import com.kk.newcleanx.utils.remoteconfig.RemoteConfigHelper
 import com.kk.newcleanx.utils.startFrontNoticeService
@@ -23,6 +24,7 @@ class MyAPP : Application() {
         RemoteConfigHelper.init()
         startFrontNoticeService()
         TbaHelper.getAllUserInfo()
+        NormalNoticeTask.initTask(this)
     }
 
 }

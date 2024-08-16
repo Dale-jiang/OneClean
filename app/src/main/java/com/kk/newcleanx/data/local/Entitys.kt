@@ -81,7 +81,7 @@ data class VirusBean(
 
 @Keep
 @Parcelize
-data class NoticeType(val toPage: String, val scene: String, val des: String) : Parcelable
+data class NoticeType(val toPage: String, val scene: String, val sceneSecond: String = "", val des: String="") : Parcelable
 
 @Keep
 data class NormalNoticeConfig(
@@ -98,11 +98,11 @@ data class NormalNoticeConfigItem(
 
 @Keep
 data class NormalNoticeTextItem(
-        @SerializedName("octtt") val function: String,
-        @SerializedName("occcc") val noticeDes: MutableList<String>,
-        @SerializedName("ocbbb") val btnStr: String,
-        var largeIconId: Int,
-        var smallIconId: Int,
+        @SerializedName("octtt") val functions: String = "",
+        @SerializedName("occcc") val noticeDes: MutableList<String> = mutableListOf(),
+        @SerializedName("ocbbb") val btnStr: String = "",
+        @Transient var largeIconId: Int = 0,
+        @Transient var smallIconId: Int = 0,
 )
 
 
