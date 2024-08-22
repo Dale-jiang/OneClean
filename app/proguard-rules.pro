@@ -69,3 +69,5 @@
 -keep @com.google.gson.annotations.Since class * { *; }
 -keep @com.google.gson.annotations.Until class * { *; }
 
+-keep class com.trustlook.** { *;}
+
