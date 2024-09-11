@@ -24,7 +24,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.aceclean"
+        applicationId "com.example.acecleanX"
         minSdk 24
         //noinspection OldTargetApi
         targetSdk 33

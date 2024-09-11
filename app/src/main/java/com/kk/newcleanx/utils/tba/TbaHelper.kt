@@ -292,7 +292,7 @@ object TbaHelper : TbaBase() {
 
     override fun getReferrerInfo() {
         if (installReferrerStr.isNotBlank()) return
-        getCloakInfoJob = CoroutineHelper.launchIO {
+        getReferrerJob = CoroutineHelper.launchIO {
             while (installReferrerStr.isBlank()) {
                 delay(1000L)
                 requestReferrer()

@@ -11,6 +11,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.installedPathPrefixes
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.data.local.virusRiskList
 import com.kk.newcleanx.databinding.AcAntivirusListBinding
@@ -42,7 +43,7 @@ class AntivirusListActivity : AllFilePermissionActivity<AcAntivirusListBinding>(
 
     private val adapter by lazy {
         AntivirusListAdapter(this) {
-            if (it.packageName.isNotEmpty() && CommonUtils.isPackageInstalled(it.packageName)) {
+            if (it.packageName.isNotEmpty() && installedPathPrefixes.any { pre -> it.path.startsWith(pre) } && CommonUtils.isPackageInstalled(it.packageName)) {
                 packageNameTemp = it.packageName
                 unInstallApp()
             } else {

@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.VirusBean
+import com.kk.newcleanx.data.local.installedPathPrefixes
 import com.kk.newcleanx.databinding.ItemVirusListBinding
 import com.kk.newcleanx.utils.CommonUtils
 
@@ -42,7 +43,7 @@ class AntivirusListAdapter(private val context: Context, private val clickListen
                     image.setImageDrawable(item.icon)
                 }
 
-                if (item.packageName.isNotEmpty() && CommonUtils.isPackageInstalled(item.packageName)) {
+                if (item.packageName.isNotEmpty() && installedPathPrefixes.any { item.path.startsWith(it) } && CommonUtils.isPackageInstalled(item.packageName)) {
                     tvBtn.text = context.getString(R.string.string_uninstall)
                 } else {
                     tvBtn.text = context.getString(R.string.string_remove)

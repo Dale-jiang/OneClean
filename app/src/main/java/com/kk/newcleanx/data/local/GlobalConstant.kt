@@ -14,7 +14,7 @@ const val APP_MANAGER = "app_manager"
 const val DEVICE_STATUS = "device_status"
 const val EMPTY_FOLDER = "empty_folder"
 const val SCAN_ANTIVIRUS = "scan_antivirus"
-
+val installedPathPrefixes = arrayOf("/data/app/", "/system/app/", "/system/priv-app/", "/mnt/asec/")
 
 const val LOCAL_NOTICE_CONFIG_JSON = """
     {
