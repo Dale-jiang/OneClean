@@ -32,18 +32,19 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
     }
 
     override fun topView(): View {
-        return binding.toolbar.root
+        return binding.toolbar
     }
 
     private val viewModel by viewModels<DuplicateFileCleanViewModel>()
     private var adapter: DuplicateFileCleanAdapter? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding.apply {
 
-            toolbar.tvTitle.text = getString(R.string.duplicate_files)
+            tvTitle.text = getString(R.string.duplicate_files)
 
             startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
@@ -56,6 +57,12 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
 
             viewModel.getDuplicateFileList()
 
+            tvRight.setOnClickListener {
+                duplicateFiles.forEach { it.select = false }
+                adapter?.notifyDataSetChanged()
+                changeButtonView()
+            }
+
             btnClean.setOnClickListener {
                 // JunkCleanActivity.start(this@DuplicateFileCleanActivity, CleanType.EmptyFolderType)
                 // finish()
@@ -65,7 +72,7 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
                 finish()
             }
 
-            toolbar.ivBack.setOnClickListener {
+            ivBack.setOnClickListener {
                 if (clLoading.isVisible) return@setOnClickListener
                 finish()
             }
