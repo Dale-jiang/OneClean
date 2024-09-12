@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.databinding.AcJunkCleanBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
@@ -24,8 +25,10 @@ import kotlinx.coroutines.launch
 class DuplicateFileDeleteActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, DuplicateFileDeleteActivity::class.java))
+        fun start(context: Context, tips: String) {
+            context.startActivity(Intent(context, DuplicateFileDeleteActivity::class.java).apply {
+                putExtra(INTENT_KEY, tips)
+            })
         }
     }
 
@@ -41,18 +44,20 @@ class DuplicateFileDeleteActivity : AllFilePermissionActivity<AcJunkCleanBinding
         super.onCreate(savedInstanceState)
         binding.apply {
 
-            tvTip.text = "duplicate files cleaning..."
+            tvTip.text = getString(R.string.duplicate_files_cleaning)
+            toolbar.ivBack.isInvisible = true
             toolbar.ivBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
 
             onBackPressedDispatcher.addCallback {
-                if (btnContinue.isVisible.not()) {
-                    onBackClicked()
-                }
+//                if (btnContinue.isVisible.not()) {
+//                    onBackClicked()
+//                }
             }
 
             btnContinue.setOnClickListener {
+                DuplicateFileCleanResultActivity.start(this@DuplicateFileDeleteActivity, intent?.getStringExtra(INTENT_KEY) ?: "")
                 setResult(RESULT_OK)
                 finish()
             }

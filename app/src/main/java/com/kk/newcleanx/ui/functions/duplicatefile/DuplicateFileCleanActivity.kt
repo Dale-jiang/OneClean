@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.data.local.duplicateFiles
 import com.kk.newcleanx.databinding.AcDuplicateFileCleanBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
@@ -38,11 +39,12 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
 
     private val viewModel by viewModels<DuplicateFileCleanViewModel>()
     private var adapter: DuplicateFileCleanAdapter? = null
+    private var deleteSize = 0L
 
     @SuppressLint("NotifyDataSetChanged")
     private val deleteLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
-          viewModel.refreshData()
+            viewModel.refreshData()
         }
     }
 
@@ -78,7 +80,9 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
                     positiveButtonText = getString(R.string.string_ok),
                     negativeButtonText = getString(R.string.string_cancel),
                     onPositiveButtonClick = { dialog ->
-                        deleteLauncher.launch(Intent(this@DuplicateFileCleanActivity, DuplicateFileDeleteActivity::class.java))
+                        deleteLauncher.launch(Intent(this@DuplicateFileCleanActivity, DuplicateFileDeleteActivity::class.java).apply {
+                            putExtra(INTENT_KEY, deleteSize.formatStorageSize())
+                        })
                         dialog.dismiss()
                     },
                     onNegativeButtonClick = {})
@@ -135,10 +139,12 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
             binding.btnClean.isEnabled = false
             binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
             binding.btnClean.text = getString(R.string.string_clean)
+            deleteSize = 0
         } else {
             binding.btnClean.isEnabled = true
             binding.btnClean.setBackgroundResource(R.drawable.ripple_clean_continue_btn)
             binding.btnClean.text = "${getString(R.string.string_clean)}(${size.formatStorageSize()})"
+            deleteSize = size
         }
     }
 

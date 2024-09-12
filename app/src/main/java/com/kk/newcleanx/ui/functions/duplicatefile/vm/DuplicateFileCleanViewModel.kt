@@ -1,7 +1,6 @@
 package com.kk.newcleanx.ui.functions.duplicatefile.vm
 
 import android.provider.MediaStore
-import android.util.Log
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.MutableLiveData
@@ -42,7 +41,6 @@ class DuplicateFileCleanViewModel : ViewModel() {
             duplicateFiles.clear()
             val fileList = scanFiles()
             getDuplicateFile(fileList)
-            Log.e("-------->>>", "-----completeObserver--->>>")
             completeObserver.postValue(true)
         }
     }

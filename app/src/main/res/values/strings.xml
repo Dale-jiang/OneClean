@@ -132,6 +132,8 @@
     <string name="recent_app">Recent App</string>
     <string name="deselect_all">Deselect All</string>
     <string name="duplicate_file_delete_tip">The selected files cannot be recovered after being deleted. Do you want to continue?</string>
+    <string name="duplicate_files_cleaning">duplicate files cleaning...</string>
+    <string name="a_total_of_has_been_deleted">A total of %1$s has been deleted.</string>
 
 
 </resources>
