@@ -119,6 +119,10 @@
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.functions.duplicatefile.DuplicateFileCleanActivity"
+            android:configChanges="density|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".ui.functions.notice.FrontNoticeService"
