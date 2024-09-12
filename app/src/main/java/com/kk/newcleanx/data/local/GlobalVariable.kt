@@ -39,4 +39,5 @@ val junkDataList = mutableListOf<JunkDetailsType>()
 val emptyFoldersDataList = mutableListOf<String>()
 val allBigFiles = mutableListOf<BigFile>()
 val virusRiskList = mutableListOf<VirusBean>()
+val duplicateFiles = mutableListOf<DuplicateFile>()
 

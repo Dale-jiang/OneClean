@@ -1,5 +1,6 @@
 package com.kk.newcleanx.ui.functions.duplicatefile
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,13 +10,16 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
-import com.kk.newcleanx.data.local.CleanType
+import com.kk.newcleanx.data.local.duplicateFiles
 import com.kk.newcleanx.databinding.AcDuplicateFileCleanBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.common.JunkCleanActivity
+import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.ui.functions.admob.ADManager
+import com.kk.newcleanx.ui.functions.duplicatefile.adapter.DuplicateFileCleanAdapter
 import com.kk.newcleanx.ui.functions.duplicatefile.vm.DuplicateFileCleanViewModel
+import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.tba.TbaHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -32,13 +36,14 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
     }
 
     private val viewModel by viewModels<DuplicateFileCleanViewModel>()
+    private var adapter: DuplicateFileCleanAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding.apply {
+
             toolbar.tvTitle.text = getString(R.string.duplicate_files)
-        //    recyclerView.adapter = adapter
 
             startProgress(minWaitTime = 2000L) {
                 if (it >= 100) {
@@ -48,11 +53,12 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
                     }
                 }
             }
-            isCompleted = true
+
+            viewModel.getDuplicateFileList()
 
             btnClean.setOnClickListener {
-                JunkCleanActivity.start(this@DuplicateFileCleanActivity, CleanType.EmptyFolderType)
-                finish()
+                // JunkCleanActivity.start(this@DuplicateFileCleanActivity, CleanType.EmptyFolderType)
+                // finish()
             }
 
             ivScanBack.setOnClickListener {
@@ -65,7 +71,51 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
             }
         }
 
+        initObservers()
 
+    }
+
+
+    private fun initObservers() {
+
+        viewModel.completeObserver.observe(this) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                binding.ivEmpty.isVisible = duplicateFiles.isEmpty()
+                binding.recyclerView.itemAnimator = null
+                adapter = DuplicateFileCleanAdapter(this@DuplicateFileCleanActivity, duplicateFiles,
+                    click = { data ->
+                        CustomAlertDialog(this@DuplicateFileCleanActivity).showDialog(title = data.name,
+                            message = data.path,
+                            positiveButtonText = getString(R.string.string_ok),
+                            negativeButtonText = "",
+                            onPositiveButtonClick = { dialog ->
+                                dialog.dismiss()
+                            },
+                            onNegativeButtonClick = {})
+                    },
+                    change = { changeButtonView() })
+
+                binding.recyclerView.adapter = adapter
+                changeButtonView()
+                isCompleted = true
+            }
+
+        }
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun changeButtonView() {
+        val size = adapter?.getList()?.filter { it.select }?.sumOf { it.size } ?: 0
+        if (size <= 0) {
+            binding.btnClean.isEnabled = false
+            binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
+            binding.btnClean.text = getString(R.string.string_clean)
+        } else {
+            binding.btnClean.isEnabled = true
+            binding.btnClean.setBackgroundResource(R.drawable.ripple_clean_continue_btn)
+            binding.btnClean.text = "${getString(R.string.string_clean)}(${size.formatStorageSize()})"
+        }
     }
 
 
@@ -89,6 +139,11 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
                 b.invoke()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        duplicateFiles.clear()
     }
 
 }

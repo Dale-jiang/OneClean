@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -102,6 +104,17 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
         TbaHelper.eventPost("home_page")
         noticeType = intent?.getParcelableExtra(KEY_NOTICE_FUNCTION)
+        binding.btnScan.startAnimation(
+            ScaleAnimation(
+                1.0f, 1.05f, 1.0f, 1.05f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+            ).also {
+                it.duration = 800
+                it.repeatCount = Animation.INFINITE
+                it.repeatMode = Animation.REVERSE
+            }
+        )
 
         initAdapter()
         setStorageInfo()
