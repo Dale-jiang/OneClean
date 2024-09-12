@@ -13,6 +13,7 @@
     <string name="big_file_clean">Big File Clean</string>
     <string name="app_manager">App Manager</string>
     <string name="device_status">Device Status</string>
+    <string name="duplicate_files">Duplicate Files</string>
     <string name="empty_folder">Empty Folder</string>
     <string name="string_scanning">Scanning…</string>
     <string name="app_cache">App Cache</string>
@@ -127,6 +128,8 @@
     <string name="no_threats_found">No Threats Found</string>
     <string name="all_threats_resolved">All Threats Resolved</string>
     <string name="request_notice_per_des">Please enable notifications for important alerts.</string>
+
+    <string name="recent_app">Recent App</string>
 
 
 </resources>

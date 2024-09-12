@@ -9,9 +9,11 @@ var isToSettings = false
 val main_list_data = arrayListOf(
     MainFunction(R.string.free_up_space, -1, ""),
     MainFunction(R.string.string_antivirus, R.drawable.scan_antivirus, SCAN_ANTIVIRUS),
-    MainFunction(R.string.big_file_clean, R.drawable.big_file_clean, BIG_FILE_CLEAN),
-    MainFunction(R.string.app_manager, R.drawable.app_manager, APP_MANAGER),
+    MainFunction(R.string.recent_app, R.drawable.recent_app, RECENT_APP),
     MainFunction(R.string.device_status, R.drawable.device_status, DEVICE_STATUS),
+    MainFunction(R.string.app_manager, R.drawable.app_manager, APP_MANAGER),
+    MainFunction(R.string.big_file_clean, R.drawable.big_file_clean, BIG_FILE_CLEAN),
+    MainFunction(R.string.duplicate_files, R.drawable.duplicate_files, DUPLICATE_FILES_CLEAN),
     MainFunction(R.string.empty_folder, R.drawable.empty_folder, EMPTY_FOLDER)
 )
 

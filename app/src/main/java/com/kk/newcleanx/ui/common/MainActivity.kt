@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,9 +21,11 @@ import com.kk.newcleanx.data.local.APP_MANAGER
 import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
 import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.DEVICE_STATUS
+import com.kk.newcleanx.data.local.DUPLICATE_FILES_CLEAN
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
 import com.kk.newcleanx.data.local.NoticeType
+import com.kk.newcleanx.data.local.RECENT_APP
 import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.isToSettings
@@ -175,6 +178,18 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                         }
                     }
                 }
+
+                RECENT_APP -> {
+                    Toast.makeText(this, "RECENT_APP", Toast.LENGTH_LONG).show()
+                }
+
+                DUPLICATE_FILES_CLEAN -> {
+                    requestAllFilePermission { success ->
+                        if (success) {
+                            Toast.makeText(this, "DUPLICATE_FILES_CLEAN", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
         }
 
@@ -306,14 +321,14 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
             if (System.currentTimeMillis() - showNotificationPerDialogTime > 24 * 60 * 60 * 1000) {
                 showNotificationPerDialogTime = System.currentTimeMillis()
                 CustomAlertDialog(this).showDialog(title = getString(R.string.app_name),
-                        message = getString(R.string.request_notice_per_des),
-                        positiveButtonText = getString(R.string.got_it),
-                        negativeButtonText = "",
-                        onPositiveButtonClick = {
-                            it.dismiss()
-                            showNotificationPerSetting()
-                        },
-                        onNegativeButtonClick = {})
+                    message = getString(R.string.request_notice_per_des),
+                    positiveButtonText = getString(R.string.got_it),
+                    negativeButtonText = "",
+                    onPositiveButtonClick = {
+                        it.dismiss()
+                        showNotificationPerSetting()
+                    },
+                    onNegativeButtonClick = {})
             }
         }
     }
