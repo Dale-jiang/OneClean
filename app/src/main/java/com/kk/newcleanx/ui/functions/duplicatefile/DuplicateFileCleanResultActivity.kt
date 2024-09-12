@@ -9,20 +9,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kk.newcleanx.R
-import com.kk.newcleanx.data.local.APP_MANAGER
 import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
-import com.kk.newcleanx.data.local.DEVICE_STATUS
+import com.kk.newcleanx.data.local.CleanType
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.data.local.INTENT_KEY
+import com.kk.newcleanx.data.local.JUNK_CLEAN
+import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
 import com.kk.newcleanx.databinding.AcCleanResultBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
-import com.kk.newcleanx.ui.common.adapter.CleanResultListAdapter
+import com.kk.newcleanx.ui.common.CleanResultActivity
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
-import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
+import com.kk.newcleanx.ui.functions.antivirus.AntivirusScanningActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
-import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
+import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
+import com.kk.newcleanx.ui.functions.duplicatefile.adapter.DuplicateCleanResultListAdapter
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
+import com.kk.newcleanx.utils.CommonUtils
+import com.kk.newcleanx.utils.showAntivirusNotice
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,7 +45,7 @@ class DuplicateFileCleanResultActivity : AllFilePermissionActivity<AcCleanResult
         return binding.toolbar.root
     }
 
-    private var adapter: CleanResultListAdapter? = null
+    private var adapter: DuplicateCleanResultListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initAdapter()
@@ -59,21 +63,31 @@ class DuplicateFileCleanResultActivity : AllFilePermissionActivity<AcCleanResult
 
     private fun initAdapter() {
 
-        adapter = CleanResultListAdapter(this) {
+        adapter = DuplicateCleanResultListAdapter(this) {
             when (it.type) {
                 BIG_FILE_CLEAN -> {
                     BigFileCleanActivity.start(this)
                     finish()
                 }
 
-                APP_MANAGER -> {
-                    AppManagerActivity.start(this)
+                JUNK_CLEAN -> {
+                    if (CommonUtils.checkIfCanClean()) {
+                        JunkScanningActivity.start(this)
+                    } else {
+                        CleanResultActivity.start(this, CleanType.JunkType)
+                    }
                     finish()
                 }
 
-                DEVICE_STATUS -> {
-                    DeviceInfoActivity.start(this)
-                    finish()
+                SCAN_ANTIVIRUS -> {
+
+                    showAntivirusNotice { res ->
+                        if (res) {
+                            AntivirusScanningActivity.start(this)
+                            finish()
+                        }
+                    }
+
                 }
 
                 EMPTY_FOLDER -> {
