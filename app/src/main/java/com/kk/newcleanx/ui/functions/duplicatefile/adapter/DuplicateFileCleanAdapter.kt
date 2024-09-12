@@ -54,7 +54,7 @@ class DuplicateFileCleanAdapter(
 
             tvName.text = data.name
             tvSize.text = data.size.formatStorageSize()
-            ivSelect.setImageResource(if (data.select) R.drawable.scanning_item_complete else R.drawable.scanning_item_unselect)
+            ivSelect.setImageResource(if (data.select) R.drawable.scanning_item_complete else R.drawable.scanning_item_unselect_deep)
 
             if (data.mimeType.startsWith("image/", true) || data.mimeType.startsWith("video/", true)) {
                 Glide.with(context).load(File(data.path)).centerCrop().placeholder(R.drawable.svg_duplicate_file_clean_icon).into(ivItem)

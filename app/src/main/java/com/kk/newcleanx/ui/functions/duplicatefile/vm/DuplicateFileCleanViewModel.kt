@@ -108,7 +108,7 @@ class DuplicateFileCleanViewModel : ViewModel() {
     private suspend fun hashFile(duplicateFile: DuplicateFile) = withContext(Dispatchers.IO + SupervisorJob()) {
         try {
             val file = File(duplicateFile.path)
-            val digest = MessageDigest.getInstance("SHA-256")
+            val digest = MessageDigest.getInstance("MD5")
             file.inputStream().use { fis ->
                 val buffer = ByteArray(1024)
                 if (file.length() > 20 * 1000 * 1000) {
