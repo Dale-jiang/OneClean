@@ -24,6 +24,18 @@ class DuplicateFileCleanViewModel : ViewModel() {
     val completeObserver = MutableLiveData<Boolean>()
     private var searchJob: Job? = null
 
+    fun refreshData() {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
+            val list = mutableListOf<DuplicateFile>()
+            list.addAll(duplicateFiles)
+            duplicateFiles.clear()
+            refreshDuplicateFile(list)
+            completeObserver.postValue(true)
+        }
+    }
+
+
     fun getDuplicateFileList() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
@@ -104,6 +116,25 @@ class DuplicateFileCleanViewModel : ViewModel() {
 
     }
 
+
+    private suspend fun refreshDuplicateFile(fileList: MutableList<DuplicateFile>) = withContext(Dispatchers.IO + SupervisorJob()) {
+        if (fileList.isEmpty()) return@withContext
+        val filesMap = fileList.groupBy { it.fileHash }.filterValues { it.size > 1 }
+        val sortedByFileSize = filesMap.entries.sortedByDescending { it.value.firstOrNull()?.size ?: 0L }.associate { it.toPair() }
+        val finalList = sortedByFileSize.values.flatten()
+        var hash = ""
+        finalList.forEach { duplicate ->
+            if (duplicate.fileHash != hash) {
+                duplicateFiles.lastOrNull()?.itemType = 2
+                duplicate.itemType = 0
+                hash = duplicate.fileHash
+            } else {
+                duplicate.itemType = 1
+            }
+            duplicateFiles.add(duplicate)
+        }
+        duplicateFiles.lastOrNull()?.itemType = 2
+    }
 
     private suspend fun hashFile(duplicateFile: DuplicateFile) = withContext(Dispatchers.IO + SupervisorJob()) {
         try {

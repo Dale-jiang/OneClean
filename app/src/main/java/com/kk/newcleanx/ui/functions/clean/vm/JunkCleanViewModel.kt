@@ -1,9 +1,11 @@
 package com.kk.newcleanx.ui.functions.clean.vm
 
+import android.media.MediaScannerConnection
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kk.newcleanx.data.local.JunkDetails
 import com.kk.newcleanx.data.local.allBigFiles
+import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.emptyFoldersDataList
 import com.kk.newcleanx.data.local.junkDataList
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +41,10 @@ class JunkCleanViewModel : ViewModel() {
     fun cleanBigFiles() {
         CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
             allBigFiles.forEach {
-                if (it.select) File(it.path).deleteRecursively()
+                if (it.select) {
+                    File(it.path).deleteRecursively()
+                    MediaScannerConnection.scanFile(app, arrayOf(it.path), null) { _, _ -> }
+                }
             }
             completeObserver.postValue(true)
             allBigFiles.removeIf { it.select }

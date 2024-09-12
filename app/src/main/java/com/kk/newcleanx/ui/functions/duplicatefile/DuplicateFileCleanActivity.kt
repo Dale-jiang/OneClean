@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -39,6 +40,13 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
     private var adapter: DuplicateFileCleanAdapter? = null
 
     @SuppressLint("NotifyDataSetChanged")
+    private val deleteLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+          viewModel.refreshData()
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,8 +72,17 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
             }
 
             btnClean.setOnClickListener {
-                // JunkCleanActivity.start(this@DuplicateFileCleanActivity, CleanType.EmptyFolderType)
-                // finish()
+
+                CustomAlertDialog(this@DuplicateFileCleanActivity).showDialog(title = getString(R.string.app_name),
+                    message = getString(R.string.duplicate_file_delete_tip),
+                    positiveButtonText = getString(R.string.string_ok),
+                    negativeButtonText = getString(R.string.string_cancel),
+                    onPositiveButtonClick = { dialog ->
+                        deleteLauncher.launch(Intent(this@DuplicateFileCleanActivity, DuplicateFileDeleteActivity::class.java))
+                        dialog.dismiss()
+                    },
+                    onNegativeButtonClick = {})
+
             }
 
             ivScanBack.setOnClickListener {

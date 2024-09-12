@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -132,11 +134,11 @@ class BigFileCleanViewModel : ViewModel() {
             val mimeTypeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
 
             while (it.moveToNext()) {
-                val id = cursor.getLong(idColumn)
-                val path = cursor.getString(pathColumn)
-                val size = cursor.getLong(sizeColumn)
-                val date = cursor.getLong(dateColumn)
-                val mimeType = cursor.getString(mimeTypeColumn)
+                val id = cursor.getLongOrNull(idColumn) ?: 0
+                val path = cursor.getStringOrNull(pathColumn) ?: ""
+                val size = cursor.getLongOrNull(sizeColumn) ?: 0
+                val date = cursor.getLongOrNull(dateColumn) ?: 0
+                val mimeType = cursor.getStringOrNull(mimeTypeColumn) ?: "*/*"
 
                 if (File(path).exists()) {
                     val name = path.substring(path.lastIndexOf("/") + 1, path.length)
