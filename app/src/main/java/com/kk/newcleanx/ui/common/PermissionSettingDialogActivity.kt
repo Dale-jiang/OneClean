@@ -14,7 +14,7 @@ class PermissionSettingDialogActivity : BaseActivity<AcPermissionSettingDialogBi
         super.onCreate(savedInstanceState)
 
         binding.apply {
-
+            isToSettings = true
             val title = intent?.getStringExtra(INTENT_KEY) ?: getString(R.string.user_guide)
             val message = intent?.getStringExtra(INTENT_KEY_1) ?: getString(R.string.please_ensure_this_option_is_enabled)
 

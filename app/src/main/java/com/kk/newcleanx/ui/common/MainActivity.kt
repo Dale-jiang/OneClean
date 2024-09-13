@@ -194,7 +194,11 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 }
 
                 RECENT_APP -> {
-                    RecentAppGrantPermissionActivity.start(this)
+                    if (CommonUtils.hasUsageStatsPermission()) {
+                        RecentAppGrantPermissionActivity.start(this)
+                    } else {
+                        // TODO:  
+                    }
                 }
 
                 DUPLICATE_FILES_CLEAN -> {

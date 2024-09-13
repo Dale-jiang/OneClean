@@ -37,7 +37,7 @@ class RecentAppGrantPermissionActivity : BaseActivity<AcRecentAppPermissionBindi
     private val perResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (hasUsageStatsPermission()) {
-                // TODO:  
+                // TODO:
             }
         }
 
@@ -59,7 +59,9 @@ class RecentAppGrantPermissionActivity : BaseActivity<AcRecentAppPermissionBindi
                     if (CommonUtils.isAtLeastAndroid10()) {
                         intent.data = Uri.fromParts("package", packageName, null)
                     }
-                    perResult.launch(intent)
+                    perResult.launch(intent.apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    })
 
                     lifecycleScope.launch {
                         delay(350)
