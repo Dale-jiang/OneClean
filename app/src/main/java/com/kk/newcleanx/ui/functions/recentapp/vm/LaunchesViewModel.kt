@@ -26,62 +26,61 @@ class LaunchesViewModel : ViewModel() {
     }
 
     private fun getAppLaunches(start: Long, end: Long): MutableList<LaunchesItem> {
-        val foregroundEvents = hashMapOf<String, MutableList<UsageEvents.Event>>()
-        val eventGroups = LinkedList<LinkedList<UsageEvents.Event>>()
-        val launchesHashMap = hashMapOf<String, Int>()
-        var lastEvent: UsageEvents.Event? = null
+        try {
+            val foregroundEventsMap = mutableMapOf<String, MutableList<UsageEvents.Event>>()
+            val eventGroups = LinkedList<LinkedList<UsageEvents.Event>>()
+            var lastEvent: UsageEvents.Event? = null
 
-        val queryEvents = statsManager.queryEvents(start, end)
-        while (queryEvents?.hasNextEvent() == true) {
-            val event = UsageEvents.Event()
-            if (queryEvents.getNextEvent(event)) {
-                if (event.eventType == UsageEvents.Event.ACTIVITY_STOPPED || event.eventType == UsageEvents.Event.STANDBY_BUCKET_CHANGED) continue
+            val queryEvents = statsManager.queryEvents(start, end)
+            while (queryEvents?.hasNextEvent() == true) {
+                val event = UsageEvents.Event()
+                if (queryEvents.getNextEvent(event) &&
+                    event.eventType != UsageEvents.Event.ACTIVITY_STOPPED &&
+                    event.eventType != UsageEvents.Event.STANDBY_BUCKET_CHANGED
+                ) {
+                    if (eventGroups.isNotEmpty() && eventGroups.last.last.packageName == event.packageName) {
+                        eventGroups.last.addLast(event)
+                    } else {
+                        eventGroups.add(LinkedList<UsageEvents.Event>().apply { add(event) })
+                    }
 
-                // Group events by package name
-                if (eventGroups.isNotEmpty() && eventGroups.last.last.packageName == event.packageName) {
-                    eventGroups.last.add(event)
-                } else {
-                    eventGroups.add(LinkedList<UsageEvents.Event>().apply { add(event) })
+                    if (lastEvent?.packageName != event.packageName &&
+                        (lastEvent == null || lastEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED) &&
+                        event.eventType == UsageEvents.Event.ACTIVITY_RESUMED
+                    ) {
+                        foregroundEventsMap.getOrPut(event.packageName) { mutableListOf() }.add(event)
+                    }
+                    lastEvent = event
                 }
-
-                // Record foreground events
-                if (lastEvent == null || (lastEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED && event.eventType == UsageEvents.Event.ACTIVITY_RESUMED)) {
-                    foregroundEvents.getOrPut(event.packageName) { mutableListOf() }.add(event)
-                }
-
-                lastEvent = event
             }
-        }
 
-        // Count launches for each package
-        eventGroups.forEach { eventList ->
-            if (eventList.size > 1) {
-                val packageName = eventList.first.packageName
-                launchesHashMap[packageName] = launchesHashMap.getOrDefault(packageName, 0) + 1
-            }
-        }
+            val launchCountMap = eventGroups
+                .filter { it.size > 1 }
+                .groupingBy { it.first.packageName }
+                .eachCount()
 
-        // Filter system apps early
-        val systemApps = setOf(app.packageName, "com.android.mms", "com.android.contacts", "com.android.settings")
-        val resultList = mutableListOf<LaunchesItem>()
-
-        foregroundEvents.forEach { (packageName, events) ->
-            if (CommonUtils.isPackageInstalled(packageName) && !systemApps.contains(packageName)) {
-                val totalLaunches = launchesHashMap.getOrDefault(packageName, events.size)
-                resultList.add(
-                    LaunchesItem(
-                        CommonUtils.getApplicationLabelString(packageName),
-                        packageName,
-                        CommonUtils.getApplicationIconDrawable(packageName),
-                        totalLaunches,
-                        events.size,
-                        totalLaunches - events.size
+            val resultList = mutableListOf<LaunchesItem>()
+            foregroundEventsMap.forEach { (packageName, events) ->
+                if (CommonUtils.isPackageInstalled(packageName)) {
+                    val totalLaunches = maxOf(launchCountMap.getOrDefault(packageName, 0), events.size)
+                    resultList.add(
+                        LaunchesItem(
+                            CommonUtils.getApplicationLabelString(packageName),
+                            packageName,
+                            CommonUtils.getApplicationIconDrawable(packageName),
+                            totalLaunches,
+                            events.size,
+                            totalLaunches - events.size
+                        )
                     )
-                )
+                }
             }
-        }
 
-        return resultList
+            val systemAppList = setOf(app.packageName, "com.android.mms", "com.android.contacts", "com.android.settings")
+            return resultList.filterNot { systemAppList.contains(it.packageName) }.toMutableList()
+        } catch (e: Throwable) {
+            return mutableListOf()
+        }
     }
 
 }
