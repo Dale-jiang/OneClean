@@ -20,8 +20,12 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
+import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetailsType
 import com.kk.newcleanx.data.local.JunkType
@@ -41,6 +45,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -218,6 +223,23 @@ fun HashMap<String, Any?>.toBundle(): Bundle? = let {
         bundle
     } else null
 }
+
+fun Context.opFiles(path: String) = runCatching {
+    val file = File(path)
+    val uri = FileProvider.getUriForFile(app, "${BuildConfig.APPLICATION_ID}.provider", file)
+    val extension = MimeTypeMap.getFileExtensionFromUrl(file.toString())
+    val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+    val intent = Intent().apply {
+        action = Intent.ACTION_VIEW
+        setDataAndType(uri, mimetype)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+    }
+    isToSettings = true
+    this.startActivity(intent)
+}.onFailure {
+    Toast.makeText(this, getString(R.string.open_failed), Toast.LENGTH_SHORT).show()
+}
+
 
 fun CoroutineScope.launchTicker(
     first: Long,

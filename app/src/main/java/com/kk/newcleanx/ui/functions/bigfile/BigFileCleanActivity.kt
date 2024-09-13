@@ -28,6 +28,7 @@ import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileCleanAdapter
 import com.kk.newcleanx.ui.functions.bigfile.adapter.BigFileFilterAdapter
 import com.kk.newcleanx.ui.functions.bigfile.vm.BigFileCleanViewModel
 import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.utils.opFiles
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -102,15 +103,15 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
             btnClean.setOnClickListener {
                 val dialog = CustomAlertDialog(this@BigFileCleanActivity)
                 dialog.showDialog(title = getString(R.string.string_tips),
-                                  message = getString(R.string.delete_big_file_tip),
-                                  positiveButtonText = getString(R.string.string_ok),
-                                  negativeButtonText = getString(R.string.string_cancel),
-                                  onPositiveButtonClick = { d ->
-                                      refreshPage = true
-                                      JunkCleanActivity.start(this@BigFileCleanActivity, CleanType.BigFileType)
-                                      d.dismiss()
-                                  },
-                                  onNegativeButtonClick = {})
+                    message = getString(R.string.delete_big_file_tip),
+                    positiveButtonText = getString(R.string.string_ok),
+                    negativeButtonText = getString(R.string.string_cancel),
+                    onPositiveButtonClick = { d ->
+                        refreshPage = true
+                        JunkCleanActivity.start(this@BigFileCleanActivity, CleanType.BigFileType)
+                        d.dismiss()
+                    },
+                    onNegativeButtonClick = {})
             }
 
             ivScanBack.setOnClickListener {
@@ -130,13 +131,14 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
         adapter = BigFileCleanAdapter(this, click = {
 
             CustomAlertDialog(this).showDialog(title = it.name,
-                                               message = it.path,
-                                               positiveButtonText = getString(R.string.string_ok),
-                                               negativeButtonText = "",
-                                               onPositiveButtonClick = { dialog ->
-                                                   dialog.dismiss()
-                                               },
-                                               onNegativeButtonClick = {})
+                message = it.path,
+                positiveButtonText = getString(R.string.string_preview),
+                negativeButtonText = "",
+                onPositiveButtonClick = { dialog ->
+                    dialog.dismiss()
+                    this.opFiles(it.path)
+                },
+                onNegativeButtonClick = {})
 
 
         }, change = {
@@ -229,7 +231,7 @@ class BigFileCleanActivity : AllFilePermissionActivity<AcBigFileCleanBinding>() 
 
     private fun showFullAd(b: () -> Unit) {
 
-        if (ADManager.isOverAdMax()|| ADManager.isBlocked()) {
+        if (ADManager.isOverAdMax() || ADManager.isBlocked()) {
             b.invoke()
             return
         }

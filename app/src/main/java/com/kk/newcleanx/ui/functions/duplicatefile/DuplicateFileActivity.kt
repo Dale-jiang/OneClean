@@ -22,6 +22,7 @@ import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.duplicatefile.adapter.DuplicateFileCleanAdapter
 import com.kk.newcleanx.ui.functions.duplicatefile.vm.DuplicateFileCleanViewModel
 import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.utils.opFiles
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -124,10 +125,11 @@ class DuplicateFileActivity : AllFilePermissionActivity<AcDuplicateFileCleanBind
                     click = { data ->
                         CustomAlertDialog(this@DuplicateFileActivity).showDialog(title = data.name,
                             message = data.path,
-                            positiveButtonText = getString(R.string.string_ok),
+                            positiveButtonText = getString(R.string.string_preview),
                             negativeButtonText = "",
                             onPositiveButtonClick = { dialog ->
                                 dialog.dismiss()
+                                this@DuplicateFileActivity.opFiles(data.path)
                             },
                             onNegativeButtonClick = {})
                     },
