@@ -37,7 +37,7 @@ class RecentAppGrantPermissionActivity : BaseActivity<AcRecentAppPermissionBindi
     private val perResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (hasUsageStatsPermission()) {
-                // TODO:
+               RecentAppUsedInfoActivity.start(this)
             }
         }
 

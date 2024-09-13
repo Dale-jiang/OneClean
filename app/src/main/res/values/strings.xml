@@ -144,6 +144,8 @@
     <string name="same_has_been_selected">The same document has been selected</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="grant_permission_to_use_feature">Grant Permission to Use Feature</string>
+    <string name="string_launches">Launches</string>
+    <string name="screen_time">Screen time</string>
 
 
 </resources>

@@ -45,6 +45,7 @@ import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.duplicatefile.DuplicateFileActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import com.kk.newcleanx.ui.functions.recentapp.RecentAppGrantPermissionActivity
+import com.kk.newcleanx.ui.functions.recentapp.RecentAppUsedInfoActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
@@ -195,9 +196,9 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
                 RECENT_APP -> {
                     if (CommonUtils.hasUsageStatsPermission()) {
-                        RecentAppGrantPermissionActivity.start(this)
+                        RecentAppUsedInfoActivity.start(this)
                     } else {
-                        // TODO:  
+                        RecentAppGrantPermissionActivity.start(this)
                     }
                 }
 
