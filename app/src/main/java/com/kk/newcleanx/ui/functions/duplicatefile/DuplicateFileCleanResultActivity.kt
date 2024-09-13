@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.BIG_FILE_CLEAN
 import com.kk.newcleanx.data.local.CleanType
+import com.kk.newcleanx.data.local.DUPLICATE_FILES_CLEAN
 import com.kk.newcleanx.data.local.EMPTY_FOLDER
 import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.data.local.JUNK_CLEAN
 import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
+import com.kk.newcleanx.data.local.busObserver
 import com.kk.newcleanx.databinding.AcCleanResultBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.CleanResultActivity
@@ -66,11 +68,13 @@ class DuplicateFileCleanResultActivity : AllFilePermissionActivity<AcCleanResult
         adapter = DuplicateCleanResultListAdapter(this) {
             when (it.type) {
                 BIG_FILE_CLEAN -> {
+                    busObserver.postValue(DUPLICATE_FILES_CLEAN)
                     BigFileCleanActivity.start(this)
                     finish()
                 }
 
                 JUNK_CLEAN -> {
+                    busObserver.postValue(DUPLICATE_FILES_CLEAN)
                     if (CommonUtils.checkIfCanClean()) {
                         JunkScanningActivity.start(this)
                     } else {
@@ -83,6 +87,7 @@ class DuplicateFileCleanResultActivity : AllFilePermissionActivity<AcCleanResult
 
                     showAntivirusNotice { res ->
                         if (res) {
+                            busObserver.postValue(DUPLICATE_FILES_CLEAN)
                             AntivirusScanningActivity.start(this)
                             finish()
                         }
@@ -91,6 +96,7 @@ class DuplicateFileCleanResultActivity : AllFilePermissionActivity<AcCleanResult
                 }
 
                 EMPTY_FOLDER -> {
+                    busObserver.postValue(DUPLICATE_FILES_CLEAN)
                     EmptyFolderActivity.start(this)
                     finish()
                 }

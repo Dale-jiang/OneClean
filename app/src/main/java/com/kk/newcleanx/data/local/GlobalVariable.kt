@@ -1,10 +1,13 @@
 package com.kk.newcleanx.data.local
 
+import androidx.lifecycle.MutableLiveData
 import com.kk.newcleanx.MyAPP
 import com.kk.newcleanx.R
 
 lateinit var app: MyAPP
 var isToSettings = false
+
+val busObserver = MutableLiveData<String>()
 
 val main_list_data = arrayListOf(
     MainFunction(R.string.free_up_space, -1, ""),

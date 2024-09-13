@@ -11,7 +11,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.DUPLICATE_FILES_CLEAN
 import com.kk.newcleanx.data.local.INTENT_KEY
+import com.kk.newcleanx.data.local.busObserver
 import com.kk.newcleanx.data.local.duplicateFiles
 import com.kk.newcleanx.databinding.AcDuplicateFileCleanBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
@@ -105,6 +107,14 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
 
 
     private fun initObservers() {
+
+        busObserver.observe(this) {
+            if (it == DUPLICATE_FILES_CLEAN) {
+                duplicateFiles.clear()
+                finish()
+                busObserver.postValue("")
+            }
+        }
 
         viewModel.completeObserver.observe(this) {
             lifecycleScope.launch(Dispatchers.Main) {
