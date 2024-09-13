@@ -1,26 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_f2f6fc">
 
-    <FrameLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/shape_big_file_clean_bg"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dateRange"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Launches"
-            android:textColor="#FF0F3536"
-            android:textSize="26sp" />
+            android:layout_height="42dp"
+            android:layout_gravity="center_horizontal"
+            android:drawableEnd="@drawable/svg_date_range_arrow"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="today"
+            android:textColor="@color/main_text_color"
+            android:textSize="14sp"
+            app:fontFamily="@font/montserrat"
+            tools:ignore="HardcodedText" />
 
-    </FrameLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="13dp"
+            android:background="@color/color_f1f1f1" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tvDateRange">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutTotal"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginVertical="15dp"
+                android:layout_marginStart="22dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_recent_app_launches_btn">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalCounts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="0"
+                    android:textColor="@color/selector_recent_app_launches_text"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/montserrat"
+                    app:layout_constraintBottom_toTopOf="@+id/totalLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="@string/string_launches"
+                    android:textAllCaps="true"
+                    android:textColor="@color/selector_recent_app_launches_text_sub"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/montserrat"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/totalCounts"
+                    app:layout_constraintStart_toStartOf="@+id/totalCounts"
+                    app:layout_constraintTop_toBottomOf="@+id/totalCounts"
+                    tools:ignore="SmallSp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="7dp"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:text="="
+                android:textColor="@color/color_949eac"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutForeground"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginVertical="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_recent_app_launches_btn">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/foregroundCounts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="0"
+                    android:textColor="@color/selector_recent_app_launches_text"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/montserrat"
+                    app:layout_constraintBottom_toTopOf="@+id/foregroundLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/foregroundLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    app:fontFamily="@font/montserrat"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="@string/string_foreground"
+                    android:textAllCaps="true"
+                    android:textColor="@color/selector_recent_app_launches_text_sub"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/foregroundCounts"
+                    app:layout_constraintStart_toStartOf="@+id/foregroundCounts"
+                    app:layout_constraintTop_toBottomOf="@+id/foregroundCounts"
+                    tools:ignore="SmallSp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="7dp"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:text="+"
+                android:textColor="@color/color_949eac"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutBackground"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginVertical="15dp"
+                android:layout_marginEnd="22dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_recent_app_launches_btn">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/backgroundCounts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="0"
+                    android:textColor="@color/selector_recent_app_launches_text"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/montserrat"
+                    app:layout_constraintBottom_toTopOf="@+id/backgroundLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/backgroundLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/string_background"
+                    android:textAllCaps="true"
+                    android:textColor="@color/selector_recent_app_launches_text_sub"
+                    android:textSize="10sp"
+                    app:fontFamily="@font/montserrat"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/backgroundCounts"
+                    app:layout_constraintStart_toStartOf="@+id/backgroundCounts"
+                    app:layout_constraintTop_toBottomOf="@+id/backgroundCounts"
+                    tools:ignore="SmallSp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

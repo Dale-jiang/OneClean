@@ -146,6 +146,8 @@
     <string name="grant_permission_to_use_feature">Grant Permission to Use Feature</string>
     <string name="string_launches">Launches</string>
     <string name="screen_time">Screen time</string>
+    <string name="string_foreground">Foreground</string>
+    <string name="string_background">Background</string>
 
 
 </resources>
