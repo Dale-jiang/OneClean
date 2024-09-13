@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -45,6 +44,7 @@ import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
 import com.kk.newcleanx.ui.functions.duplicatefile.DuplicateFileActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
+import com.kk.newcleanx.ui.functions.recentapp.RecentAppGrantPermissionActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
@@ -194,7 +194,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 }
 
                 RECENT_APP -> {
-                    Toast.makeText(this, "RECENT_APP", Toast.LENGTH_LONG).show()
+                    RecentAppGrantPermissionActivity.start(this)
                 }
 
                 DUPLICATE_FILES_CLEAN -> {

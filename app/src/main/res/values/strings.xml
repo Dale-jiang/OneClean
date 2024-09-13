@@ -138,6 +138,8 @@
     <string name="open_failed">Open Failed!</string>
     <string name="install_error_tip">[One Clean] doesn\'t not have permission to install items</string>
     <string name="same_has_been_selected">The same document has been selected</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="grant_permission_to_use_feature">Grant Permission to Use Feature</string>
 
 
 </resources>
