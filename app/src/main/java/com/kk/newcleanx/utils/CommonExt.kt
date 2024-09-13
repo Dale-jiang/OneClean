@@ -259,6 +259,8 @@ fun Activity.showDateRangeSelector(callback: (value: Int, text: String) -> Unit)
     val binding = DialogDateRangeChoseBinding.inflate(LayoutInflater.from(this), window.decorView as ViewGroup, false)
     val bottomSheetDialog = BottomSheetDialog(this, R.style.CustomAlertDialog).apply {
         setContentView(binding.root)
+        setCancelable(true)
+        setCanceledOnTouchOutside(true)
         create()
     }
     val listData = listOf(getDateRangeNameByIndex(0), getDateRangeNameByIndex(1), getDateRangeNameByIndex(2), getDateRangeNameByIndex(3))
