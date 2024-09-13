@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="34dp"
         android:layout_marginEnd="17dp"
-        android:background="@drawable/shape_fd9b40_r6"
+        android:background="@drawable/selector_stop_app_bg"
         android:gravity="center"
         android:includeFontPadding="false"
         android:minWidth="72dp"
