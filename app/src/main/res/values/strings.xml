@@ -25,8 +25,12 @@
     <string name="string_scanning_stop_tip">Are you sure you want to exit the cleaning scan? The current scanning progress will be lost after exiting.</string>
     <string name="string_junk">Junk</string>
     <string name="clean_junk">Clean Junk</string>
-    <string name="how_to_do">User Guide</string>
-    <string name="make_sure_this_option_is_turned_on">Please ensure this option is enabled.</string>
+
+    <string name="how_to_do">How To Do</string>
+    <string name="make_sure_this_option_is_turned_on">Make Sure This Option Is Turned On</string>
+    <string name="user_guide">User Guide</string>
+    <string name="please_ensure_this_option_is_enabled">Please ensure this option is enabled.</string>
+
     <string name="got_it">GOT IT</string>
     <string name="clean_finished">Clean Finished !</string>
     <string name="string_continue">Continue</string>

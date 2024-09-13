@@ -3,12 +3,24 @@ package com.kk.newcleanx.ui.functions.recentapp
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.INTENT_KEY
+import com.kk.newcleanx.data.local.INTENT_KEY_1
+import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.databinding.AcRecentAppPermissionBinding
 import com.kk.newcleanx.ui.base.BaseActivity
+import com.kk.newcleanx.ui.common.PermissionSettingDialogActivity
+import com.kk.newcleanx.utils.CommonUtils
+import com.kk.newcleanx.utils.CommonUtils.hasUsageStatsPermission
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class RecentAppGrantPermissionActivity : BaseActivity<AcRecentAppPermissionBinding>() {
 
@@ -22,6 +34,13 @@ class RecentAppGrantPermissionActivity : BaseActivity<AcRecentAppPermissionBindi
         return binding.toolbar.root
     }
 
+    private val perResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (hasUsageStatsPermission()) {
+                // TODO:  
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
@@ -30,8 +49,27 @@ class RecentAppGrantPermissionActivity : BaseActivity<AcRecentAppPermissionBindi
             toolbar.ivBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
+
             btnOk.setOnClickListener {
-                // TODO:  
+
+                runCatching {
+                    isToSettings = true
+
+                    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                    if (CommonUtils.isAtLeastAndroid10()) {
+                        intent.data = Uri.fromParts("package", packageName, null)
+                    }
+                    perResult.launch(intent)
+
+                    lifecycleScope.launch {
+                        delay(350)
+                        startActivity(Intent(this@RecentAppGrantPermissionActivity, PermissionSettingDialogActivity::class.java).apply {
+                            putExtra(INTENT_KEY, getString(R.string.how_to_do))
+                            putExtra(INTENT_KEY_1, getString(R.string.make_sure_this_option_is_turned_on))
+                        })
+                    }
+                }
+
             }
         }
     }

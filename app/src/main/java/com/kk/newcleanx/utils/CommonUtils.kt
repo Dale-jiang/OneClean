@@ -2,6 +2,7 @@ package com.kk.newcleanx.utils
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.app.AppOpsManager
 import android.app.usage.StorageStatsManager
 import android.content.Context
 import android.content.pm.PackageManager
@@ -23,9 +24,6 @@ import com.kk.newcleanx.data.local.distinctId
 import com.kk.newcleanx.data.local.junkCleanTimeTag
 import okhttp3.OkHttpClient
 import java.io.File
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.Calendar
 import java.util.LinkedList
 import java.util.UUID
@@ -267,5 +265,23 @@ object CommonUtils {
             NotificationManagerCompat.from(app).areNotificationsEnabled()
         }
     }
+
+
+    @Suppress("DEPRECATION")
+    fun hasUsageStatsPermission(): Boolean {
+        val appOps = app.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager ?: return false
+        return try {
+            val mode = if (isAtLeastAndroid10()) {
+                appOps.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), app.packageName)
+            } else {
+                appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), app.packageName)
+            }
+            mode == AppOpsManager.MODE_ALLOWED
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 
 }
