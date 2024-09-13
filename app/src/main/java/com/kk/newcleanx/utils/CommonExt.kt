@@ -229,13 +229,18 @@ fun Context.opFiles(path: String) = runCatching {
     val uri = FileProvider.getUriForFile(app, "${BuildConfig.APPLICATION_ID}.provider", file)
     val extension = MimeTypeMap.getFileExtensionFromUrl(file.toString())
     val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-    val intent = Intent().apply {
-        action = Intent.ACTION_VIEW
-        setDataAndType(uri, mimetype)
-        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+    if ("application/vnd.android.package-archive" == mimetype || file.name.endsWith(".apk")) {
+        Toast.makeText(this, getString(R.string.install_error_tip), Toast.LENGTH_SHORT).show()
+    } else {
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            setDataAndType(uri, mimetype)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        isToSettings = true
+        this.startActivity(intent)
     }
-    isToSettings = true
-    this.startActivity(intent)
 }.onFailure {
     Toast.makeText(this, getString(R.string.open_failed), Toast.LENGTH_SHORT).show()
 }
