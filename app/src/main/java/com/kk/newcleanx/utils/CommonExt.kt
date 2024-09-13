@@ -14,6 +14,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -25,6 +26,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kk.newcleanx.BuildConfig
 import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.JunkDetailsType
@@ -33,11 +35,13 @@ import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.hasShowAntivirusTips
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.databinding.DialogAntivirusNoticeBinding
+import com.kk.newcleanx.databinding.DialogDateRangeChoseBinding
 import com.kk.newcleanx.databinding.DialogVirusDeleteBinding
 import com.kk.newcleanx.databinding.DialogVirusScanErrorBinding
 import com.kk.newcleanx.ui.common.WebViewActivity
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeManager
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeService
+import com.kk.newcleanx.utils.CommonUtils.getDateRangeNameByIndex
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +50,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -78,9 +85,11 @@ fun Long.formatStorageSize(): String = let {
     if (this <= 0) return "0 B"
     val units = arrayOf("B", "kB", "MB", "GB", "TB")
     val digitGroups = (log10(this.toDouble()) / log10(1000.0)).toInt()
-    return String.format("%.1f %s", this / 1000.0.pow(digitGroups.toDouble()), units[digitGroups])
+    return String.format(Locale.getDefault(), "%.1f %s", this / 1000.0.pow(digitGroups.toDouble()), units[digitGroups])
 
 }
+
+fun Long.formatTime(format: String = "yyyy/MM/dd"): String = let { SimpleDateFormat(format, Locale.getDefault()).format(Date(this)) }
 
 fun View.startRotateAnim() = run {
     runCatching {
@@ -243,6 +252,43 @@ fun Context.opFiles(path: String) = runCatching {
     }
 }.onFailure {
     Toast.makeText(this, getString(R.string.open_failed), Toast.LENGTH_SHORT).show()
+}
+
+
+fun Activity.showDateRangeSelector(callback: (value: Int, text: String) -> Unit) {
+    val binding = DialogDateRangeChoseBinding.inflate(LayoutInflater.from(this), window.decorView as ViewGroup, false)
+    val bottomSheetDialog = BottomSheetDialog(this, R.style.CustomAlertDialog).apply {
+        setContentView(binding.root)
+        create()
+    }
+    val listData = listOf(getDateRangeNameByIndex(0), getDateRangeNameByIndex(1), getDateRangeNameByIndex(2), getDateRangeNameByIndex(3))
+
+    binding.apply {
+        last60min.text = listData[0]
+        today.text = listData[1]
+        yesterday.text = listData[2]
+        last7days.text = listData[3]
+
+        last60min.setOnClickListener {
+            callback(0, getDateRangeNameByIndex(0))
+            bottomSheetDialog.dismiss()
+        }
+        today.setOnClickListener {
+            callback(1, getDateRangeNameByIndex(1))
+            bottomSheetDialog.dismiss()
+        }
+        yesterday.setOnClickListener {
+            callback(2, getDateRangeNameByIndex(2))
+            bottomSheetDialog.dismiss()
+        }
+        last7days.setOnClickListener {
+            callback(3, getDateRangeNameByIndex(3))
+            bottomSheetDialog.dismiss()
+        }
+
+    }
+
+    bottomSheetDialog.show()
 }
 
 

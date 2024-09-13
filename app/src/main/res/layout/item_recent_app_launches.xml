@@ -80,7 +80,7 @@
         android:gravity="center"
         android:includeFontPadding="false"
         android:minWidth="72dp"
-        android:text="@string/string_remove"
+        android:text="@string/string_stop"
         android:textColor="@color/white"
         android:textSize="11sp"
         android:textStyle="bold"

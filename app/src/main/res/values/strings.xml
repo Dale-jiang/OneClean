@@ -145,9 +145,16 @@
     <string name="grant_permission">Grant Permission</string>
     <string name="grant_permission_to_use_feature">Grant Permission to Use Feature</string>
     <string name="string_launches">Launches</string>
+    <string name="string_launch">Launch</string>
     <string name="screen_time">Screen time</string>
     <string name="string_foreground">Foreground</string>
     <string name="string_background">Background</string>
-
+    <string name="string_stop">Stop</string>
+    <string name="tap_force_stop_to_quit_the_running_app_completely">Tap\"Force stop\" to quit the running app completely.</string>
+    <string name="no_launch_time">Launch time is 0</string>
+    <string name="string_last7days">Last 7 Days</string>
+    <string name="string_yesterday">Yesterday</string>
+    <string name="string_last60min">Last 60 mins</string>
+    <string name="string_today">Today</string>
 
 </resources>

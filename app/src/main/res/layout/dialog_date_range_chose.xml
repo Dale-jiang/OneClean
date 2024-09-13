@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_no_bottom_border"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="50dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/shape_dde2e9_r4" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/last60min"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingVertical="13dp"
+        android:textColor="@color/main_text_color"
+        app:fontFamily="@font/montserrat"
+        android:text="@string/string_last60min" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/today"
+        android:includeFontPadding="false"
+        android:paddingVertical="13dp"
+        android:textColor="@color/main_text_color"
+        app:fontFamily="@font/montserrat"
+        tools:text="XXXXX" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/yesterday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingVertical="13dp"
+        android:textColor="@color/main_text_color"
+        app:fontFamily="@font/montserrat"
+        tools:text="XXXXX" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/last7days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingVertical="13dp"
+        android:textColor="@color/main_text_color"
+        app:fontFamily="@font/montserrat"
+        tools:text="XXXXX" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+

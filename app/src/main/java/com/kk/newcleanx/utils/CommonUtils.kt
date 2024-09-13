@@ -5,6 +5,7 @@ import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.app.usage.StorageStatsManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.ResponseInfo
 import com.kk.newcleanx.BuildConfig
+import com.kk.newcleanx.R
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.cloakResult
 import com.kk.newcleanx.data.local.distinctId
@@ -287,6 +289,95 @@ object CommonUtils {
         runCatching { app.packageManager.getApplicationLabel(app.packageManager.getApplicationInfo(packageName, 0)).toString() }.getOrNull() ?: ""
 
     fun getApplicationIconDrawable(packageName: String) = runCatching { app.packageManager.getApplicationIcon(packageName) }.getOrNull()
+
+    fun isEnableStop(packageName: String): Boolean {
+        if (isGoogleApplication(packageName) || isSystemApplication(packageName)) return false
+        return isApplicationCanStop(packageName)
+    }
+
+    fun isApplicationCanStop(packageName: String): Boolean {
+        return runCatching {
+            val appInfo = app.packageManager.getApplicationInfo(packageName, 0)
+            (appInfo.flags and ApplicationInfo.FLAG_STOPPED) == 0
+        }.getOrNull() ?: false
+    }
+
+    fun isSystemApplication(packageName: String): Boolean {
+        return runCatching {
+            val appInfo = app.packageManager.getApplicationInfo(packageName, 0)
+            (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+        }.getOrNull() ?: false
+    }
+
+    fun isGoogleApplication(packageName: String): Boolean {
+        return packageName == "com.android.vending" || packageName.contains("google")
+    }
+
+    fun getDateRangeNameByIndex(index: Int): String {
+        val calendar = Calendar.getInstance()
+        val currentFormattedTime = System.currentTimeMillis().formatTime()
+        return when (index) {
+            3 -> app.getString(R.string.string_last7days)
+            2 -> {
+                calendar.apply {
+                    add(Calendar.DAY_OF_MONTH, -1)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                "${app.getString(R.string.string_yesterday)} (${calendar.timeInMillis.formatTime()})"
+            }
+
+            1 -> "${app.getString(R.string.string_today)} ($currentFormattedTime)"
+            else -> app.getString(R.string.string_last60min)
+        }
+    }
+
+    fun getDateRangePairByIndex(index: Int): Pair<Long, Long> {
+        val calendar = Calendar.getInstance()
+        val currentTime = System.currentTimeMillis()
+        return when (index) {
+            3 -> {
+                calendar.apply {
+                    add(Calendar.DAY_OF_MONTH, -6)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.timeInMillis to currentTime
+            }
+            2 -> {
+                calendar.apply {
+                    add(Calendar.DAY_OF_MONTH, -1)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                val startOfDay = calendar.timeInMillis
+                calendar.apply {
+                    set(Calendar.HOUR_OF_DAY, 23)
+                    set(Calendar.MINUTE, 59)
+                    set(Calendar.SECOND, 59)
+                    set(Calendar.MILLISECOND, 999)
+                }
+                startOfDay to calendar.timeInMillis
+            }
+            1 -> {
+                calendar.apply {
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.timeInMillis to currentTime
+            }
+            else -> {
+                (currentTime - 60 * 60000L) to currentTime
+            }
+        }
+    }
+
 
 
 }
