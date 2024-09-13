@@ -283,5 +283,10 @@ object CommonUtils {
         }
     }
 
+    fun getApplicationLabelString(packageName: String) =
+        runCatching { app.packageManager.getApplicationLabel(app.packageManager.getApplicationInfo(packageName, 0)).toString() }.getOrNull() ?: ""
+
+    fun getApplicationIconDrawable(packageName: String) = runCatching { app.packageManager.getApplicationIcon(packageName) }.getOrNull()
+
 
 }

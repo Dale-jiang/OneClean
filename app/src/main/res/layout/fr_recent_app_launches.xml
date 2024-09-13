@@ -131,13 +131,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:ellipsize="end"
-                    app:fontFamily="@font/montserrat"
                     android:includeFontPadding="false"
                     android:maxLines="2"
                     android:text="@string/string_foreground"
                     android:textAllCaps="true"
                     android:textColor="@color/selector_recent_app_launches_text_sub"
                     android:textSize="10sp"
+                    app:fontFamily="@font/montserrat"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/foregroundCounts"
                     app:layout_constraintStart_toStartOf="@+id/foregroundCounts"
@@ -186,10 +186,10 @@
                     android:id="@+id/backgroundLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:ellipsize="end"
                     android:includeFontPadding="false"
                     android:maxLines="2"
-                    android:layout_marginTop="2dp"
                     android:text="@string/string_background"
                     android:textAllCaps="true"
                     android:textColor="@color/selector_recent_app_launches_text_sub"
@@ -211,7 +211,9 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="20dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="20"
+            tools:listitem="@layout/item_recent_app_launches" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

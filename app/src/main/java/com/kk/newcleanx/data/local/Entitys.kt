@@ -119,6 +119,16 @@ data class DuplicateFile(
     var isNewest: Boolean = false
 )
 
+@Keep
+data class LaunchesItem(
+    val appName: String,
+    val packageName: String,
+    val icon: Drawable?,
+    val totalCount: Int,
+    val foreground: Int,
+    val background: Int,
+)
+
 
 
 
