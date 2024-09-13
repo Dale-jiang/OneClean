@@ -120,12 +120,12 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.functions.duplicatefile.DuplicateFileCleanActivity"
+            android:name=".ui.functions.duplicatefile.DuplicateFileActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.functions.duplicatefile.DuplicateFileDeleteActivity"
+            android:name=".ui.functions.duplicatefile.DuplicateFileCleanActivity"
             android:configChanges="density|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 

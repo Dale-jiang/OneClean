@@ -43,7 +43,7 @@ import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
 import com.kk.newcleanx.ui.functions.bigfile.BigFileCleanActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
 import com.kk.newcleanx.ui.functions.deviceinfo.DeviceInfoActivity
-import com.kk.newcleanx.ui.functions.duplicatefile.DuplicateFileCleanActivity
+import com.kk.newcleanx.ui.functions.duplicatefile.DuplicateFileActivity
 import com.kk.newcleanx.ui.functions.empty.EmptyFolderActivity
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
@@ -200,7 +200,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 DUPLICATE_FILES_CLEAN -> {
                     requestAllFilePermission { success ->
                         if (success) {
-                            DuplicateFileCleanActivity.start(this)
+                            DuplicateFileActivity.start(this)
                         }
                     }
                 }

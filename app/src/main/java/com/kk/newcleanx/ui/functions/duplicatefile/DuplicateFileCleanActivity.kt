@@ -5,157 +5,111 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.kk.newcleanx.R
-import com.kk.newcleanx.data.local.DUPLICATE_FILES_CLEAN
 import com.kk.newcleanx.data.local.INTENT_KEY
-import com.kk.newcleanx.data.local.busObserver
-import com.kk.newcleanx.data.local.duplicateFiles
-import com.kk.newcleanx.databinding.AcDuplicateFileCleanBinding
+import com.kk.newcleanx.databinding.AcJunkCleanBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.dialog.CustomAlertDialog
 import com.kk.newcleanx.ui.functions.admob.ADManager
-import com.kk.newcleanx.ui.functions.duplicatefile.adapter.DuplicateFileCleanAdapter
-import com.kk.newcleanx.ui.functions.duplicatefile.vm.DuplicateFileCleanViewModel
-import com.kk.newcleanx.utils.formatStorageSize
+import com.kk.newcleanx.ui.functions.duplicatefile.vm.FileDeleteViewModel
 import com.kk.newcleanx.utils.tba.TbaHelper
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileCleanBinding>() {
+class DuplicateFileCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, DuplicateFileCleanActivity::class.java))
+        fun start(context: Context, tips: String) {
+            context.startActivity(Intent(context, DuplicateFileCleanActivity::class.java).apply {
+                putExtra(INTENT_KEY, tips)
+            })
         }
     }
 
     override fun topView(): View {
-        return binding.toolbar
+        return binding.toolbar.root
     }
 
-    private val viewModel by viewModels<DuplicateFileCleanViewModel>()
-    private var adapter: DuplicateFileCleanAdapter? = null
-    private var deleteSize = 0L
+    private val viewModel by viewModels<FileDeleteViewModel>()
+    private var mProgress = 0
 
-    @SuppressLint("NotifyDataSetChanged")
-    private val deleteLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) {
-            viewModel.refreshData()
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding.apply {
 
-            tvTitle.text = getString(R.string.duplicate_files)
+            tvTip.text = getString(R.string.duplicate_files_cleaning)
+            toolbar.ivBack.isInvisible = true
+            toolbar.ivBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
 
-            startProgress(minWaitTime = 2000L) {
-                if (it >= 100) {
+            onBackPressedDispatcher.addCallback {
+//                if (btnContinue.isVisible.not()) {
+//                    onBackClicked()
+//                }
+            }
+
+            btnContinue.setOnClickListener {
+                DuplicateFileCleanResultActivity.start(this@DuplicateFileCleanActivity, intent?.getStringExtra(INTENT_KEY) ?: "")
+                setResult(RESULT_OK)
+                finish()
+            }
+
+            startProgress(endDuration = 600, minWaitTime = 3000) {
+                mProgress = it
+                binding.tvPercent.text = "${mProgress}%"
+            }
+
+            viewModel.cleanDuplicateFiles()
+
+            viewModel.completeObserver.observe(this@DuplicateFileCleanActivity) {
+                lifecycleScope.launch {
+
+                    isCompleted = true
+
+                    while (mProgress < 100) delay(50L)
+
                     showFullAd {
-                        clLoading.isVisible = false
+                        viewLottie.isVisible = false
                         viewLottie.cancelAnimation()
+                        ivComplete.isVisible = true
+                        btnContinue.isVisible = false
+                        tvTip.isVisible = false
+                        tvFinished.isVisible = true
+                        tvPercent.isVisible = false
+                        toolbar.ivBack.isInvisible = true
+
+                        lifecycleScope.launch {
+                            delay(600)
+                            btnContinue.performClick()
+                        }
                     }
+
                 }
             }
 
-            viewModel.getDuplicateFileList()
-
-            tvRight.setOnClickListener {
-                duplicateFiles.forEach { it.select = false }
-                adapter?.notifyDataSetChanged()
-                changeButtonView()
-            }
-
-            btnClean.setOnClickListener {
-
-                CustomAlertDialog(this@DuplicateFileCleanActivity).showDialog(title = getString(R.string.app_name),
-                    message = getString(R.string.duplicate_file_delete_tip),
-                    positiveButtonText = getString(R.string.string_ok),
-                    negativeButtonText = getString(R.string.string_cancel),
-                    onPositiveButtonClick = { dialog ->
-                        deleteLauncher.launch(Intent(this@DuplicateFileCleanActivity, DuplicateFileDeleteActivity::class.java).apply {
-                            putExtra(INTENT_KEY, deleteSize.formatStorageSize())
-                        })
-                        dialog.dismiss()
-                    },
-                    onNegativeButtonClick = {})
-
-            }
-
-            ivScanBack.setOnClickListener {
-                finish()
-            }
-
-            ivBack.setOnClickListener {
-                if (clLoading.isVisible) return@setOnClickListener
-                finish()
-            }
         }
-
-        initObservers()
-
     }
 
 
-    private fun initObservers() {
-
-        busObserver.observe(this) {
-            if (it == DUPLICATE_FILES_CLEAN) {
-                duplicateFiles.clear()
+    private fun onBackClicked() {
+        CustomAlertDialog(this).showDialog(title = getString(R.string.string_tips),
+            message = getString(R.string.string_cleaning_stop_tip),
+            positiveButtonText = getString(R.string.string_ok),
+            negativeButtonText = getString(R.string.string_cancel),
+            onPositiveButtonClick = {
+                it.dismiss()
+                setResult(RESULT_OK)
                 finish()
-                busObserver.postValue("")
-            }
-        }
-
-        viewModel.completeObserver.observe(this) {
-            lifecycleScope.launch(Dispatchers.Main) {
-                binding.ivEmpty.isVisible = duplicateFiles.isEmpty()
-                binding.recyclerView.itemAnimator = null
-                adapter = DuplicateFileCleanAdapter(this@DuplicateFileCleanActivity, duplicateFiles,
-                    click = { data ->
-                        CustomAlertDialog(this@DuplicateFileCleanActivity).showDialog(title = data.name,
-                            message = data.path,
-                            positiveButtonText = getString(R.string.string_ok),
-                            negativeButtonText = "",
-                            onPositiveButtonClick = { dialog ->
-                                dialog.dismiss()
-                            },
-                            onNegativeButtonClick = {})
-                    },
-                    change = { changeButtonView() })
-
-                binding.recyclerView.adapter = adapter
-                changeButtonView()
-                isCompleted = true
-            }
-
-        }
-
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun changeButtonView() {
-        val size = adapter?.getList()?.filter { it.select }?.sumOf { it.size } ?: 0
-        if (size <= 0) {
-            binding.btnClean.isEnabled = false
-            binding.btnClean.setBackgroundResource(R.drawable.shape_d9d9d9_r24)
-            binding.btnClean.text = getString(R.string.string_clean)
-            deleteSize = 0
-        } else {
-            binding.btnClean.isEnabled = true
-            binding.btnClean.setBackgroundResource(R.drawable.ripple_clean_continue_btn)
-            binding.btnClean.text = "${getString(R.string.string_clean)}(${size.formatStorageSize()})"
-            deleteSize = size
-        }
+            },
+            onNegativeButtonClick = {})
     }
 
 
@@ -166,24 +120,22 @@ class DuplicateFileCleanActivity : AllFilePermissionActivity<AcDuplicateFileClea
             return
         }
 
-        // log : oc_scan_int
-        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_scan_int"))
+        // log : oc_clean_int
+        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_clean_int"))
+
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
-            if (ADManager.ocScanIntLoader.canShow(this@DuplicateFileCleanActivity)) {
-                ADManager.ocScanIntLoader.showFullScreenAd(this@DuplicateFileCleanActivity, "oc_scan_int") {
+            if (ADManager.ocCleanIntLoader.canShow(this@DuplicateFileCleanActivity)) {
+                ADManager.ocCleanIntLoader.showFullScreenAd(this@DuplicateFileCleanActivity, "oc_clean_int") {
                     b.invoke()
                 }
             } else {
-                ADManager.ocScanIntLoader.loadAd(this@DuplicateFileCleanActivity)
+                ADManager.ocCleanIntLoader.loadAd(this@DuplicateFileCleanActivity)
                 b.invoke()
             }
         }
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        duplicateFiles.clear()
-    }
 
 }
