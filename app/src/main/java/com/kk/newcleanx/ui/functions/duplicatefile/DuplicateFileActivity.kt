@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -64,6 +65,7 @@ class DuplicateFileActivity : AllFilePermissionActivity<AcDuplicateFileCleanBind
                     showFullAd {
                         clLoading.isVisible = false
                         viewLottie.cancelAnimation()
+                        if (duplicateFiles.isNotEmpty()) Toast.makeText(this@DuplicateFileActivity, getString(R.string.same_has_been_selected), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
