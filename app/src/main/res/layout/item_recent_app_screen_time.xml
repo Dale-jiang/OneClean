@@ -57,7 +57,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                app:indicatorColor="#21B772"
+                app:indicatorColor="@color/color_21b772"
                 app:trackColor="#F2F6FC"
                 app:trackCornerRadius="4dp"
                 app:trackThickness="4dp"

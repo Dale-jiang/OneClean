@@ -10,7 +10,7 @@ import com.kk.newcleanx.data.local.ScreenTimeInfo
 import com.kk.newcleanx.databinding.ItemRecentAppScreenTimeBinding
 import com.kk.newcleanx.utils.formatDuration
 
-class ScreenTimeListAdapter(private val context: Context, private var max: Long = 0L, private val callback: (ScreenTimeInfo) -> Unit) :
+class ScreenTimeListAdapter(private val context: Context, var max: Long = 0L, private val callback: (ScreenTimeInfo) -> Unit) :
     RecyclerView.Adapter<ScreenTimeListAdapter.ScreenTimeViewHolder>() {
 
     private val listData = mutableListOf<ScreenTimeInfo>()
