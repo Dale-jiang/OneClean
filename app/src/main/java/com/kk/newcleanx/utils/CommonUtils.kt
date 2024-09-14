@@ -5,6 +5,7 @@ import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.app.usage.StorageStatsManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -347,6 +348,7 @@ object CommonUtils {
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis to currentTime
             }
+
             2 -> {
                 calendar.apply {
                     add(Calendar.DAY_OF_MONTH, -1)
@@ -364,6 +366,7 @@ object CommonUtils {
                 }
                 startOfDay to calendar.timeInMillis
             }
+
             1 -> {
                 calendar.apply {
                     set(Calendar.HOUR_OF_DAY, 0)
@@ -372,12 +375,34 @@ object CommonUtils {
                     set(Calendar.MILLISECOND, 0)
                 }.timeInMillis to currentTime
             }
+
             else -> {
                 (currentTime - 60 * 60000L) to currentTime
             }
         }
     }
 
+
+    fun isSystemLauncher(packageName: String): Boolean {
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+            addCategory(Intent.CATEGORY_DEFAULT)
+        }
+
+        val resolveInfos = app.packageManager.queryIntentActivities(intent, 0)
+        for (resolveInfo in resolveInfos) {
+            if (resolveInfo.activityInfo.packageName == packageName) {
+                try {
+                    val appInfo = app.packageManager.getApplicationInfo(packageName, 0)
+                    return (appInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) ||
+                            (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return false
+    }
 
 
 }

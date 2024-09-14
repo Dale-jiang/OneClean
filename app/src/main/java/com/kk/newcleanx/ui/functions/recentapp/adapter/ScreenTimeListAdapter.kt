@@ -1,6 +1,8 @@
 package com.kk.newcleanx.ui.functions.recentapp.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
