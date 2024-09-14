@@ -179,7 +179,7 @@ class ScreenTimeViewModel : ViewModel() {
             .mapValues { entry -> entry.value.sumOf { it.totalTimeInForeground } }
 
         return resultMap.mapNotNull { (packageName, duration) ->
-            if (CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) } && !CommonUtils.isSystemLauncher(packageName)) {
+            if (duration > 0 && CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) } && !CommonUtils.isSystemLauncher(packageName)) {
                 ScreenTimeInfo(getApplicationLabelString(packageName), packageName, getApplicationIconDrawable(packageName), duration)
             } else null
         }.toMutableList()
@@ -214,7 +214,7 @@ class ScreenTimeViewModel : ViewModel() {
             totalTime
         }
         return resultMap.mapNotNull { (packageName, duration) ->
-            if (CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) } && !CommonUtils.isSystemLauncher(packageName)) {
+            if (duration > 0 && CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) } && !CommonUtils.isSystemLauncher(packageName)) {
                 ScreenTimeInfo(getApplicationLabelString(packageName), packageName, getApplicationIconDrawable(packageName), duration)
             } else null
         }.toMutableList()
