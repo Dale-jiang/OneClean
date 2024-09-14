@@ -57,7 +57,7 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 fun Context.startFrontNoticeService() = run {
-    if ((CommonUtils.isAtLeastAndroid12() && this is Application)) {
+    if (CommonUtils.isAtLeastAndroid14() || (CommonUtils.isAtLeastAndroid12() && this is Application)) {
         runCatching {
             FrontNoticeManager.showNotice()
         }
