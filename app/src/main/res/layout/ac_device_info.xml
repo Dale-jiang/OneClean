@@ -992,7 +992,7 @@
             app:layout_constraintTop_toTopOf="@+id/view_circle"
             app:lottie_autoPlay="true"
             app:lottie_fileName="device_info_anim.json"
-            app:lottie_imageAssetsFolder="empty"
+            app:lottie_imageAssetsFolder="device"
             app:lottie_loop="true"
             app:lottie_speed="1.6"
             tools:visibility="visible" />
