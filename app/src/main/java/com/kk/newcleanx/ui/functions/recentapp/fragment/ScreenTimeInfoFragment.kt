@@ -180,7 +180,7 @@ class ScreenTimeInfoFragment : BaseFragment<FrScreenTimeInfoBinding>() {
 
     private fun YAxis.setupRightAxis() = runCatching {
         setDrawZeroLine(false)
-        //  setDrawLabels(false)
+        setDrawLabels(false)
         axisLineColor = ctx.getColor(R.color.transparent)
         zeroLineColor = ctx.getColor(R.color.transparent)
         textColor = ctx.getColor(R.color.main_text_color)

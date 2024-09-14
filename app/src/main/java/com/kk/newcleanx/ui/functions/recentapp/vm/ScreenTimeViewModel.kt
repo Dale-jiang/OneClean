@@ -2,29 +2,16 @@ package com.kk.newcleanx.ui.functions.recentapp.vm
 
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
-import android.content.Context
 import android.util.LongSparseArray
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kk.newcleanx.data.local.ScreenTimeInfo
-import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.utils.CommonUtils
-import com.kk.newcleanx.utils.CommonUtils.getApplicationIconDrawable
-import com.kk.newcleanx.utils.CommonUtils.getApplicationLabelString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.LinkedList
 
-class ScreenTimeViewModel : ViewModel() {
-
-    private val statsManager by lazy { app.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager }
-    private val systemAppLst by lazy { listOf("com.google.android.apps.nexuslauncher", app.packageName, "com.android.settings") }
-
-    val chartLiveData = MutableLiveData<LongSparseArray<Long>>()
-    val listLiveData = MutableLiveData<MutableList<ScreenTimeInfo>>()
+class ScreenTimeViewModel : RecentTimeBaseViewModel() {
 
 
     fun fetchListData(index: Int) = runCatching {
@@ -35,189 +22,209 @@ class ScreenTimeViewModel : ViewModel() {
     }
 
     private fun fetchRangeTime(index: Int): Pair<Long, Long> {
-        val calendar = Calendar.getInstance().apply {
-            when (index) {
-                2 -> add(Calendar.DAY_OF_MONTH, -1)
-                3 -> add(Calendar.DAY_OF_MONTH, -6)
+        val calendar = Calendar.getInstance()
+
+        val currentTime = System.currentTimeMillis()
+        val startTime: Long
+
+        when (index) {
+            1 -> {
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                startTime = calendar.timeInMillis
             }
-            set(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH), 0, 0, 0)
+
+            2 -> {
+                calendar.add(Calendar.DAY_OF_MONTH, -1)
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                startTime = calendar.timeInMillis
+                return Pair(startTime, startTime + 86400000)
+            }
+
+            3 -> {
+                calendar.add(Calendar.DAY_OF_MONTH, -6)
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                startTime = calendar.timeInMillis
+            }
+
+            else -> {
+                return Pair(currentTime - 3600000, currentTime)
+            }
         }
-        val startTime = calendar.timeInMillis
-        val endTime = when (index) {
-            1 -> System.currentTimeMillis()
-            2 -> startTime + 86400000
-            3 -> System.currentTimeMillis()
-            else -> System.currentTimeMillis() - 3600000
-        }
-        return Pair(startTime, endTime)
+
+        return Pair(startTime, currentTime)
     }
 
-    fun getRangeTotalByIndex(index: Int) {
+    fun getRangeTotalByIndex(index: Int) = run {
         viewModelScope.launch(Dispatchers.IO + SupervisorJob()) {
-            val longSparseArray = LongSparseArray<Long>()
-            val calendar = Calendar.getInstance()
-
-            val (intervalMillis, size) = when (index) {
-                0 -> 60000L to 60
-                1 -> 3600000L to 24
-                2 -> 86400000L to 7
-                3 -> 86400000L to 7
-                else -> 3600000L to 1
-            }
-
-            val endTime = System.currentTimeMillis()
-            val startTime = when (index) {
+            when (index) {
                 0 -> {
-                    calendar.set(Calendar.SECOND, 0)
-                    calendar.set(Calendar.MILLISECOND, 0)
-                    calendar.timeInMillis - intervalMillis * size
+                    kotlin.runCatching {
+                        val timeInMillis = Calendar.getInstance().apply {
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }.timeInMillis
+                        val endList = mutableListOf<Long>()
+                        for (i in 0..59) {
+                            endList.add(timeInMillis - i * 60000)
+                        }
+                        val longSparseArray = LongSparseArray<Long>()
+                        var current = endList.size
+                        while (--current >= 0) {
+                            val startTime = endList[current]
+                            val endTime = if (current > 0) endList[current - 1] else System.currentTimeMillis()
+                            longSparseArray.append(startTime, getRangeTimeTotal(startTime, endTime))
+                        }
+                        chartLiveData.postValue(longSparseArray)
+                    }
                 }
 
                 1 -> {
-                    calendar.set(Calendar.HOUR_OF_DAY, 0)
-                    calendar.set(Calendar.MINUTE, 0)
-                    calendar.set(Calendar.SECOND, 0)
-                    calendar.set(Calendar.MILLISECOND, 0)
-                    calendar.timeInMillis
-                }
-
-                2, 3 -> {
-                    calendar.set(Calendar.HOUR_OF_DAY, 0)
-                    calendar.set(Calendar.MINUTE, 0)
-                    calendar.set(Calendar.SECOND, 0)
-                    calendar.set(Calendar.MILLISECOND, 0)
-                    calendar.timeInMillis - intervalMillis * size
-                }
-
-                else -> endTime - intervalMillis * size
-            }
-
-            for (i in 0 until size) {
-                val rangeStart = startTime + i * intervalMillis
-                val rangeEnd = if (i == size - 1) endTime else rangeStart + intervalMillis
-                longSparseArray.append(rangeStart, getRangeTimeTotal(rangeStart, rangeEnd))
-            }
-
-            chartLiveData.postValue(longSparseArray)
-        }
-    }
-
-
-    private fun getRangeTimeTotal(start: Long, end: Long): Long {
-        return runCatching {
-            if (end - start > 259200000) { // If interval is greater than 3 days
-                getUsageStatsTotal(start, end)
-            } else {
-                getUsageEventsTotal(start, end)
-            }
-        }.getOrElse { 0L }
-    }
-
-    private fun getUsageStatsTotal(start: Long, end: Long): Long {
-        val usageStatsList = statsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, start, end)
-        val resultMap = usageStatsList
-            .filter { it.totalTimeInForeground > 0L && it.lastTimeUsed > start }
-            .groupBy { it.packageName }
-            .mapValues { entry -> entry.value.sumOf { it.totalTimeInForeground } }
-
-        return filterSystemPackages(resultMap)
-    }
-
-    private fun getUsageEventsTotal(start: Long, end: Long): Long {
-        val usageEvents = statsManager.queryEvents(start, end)
-        val eventMap = mutableMapOf<String, LinkedList<UsageEvents.Event>>()
-
-        while (usageEvents.hasNextEvent()) {
-            val event = UsageEvents.Event()
-            usageEvents.getNextEvent(event)
-            if (event.eventType != UsageEvents.Event.ACTIVITY_STOPPED && event.eventType != UsageEvents.Event.STANDBY_BUCKET_CHANGED) {
-                eventMap.getOrPut(event.packageName) { LinkedList() }.add(event)
-            }
-        }
-
-        val resultMap = eventMap.mapValues { (_, events) ->
-            var totalTime = 0L
-            var previousEvent: UsageEvents.Event? = null
-            events.forEach { event ->
-                when (event.eventType) {
-                    UsageEvents.Event.ACTIVITY_RESUMED -> previousEvent = event
-                    UsageEvents.Event.ACTIVITY_PAUSED -> {
-                        if (previousEvent != null) {
-                            totalTime += event.timeStamp - (previousEvent?.timeStamp ?: 0L)
-                            previousEvent = null
+                    kotlin.runCatching {
+                        val timeInMillis = Calendar.getInstance().apply {
+                            add(Calendar.DAY_OF_MONTH, 1)
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }.timeInMillis
+                        val endList = mutableListOf<Long>()
+                        for (i in 0..24) {
+                            endList.add(timeInMillis - i * 3600000)
                         }
+                        val longSparseArray = LongSparseArray<Long>()
+                        var current = endList.size
+                        while (--current > 0) {
+                            val startTime = endList[current]
+                            val endTime = endList[current - 1]
+                            longSparseArray.append(startTime, getRangeTimeTotal(startTime, endTime))
+                        }
+                        chartLiveData.postValue(longSparseArray)
+                    }
+
+                }
+
+                2 -> {
+                    kotlin.runCatching {
+                        val timeInMillis = Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }.timeInMillis
+                        val endList = mutableListOf<Long>()
+                        for (i in 0..24) {
+                            endList.add(timeInMillis - i * 3600000)
+                        }
+                        val longSparseArray = LongSparseArray<Long>()
+                        var current = endList.size
+                        while (--current > 0) {
+                            val startTime = endList[current]
+                            val endTime = endList[current - 1]
+                            longSparseArray.append(startTime, getRangeTimeTotal(startTime, endTime))
+                        }
+                        chartLiveData.postValue(longSparseArray)
+                    }
+
+                }
+
+                3 -> {
+                    kotlin.runCatching {
+                        val timeInMillis = Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }.timeInMillis
+                        val endList = mutableListOf<Long>()
+                        for (i in 0..6) {
+                            endList.add(timeInMillis - i * 86400000)
+                        }
+                        val longSparseArray = LongSparseArray<Long>()
+                        var current = endList.size
+                        while (--current >= 0) {
+                            val startTime = endList[current]
+                            val endTime = if (current > 0) endList[current - 1] else System.currentTimeMillis()
+                            longSparseArray.append(startTime, getRangeTimeTotal(startTime, endTime))
+                        }
+                        chartLiveData.postValue(longSparseArray)
                     }
                 }
             }
-            totalTime
         }
-
-        return filterSystemPackages(resultMap)
     }
 
-    private fun filterSystemPackages(resultMap: Map<String, Long>): Long {
-        return resultMap.filterKeys { packageName ->
-            CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) && !CommonUtils.isSystemLauncher(packageName) }
-        }.values.sum()
-    }
 
-    private fun getRangeTimeInfoList(start: Long, end: Long) {
-        val isLongInterval = end - start > 259200000
-        val resultList = if (isLongInterval) {
-            getUsageStatsInfoList(start, end)
+    private fun getRangeTimeTotal(start: Long, end: Long): Long = runCatching {
+        if (end - start > 259200000) {
+            calculateTotalForegroundTime(start, end)
         } else {
-            getUsageEventsInfoList(start, end)
+            calculateTotalEventTime(start, end)
         }
-        listLiveData.postValue(resultList)
-    }
+    }.getOrNull() ?: 0L
 
-    private fun getUsageStatsInfoList(start: Long, end: Long): MutableList<ScreenTimeInfo> {
+    private fun calculateTotalForegroundTime(start: Long, end: Long): Long {
+        val resultMap = hashMapOf<String, Long>()
         val usageStatsList = statsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, start, end)
-        val resultMap = usageStatsList
-            .filter { it.totalTimeInForeground > 0L && it.lastTimeUsed > start }
-            .groupBy { it.packageName }
-            .mapValues { entry -> entry.value.sumOf { it.totalTimeInForeground } }
 
-        return resultMap.mapNotNull { (packageName, duration) ->
-            if (duration > 0 && CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) } && !CommonUtils.isSystemLauncher(packageName)) {
-                ScreenTimeInfo(getApplicationLabelString(packageName), packageName, getApplicationIconDrawable(packageName), duration)
-            } else null
-        }.toMutableList()
-    }
-
-    private fun getUsageEventsInfoList(start: Long, end: Long): MutableList<ScreenTimeInfo> {
-        val usageEvents = statsManager.queryEvents(start, end)
-        val eventMap = mutableMapOf<String, LinkedList<UsageEvents.Event>>()
-
-        while (usageEvents.hasNextEvent()) {
-            val event = UsageEvents.Event()
-            usageEvents.getNextEvent(event)
-            if (event.eventType != UsageEvents.Event.ACTIVITY_STOPPED && event.eventType != UsageEvents.Event.STANDBY_BUCKET_CHANGED) {
-                eventMap.getOrPut(event.packageName) { LinkedList() }.add(event)
+        usageStatsList.forEach { usageStats ->
+            if (usageStats.totalTimeInForeground > 0L && usageStats.lastTimeUsed > start) {
+                resultMap[usageStats.packageName] = resultMap.getOrDefault(usageStats.packageName, 0L) + usageStats.totalTimeInForeground
             }
         }
 
-        val resultMap = eventMap.mapValues { (_, events) ->
-            var totalTime = 0L
-            var previousEvent: UsageEvents.Event? = null
-            events.forEach { event ->
-                when (event.eventType) {
-                    UsageEvents.Event.ACTIVITY_RESUMED -> previousEvent = event
-                    UsageEvents.Event.ACTIVITY_PAUSED -> {
-                        if (previousEvent != null) {
-                            totalTime += event.timeStamp - (previousEvent?.timeStamp ?: 0L)
-                            previousEvent = null
-                        }
+        return calculateTotalFromMap(resultMap)
+    }
+
+    private fun calculateTotalEventTime(start: Long, end: Long): Long {
+        val usageEvents = statsManager.queryEvents(start, end)
+        val allEventLinkedList = LinkedList<UsageEvents.Event>()
+
+        while (usageEvents != null && usageEvents.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            if (usageEvents.getNextEvent(event) && event.eventType in listOf(UsageEvents.Event.ACTIVITY_RESUMED, UsageEvents.Event.ACTIVITY_PAUSED)) {
+                allEventLinkedList.add(event)
+            }
+        }
+
+        val resultMap = hashMapOf<String, Long>()
+        var previousEvent: UsageEvents.Event? = null
+
+        allEventLinkedList.forEach { event ->
+            val packageName = event.packageName
+            if ( CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it == packageName }) {
+                if (event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                    previousEvent = event
+                } else if (event.eventType == UsageEvents.Event.ACTIVITY_PAUSED && previousEvent != null) {
+                    val duration = event.timeStamp - (previousEvent?.timeStamp ?: 0L)
+                    if (duration > 0L) {
+                        resultMap[packageName] = resultMap.getOrDefault(packageName, 0L) + duration
                     }
+                    previousEvent = null
                 }
             }
-            totalTime
         }
-        return resultMap.mapNotNull { (packageName, duration) ->
-            if (duration > 0 && CommonUtils.isPackageInstalled(packageName) && !systemAppLst.any { it.contains(packageName) } && !CommonUtils.isSystemLauncher(packageName)) {
-                ScreenTimeInfo(getApplicationLabelString(packageName), packageName, getApplicationIconDrawable(packageName), duration)
-            } else null
-        }.toMutableList()
+
+        return calculateTotalFromMap(resultMap)
     }
+
+    private fun calculateTotalFromMap(resultMap: HashMap<String, Long>): Long {
+        var total = 0L
+        resultMap.forEach { (packageName, duration) ->
+            if ( CommonUtils.isPackageInstalled(packageName) && !systemAppLst.contains(packageName)) {
+                total += duration
+            }
+        }
+        return total
+    }
+
 
 }

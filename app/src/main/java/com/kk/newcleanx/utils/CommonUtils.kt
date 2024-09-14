@@ -384,26 +384,14 @@ object CommonUtils {
     }
 
 
-    fun isSystemLauncher(packageName: String): Boolean {
-        val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-            addCategory(Intent.CATEGORY_DEFAULT)
-        }
-
-        val resolveInfos = app.packageManager.queryIntentActivities(intent, 0)
-        for (resolveInfo in resolveInfos) {
-            if (resolveInfo.activityInfo.packageName == packageName) {
-                try {
-                    val appInfo = app.packageManager.getApplicationInfo(packageName, 0)
-                    return (appInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) ||
-                            (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0)
-                } catch (e: PackageManager.NameNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        return false
-    }
+//    fun isSystemLauncher(packageName: String): Boolean {
+//        val intent = Intent(Intent.ACTION_MAIN).apply {
+//            addCategory(Intent.CATEGORY_HOME)
+//        }
+//
+//        val resolveInfoList = app.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+//        return resolveInfoList.any { it.activityInfo.packageName == packageName }
+//    }
 
 
 }
