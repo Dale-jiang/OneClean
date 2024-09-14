@@ -195,6 +195,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 }
 
                 RECENT_APP -> {
+                    TbaHelper.eventPost("ho_recent")
                     if (CommonUtils.hasUsageStatsPermission()) {
                         RecentAppUsedInfoActivity.start(this)
                     } else {
@@ -203,6 +204,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 }
 
                 DUPLICATE_FILES_CLEAN -> {
+                    TbaHelper.eventPost("ho_dup")
                     requestAllFilePermission { success ->
                         if (success) {
                             DuplicateFileActivity.start(this)

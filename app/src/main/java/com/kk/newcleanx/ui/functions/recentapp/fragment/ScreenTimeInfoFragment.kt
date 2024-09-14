@@ -20,10 +20,13 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.kk.newcleanx.R
+import com.kk.newcleanx.data.local.INTENT_KEY
+import com.kk.newcleanx.data.local.INTENT_KEY_1
 import com.kk.newcleanx.data.local.ScreenTimeInfo
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.databinding.FrScreenTimeInfoBinding
 import com.kk.newcleanx.ui.base.BaseFragment
+import com.kk.newcleanx.ui.common.PermissionSettingDialogActivity
 import com.kk.newcleanx.ui.common.widget.TransitionFadeForRecycler
 import com.kk.newcleanx.ui.functions.recentapp.adapter.ScreenTimeListAdapter
 import com.kk.newcleanx.ui.functions.recentapp.vm.ScreenTimeViewModel
@@ -101,11 +104,8 @@ class ScreenTimeInfoFragment : BaseFragment<FrScreenTimeInfoBinding>() {
 
     private fun initAdapter() {
         screenListAdapter = ScreenTimeListAdapter(ctx) { screenTimeInfo ->
-            isToSettings = true
-            settingsDetailsLauncher.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:${screenTimeInfo.packageName}")
-                addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            })
+            openAppSettings(screenTimeInfo.packageName)
+
         }
         binding.recyclerView.apply {
             itemAnimator = null
@@ -180,7 +180,7 @@ class ScreenTimeInfoFragment : BaseFragment<FrScreenTimeInfoBinding>() {
 
     private fun YAxis.setupRightAxis() = runCatching {
         setDrawZeroLine(false)
-      //  setDrawLabels(false)
+        //  setDrawLabels(false)
         axisLineColor = ctx.getColor(R.color.transparent)
         zeroLineColor = ctx.getColor(R.color.transparent)
         textColor = ctx.getColor(R.color.main_text_color)
@@ -191,6 +191,20 @@ class ScreenTimeInfoFragment : BaseFragment<FrScreenTimeInfoBinding>() {
         setGridDashedLine(DashPathEffect(floatArrayOf(5f, 5f), 0F))
         valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String = value.toLong().formatDuration()
+        }
+    }
+
+    private fun openAppSettings(packageName: String) = runCatching {
+        lifecycleScope.launch(Dispatchers.Main) {
+            isToSettings = true
+            settingsDetailsLauncher.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.parse("package:$packageName")
+            }.apply { addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY) })
+            delay(350L)
+            startActivity(Intent(ctx, PermissionSettingDialogActivity::class.java).apply {
+                putExtra(INTENT_KEY, getString(R.string.how_to_do))
+                putExtra(INTENT_KEY_1, getString(R.string.tap_force_stop_to_quit_the_running_app_completely))
+            })
         }
     }
 

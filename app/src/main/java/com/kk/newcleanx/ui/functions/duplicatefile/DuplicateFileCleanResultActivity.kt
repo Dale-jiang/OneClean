@@ -50,6 +50,9 @@ class DuplicateFileCleanResultActivity : AllFilePermissionActivity<AcCleanResult
     private var adapter: DuplicateCleanResultListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        TbaHelper.eventPost("dup_result_page")
+
         initAdapter()
         showNatAd()
 
