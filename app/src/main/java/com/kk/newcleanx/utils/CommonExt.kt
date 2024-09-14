@@ -294,6 +294,27 @@ fun Activity.showDateRangeSelector(callback: (value: Int, text: String) -> Unit)
 }
 
 
+fun Double.format(): String {
+    if (this.isNaN()) return "0"
+    return String.format(Locale.US, "%.1f", this)
+}
+
+fun String.removeEndSuffix(suffix: String = ".0") = if (this.endsWith(suffix)) this.dropLast(suffix.length) else this
+fun String.removeStartPrefix(prefix: String = "0") = if (this.startsWith(prefix)) this.drop(prefix.length) else this
+fun Long.formatDuration(): String {
+    val seconds = this / 1000.0
+    val hours = seconds / 3600
+    val minutes = seconds / 60
+
+    return when {
+        hours >= 1.0 -> "${hours.format().removeEndSuffix()} h"
+        minutes >= 1.0 -> "${minutes.format().removeEndSuffix()} m"
+        seconds >= 1.0 -> "${seconds.format().removeEndSuffix()} s"
+        else -> "${this % 1000} ms"
+    }
+}
+
+
 fun CoroutineScope.launchTicker(
     first: Long,
     interval: Long,

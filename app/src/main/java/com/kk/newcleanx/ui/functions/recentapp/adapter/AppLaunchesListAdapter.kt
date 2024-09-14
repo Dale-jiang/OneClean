@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kk.newcleanx.R
@@ -18,10 +19,12 @@ class AppLaunchesListAdapter(private val context: Context, private val callback:
 
     @SuppressLint("NotifyDataSetChanged")
     fun initData(list: MutableList<LaunchesItem>, selectorIndex: Int) = runCatching {
+        val diffCallback = ScreenTimeDiffCallback(listData, list)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         listData.clear()
         listData.addAll(list)
         this.selectorIndex = selectorIndex
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     class ViewHolder(val binding: ItemRecentAppLaunchesBinding) : RecyclerView.ViewHolder(binding.root)
@@ -71,6 +74,25 @@ class AppLaunchesListAdapter(private val context: Context, private val callback:
                 tvBtn.setOnClickListener { callback(data) }
             }
         }
-
     }
+
+    class ScreenTimeDiffCallback(
+        private val oldList: List<LaunchesItem>,
+        private val newList: List<LaunchesItem>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].packageName == newList[newItemPosition].packageName
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
+
+
 }

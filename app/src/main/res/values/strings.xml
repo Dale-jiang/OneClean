@@ -9,7 +9,7 @@
     <string name="string_cancel">Cancel</string>
     <string name="grant_permission_to_use">Grant permission to use</string>
     <string name="string_scan">Scan</string>
-    <string name="free_up_space">Free Up Space</string>
+    <string name="free_up_space">More Features</string>
     <string name="big_file_clean">Big File Clean</string>
     <string name="app_manager">App Manager</string>
     <string name="device_status">Device Status</string>
@@ -156,5 +156,6 @@
     <string name="string_yesterday">Yesterday</string>
     <string name="string_last60min">Last 60 mins</string>
     <string name="string_today">Today</string>
+    <string name="no_data_yet">No Data Yet</string>
 
 </resources>

@@ -129,6 +129,9 @@ data class LaunchesItem(
     val background: Int,
 )
 
+@Keep
+data class ScreenTimeInfo(val appName: String, val packageName: String, val icon: Drawable?, val duration: Long)
+
 
 
 

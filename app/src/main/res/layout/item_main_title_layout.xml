@@ -9,5 +9,5 @@
     android:textColor="@color/main_text_color"
     android:textSize="14sp"
     android:textStyle="bold"
-    tools:text="Free Up Space" />
+    tools:text="More Features" />
 
