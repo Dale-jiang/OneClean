@@ -118,7 +118,7 @@ object TbaHelper : TbaBase() {
                 put("galactic", BuildConfig.VERSION_NAME)
                 put("bronze", distinctId)
                 put("rod", "backstop")
-                put("physic", "0")
+                put("physic", Build.VERSION.RELEASE ?: "")
                 put("bandy", "2")
             })
 

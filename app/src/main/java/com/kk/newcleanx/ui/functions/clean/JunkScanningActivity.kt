@@ -71,27 +71,25 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
             }
 
             itemChaneObserver.observe(this@JunkScanningActivity) { item ->
-
+                val newList = ArrayList(viewModel.junkDetailsList)
                 binding.run {
                     when (item.junkType) {
                         JunkType.APP_CACHE -> tvCacheSize.text =
-                            viewModel.junkDetailsList.filter { it.junkType == JunkType.APP_CACHE }.sumOf { it.fileSize }.formatStorageSize()
+                            newList.filter { it.junkType == JunkType.APP_CACHE }.sumOf { it.fileSize }.formatStorageSize()
 
                         JunkType.LOG_FILES -> tvLogSize.text =
-                            viewModel.junkDetailsList.filter { it.junkType == JunkType.LOG_FILES }.sumOf { it.fileSize }.formatStorageSize()
+                            newList.filter { it.junkType == JunkType.LOG_FILES }.sumOf { it.fileSize }.formatStorageSize()
 
                         JunkType.TEMP_FILES -> tvTempSize.text =
-                            viewModel.junkDetailsList.filter { it.junkType == JunkType.TEMP_FILES }.sumOf { it.fileSize }.formatStorageSize()
+                            newList.filter { it.junkType == JunkType.TEMP_FILES }.sumOf { it.fileSize }.formatStorageSize()
 
                         JunkType.AD_JUNK -> tvAdSize.text =
-                            viewModel.junkDetailsList.filter { it.junkType == JunkType.AD_JUNK }.sumOf { it.fileSize }.formatStorageSize()
+                            newList.filter { it.junkType == JunkType.AD_JUNK }.sumOf { it.fileSize }.formatStorageSize()
 
                         JunkType.APK_FILES -> tvApkSize.text =
-                            viewModel.junkDetailsList.filter { it.junkType == JunkType.APK_FILES }.sumOf { it.fileSize }.formatStorageSize()
+                            newList.filter { it.junkType == JunkType.APK_FILES }.sumOf { it.fileSize }.formatStorageSize()
                     }
-
-                    tvJunkSize.text = viewModel.junkDetailsList.sumOf { it.fileSize }.formatStorageSize()
-
+                    tvJunkSize.text = newList.sumOf { it.fileSize }.formatStorageSize()
                 }
             }
 
@@ -154,20 +152,20 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
 
     private fun onBackClicked() {
         CustomAlertDialog(this).showDialog(title = getString(R.string.string_tips),
-                                           message = getString(R.string.string_scanning_stop_tip),
-                                           positiveButtonText = getString(R.string.string_ok),
-                                           negativeButtonText = getString(R.string.string_cancel),
-                                           onPositiveButtonClick = {
-                                               it.dismiss()
-                                               finish()
-                                           },
-                                           onNegativeButtonClick = {})
+            message = getString(R.string.string_scanning_stop_tip),
+            positiveButtonText = getString(R.string.string_ok),
+            negativeButtonText = getString(R.string.string_cancel),
+            onPositiveButtonClick = {
+                it.dismiss()
+                finish()
+            },
+            onNegativeButtonClick = {})
     }
 
 
     private fun showFullAd(b: () -> Unit) {
 
-        if (ADManager.isOverAdMax()|| ADManager.isBlocked()) {
+        if (ADManager.isOverAdMax() || ADManager.isBlocked()) {
             b.invoke()
             return
         }
