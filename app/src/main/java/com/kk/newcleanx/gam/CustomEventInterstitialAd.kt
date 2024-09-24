@@ -45,7 +45,7 @@ class CustomEventInterstitialAd : Adapter(), MediationInterstitialAd {
         mediationAdLoadCallback: MediationAdLoadCallback<MediationInterstitialAd, MediationInterstitialAdCallback>
     ) {
         runCatching {
-            val adUnit = adConfiguration.serverParameters.getString("parameter")
+            val adUnit = adConfiguration.serverParameters.getString(MediationConfiguration.CUSTOM_EVENT_SERVER_PARAMETER_FIELD)
             val adRequest = AdManagerAdRequest.Builder().build()
 
             AdManagerInterstitialAd.load(adConfiguration.context, adUnit!!, adRequest, object : AdManagerInterstitialAdLoadCallback() {
