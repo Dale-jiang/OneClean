@@ -73,14 +73,14 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!ADManager.isOverAdMax() && !ADManager.isBlocked()) {
-            TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))
-        }
-
         cancelNormalNotice()
         TbaHelper.postSessionEvent()
         TbaHelper.eventPost("loading_page")
         startFrontNoticeService()
+
+        if (!ADManager.isOverAdMax() && !ADManager.isBlocked()) {
+            TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))
+        }
 
         if (!hasNotificationPermission() && isAtLeastAndroid13()) {
             notificationLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
