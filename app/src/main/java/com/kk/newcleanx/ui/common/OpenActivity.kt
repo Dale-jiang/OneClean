@@ -73,6 +73,10 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (!ADManager.isOverAdMax() && !ADManager.isBlocked()) {
+            TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))
+        }
+
         cancelNormalNotice()
         TbaHelper.postSessionEvent()
         TbaHelper.eventPost("loading_page")
@@ -136,7 +140,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         val paramsBuilder = ConsentRequestParameters.Builder()
         if (BuildConfig.DEBUG) {
             val debugSettings = ConsentDebugSettings.Builder(this).setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-                    .addTestDeviceHashedId("E0B0FE3B4C530E91951B4FC4C86CF0E9").build()
+                .addTestDeviceHashedId("E0B0FE3B4C530E91951B4FC4C86CF0E9").build()
             paramsBuilder.setConsentDebugSettings(debugSettings)
         }
 
@@ -162,16 +166,16 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
                 "clean" -> {
                     if (CommonUtils.hasAllStoragePermission()) {
                         startActivities(
-                                arrayOf(
-                                        Intent(this, MainActivity::class.java),
-                                        if (CommonUtils.checkIfCanClean()) {
-                                            Intent(this, JunkScanningActivity::class.java)
-                                        } else {
-                                            Intent(this, CleanResultActivity::class.java).apply {
-                                                putExtra(INTENT_KEY, CleanType.JunkType)
-                                            }
-                                        }
-                                ))
+                            arrayOf(
+                                Intent(this, MainActivity::class.java),
+                                if (CommonUtils.checkIfCanClean()) {
+                                    Intent(this, JunkScanningActivity::class.java)
+                                } else {
+                                    Intent(this, CleanResultActivity::class.java).apply {
+                                        putExtra(INTENT_KEY, CleanType.JunkType)
+                                    }
+                                }
+                            ))
                     } else MainActivity.start(this, noticeType)
                 }
 
@@ -218,9 +222,6 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             b.invoke()
             return
         }
-
-        TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))
-
         lifecycleScope.launch {
             while (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) delay(200L)
             if (ADManager.ocLaunchLoader.canShow(this@OpenActivity)) {
