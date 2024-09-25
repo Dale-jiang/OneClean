@@ -80,50 +80,62 @@ const val LOCAL_NOTICE_TEXT_JSON = """
 """
 
 const val LOCAL_AD_JSON = """
+   {
+  "uzek": 70,
+  "xihe": 15,
+  "oc_launch": [
     {
-	"uzek": 70,
-	"xihe": 15,
-	"oc_launch": [{
-		"kdhi": "ca-app-pub-5663304938951743/9005677038",
-		"iegw": "admob",
-		"zirhh": "op",
-		"zpejh": 13800,
-		"lasha": 3
-	}],
-	"oc_scan_int": [{
-		"kdhi": "ca-app-pub-5663304938951743/2157768473",
-		"iegw": "admob",
-		"zirhh": "int",
-		"zpejh": 3000,
-		"lasha": 3
-	}],
-	"oc_clean_int": [{
-		"kdhi": "ca-app-pub-5663304938951743/8531605132",
-		"iegw": "admob",
-		"zirhh": "int",
-		"zpejh": 3000,
-		"lasha": 3
-	}],
-	"oc_scan_nat": [{
-		"kdhi": "ca-app-pub-5663304938951743/2808505168",
-		"iegw": "admob",
-		"zirhh": "nat",
-		"zpejh": 3000,
-		"lasha": 3
-	}],
-	"oc_clean_nat": [{
-		"kdhi": "ca-app-pub-5663304938951743/9182341822",
-		"iegw": "admob",
-		"zirhh": "nat",
-		"zpejh": 3000,
-		"lasha": 3
-	}],
-	"oc_main_nat": [{
-		"kdhi": "ca-app-pub-5663304938951743/2616933474",
-		"iegw": "admob",
-		"zirhh": "nat",
-		"zpejh": 3000,
-		"lasha": 3
-	}]
+      "kdhi": "ca-app-pub-5663304938951743/9005677038",
+      "iegw": "admob",
+      "zirhh": "op",
+      "zpejh": 13800,
+      "lasha": 3
+    }
+  ],
+    "oc_scan_int": [
+    {
+      "kdhi": "ca-app-pub-5663304938951743/2157768473",
+      "iegw": "admob",
+      "zirhh": "int",
+      "zpejh": 3000,
+      "lasha": 3
+    }
+  ],
+  "oc_clean_int": [
+    {
+      "kdhi": "ca-app-pub-5663304938951743/8531605132",
+      "iegw": "admob",
+      "zirhh": "int",
+      "zpejh": 3000,
+      "lasha": 3
+    }
+  ],
+  "oc_scan_nat": [
+    {
+      "kdhi": "ca-app-pub-5663304938951743/8649131960",
+      "iegw": "admob",
+      "zirhh": "nat",
+      "zpejh": 3000,
+      "lasha": 3
+    }
+  ],
+  "oc_clean_nat": [
+    {
+      "kdhi": "ca-app-pub-5663304938951743/8658802457",
+      "iegw": "admob",
+      "zirhh": "nat",
+      "zpejh": 3000,
+      "lasha": 3
+    }
+  ],
+  "oc_main_nat": [
+    {
+      "kdhi": "ca-app-pub-5663304938951743/2875719662",
+      "iegw": "admob",
+      "zirhh": "nat",
+      "zpejh": 3000,
+      "lasha": 3
+    }
+  ]
 }
 """
