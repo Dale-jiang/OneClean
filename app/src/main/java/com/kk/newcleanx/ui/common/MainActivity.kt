@@ -52,6 +52,7 @@ import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid8
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.showAntivirusNotice
+import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -80,6 +81,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     private var noticeType: NoticeType? = null
     private val notificationLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (hasNotificationPermission()) {
+            this.startFrontNoticeService()
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
         } else {
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "no"))
@@ -89,6 +91,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     private val notificationSetLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 //        isToSettings = false
         if (hasNotificationPermission()) {
+            this.startFrontNoticeService()
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "yes"))
         } else {
             TbaHelper.eventPost("permiss_notifi", hashMapOf("res" to "no"))
@@ -119,6 +122,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
         initAdapter()
         setStorageInfo()
+        this.startFrontNoticeService()
+
         binding.ivSetting.setOnClickListener {
             showBackAd = true
             SettingActivity.start(this)

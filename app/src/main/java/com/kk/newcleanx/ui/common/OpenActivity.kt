@@ -76,7 +76,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
         cancelNormalNotice()
         TbaHelper.postSessionEvent()
         TbaHelper.eventPost("loading_page")
-        startFrontNoticeService()
+        this.startFrontNoticeService()
 
         if (!ADManager.isOverAdMax() && !ADManager.isBlocked()) {
             TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))

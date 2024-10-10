@@ -61,7 +61,7 @@
         android:layout_height="match_parent"
         android:background="@color/color_f2f6fc"
         android:visibility="visible"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <View
             android:layout_width="match_parent"

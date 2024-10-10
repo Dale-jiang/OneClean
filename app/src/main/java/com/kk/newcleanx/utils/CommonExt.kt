@@ -42,6 +42,7 @@ import com.kk.newcleanx.ui.common.WebViewActivity
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeManager
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeService
 import com.kk.newcleanx.utils.CommonUtils.getDateRangeNameByIndex
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,10 +61,12 @@ fun Context.startFrontNoticeService() = run {
     if (CommonUtils.isAtLeastAndroid14() || (CommonUtils.isAtLeastAndroid12() && this is Application)) {
         runCatching {
             FrontNoticeManager.showNotice()
+            TbaHelper.eventPost("normal_notice")
         }
     } else {
         runCatching {
             ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
+            TbaHelper.eventPost("foreground_notice")
         }
     }
 }

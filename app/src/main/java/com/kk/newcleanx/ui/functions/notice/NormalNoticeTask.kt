@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
+import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.utils.CoroutineHelper
 import com.kk.newcleanx.utils.CoroutineHelper.taskCheckScope
+import com.kk.newcleanx.utils.CoroutineHelper.timerTaskCheckScope
 import com.kk.newcleanx.utils.launchTicker
+import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,14 +30,16 @@ object NormalNoticeTask {
                             Log.e("unlockReceiver=>>", "noticeTextList not null  ")
                             if (NormalNoticeManager.canShowNotice("unlock", open, this.unlock)) {
                                 Log.e("unlockReceiver=>>", "canShowNotice-----")
-                                NormalNoticeManager.showNormalNotice("unlock", NormalNoticeManager.noticeTextList!!.random())
+                                withContext(Dispatchers.Main) {
+                                    NormalNoticeManager.showNormalNotice("unlock", NormalNoticeManager.noticeTextList!!.random())
+                                }
                             }
                         }
                     }
 
                     withContext(Dispatchers.Main) {
                         runCatching {
-                            FrontNoticeManager.showNotice()
+                            app.startFrontNoticeService()
                         }
                     }
 
@@ -51,13 +56,13 @@ object NormalNoticeTask {
         }
         timerNoticeCheck()
         postSessionBack()
+        TbaHelper.eventPost("start_timer_task")
     }
 
-
     private fun timerNoticeCheck() {
-        taskCheckScope.launchTicker(60000L, 60000L) {
+        timerTaskCheckScope.launchTicker(60000L, 60000L) {
             runCatching {
-                FrontNoticeManager.showNotice()
+                app.startFrontNoticeService()
             }
             runCatching {
                 NormalNoticeManager.noticeConf?.apply {

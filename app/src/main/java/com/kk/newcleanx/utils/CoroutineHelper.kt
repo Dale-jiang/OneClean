@@ -1,5 +1,6 @@
 package com.kk.newcleanx.utils
 
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -8,10 +9,11 @@ import kotlinx.coroutines.launch
 
 object CoroutineHelper {
 
-    val taskCheckScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
+    val timerTaskCheckScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, _ -> }) }
+    val taskCheckScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, _ -> }) }
 
-    private val iOScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
-    private val mainScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.Main) }
+    private val iOScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, _ -> }) }
+    private val mainScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.Main + CoroutineExceptionHandler { _, _ -> }) }
 
     fun launchIO(block: suspend () -> Unit): Job {
         return iOScope.launch {

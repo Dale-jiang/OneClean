@@ -18,7 +18,7 @@ class FrontNoticeService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         runCatching {
-            FrontNoticeManager.showNotice()
+            startForeground(NOTIFICATION_ID, FrontNoticeManager.showNotice())
         }
         return super.onStartCommand(intent, flags, startId)
     }
