@@ -60,7 +60,7 @@ import kotlin.math.pow
 fun Context.startFrontNoticeService() = run {
     if (CommonUtils.isAtLeastAndroid14() || (CommonUtils.isAtLeastAndroid12() && this is Application)) {
         runCatching {
-            FrontNoticeManager.showNotice()
+            FrontNoticeManager.showNotice("normal_notice")
             TbaHelper.eventPost("normal_notice")
         }
     } else {

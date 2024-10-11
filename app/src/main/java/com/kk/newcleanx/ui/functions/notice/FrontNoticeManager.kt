@@ -15,6 +15,7 @@ import com.kk.newcleanx.data.local.NoticeType
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.ui.common.OpenActivity
 import com.kk.newcleanx.utils.CommonUtils
+import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlin.random.Random
 
 object FrontNoticeManager {
@@ -56,7 +57,7 @@ object FrontNoticeManager {
 
 
     @SuppressLint("MissingPermission")
-    fun showNotice(): Notification = run {
+    fun showNotice(type:String="normal_notice"): Notification = run {
         buildChannel()
         val largeViews = buildRemoteViews(true)
         val tinyViews = buildRemoteViews(false)
@@ -70,6 +71,7 @@ object FrontNoticeManager {
         val notification = builder.build()
         runCatching {
             NotificationManagerCompat.from(app).notify(NOTIFICATION_ID, notification)
+            TbaHelper.eventPost("front_notice_type", hashMapOf("nt_type" to type))
         }
         return notification
     }
