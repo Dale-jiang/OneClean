@@ -60,10 +60,7 @@ object NormalNoticeTask {
     }
 
     private fun timerNoticeCheck() {
-        timerTaskCheckScope.launchTicker(60000L, 60000L) {
-            runCatching {
-                app.startFrontNoticeService()
-            }
+        timerTaskCheckScope.launchTicker(60000L, 60000L, Dispatchers.Main) {
             runCatching {
                 NormalNoticeManager.noticeConf?.apply {
                     if (NormalNoticeManager.noticeTextList.isNullOrEmpty().not()) {
@@ -72,6 +69,10 @@ object NormalNoticeTask {
                         }
                     }
                 }
+            }
+
+            runCatching {
+                app.startFrontNoticeService()
             }
         }
     }

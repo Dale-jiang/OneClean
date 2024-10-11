@@ -25,11 +25,11 @@ const val LOCAL_NOTICE_CONFIG_JSON = """
 	"ocon": 1,
 	"oct": {
 		"ocrepeat": 1,
-		"ocfirst": 5
+		"ocfirst": 1
 	},
 	"ocu": {
 		"ocrepeat": 1,
-		"ocfirst": 5
+		"ocfirst": 1
 	}
 }
 """

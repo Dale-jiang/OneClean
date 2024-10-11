@@ -20,7 +20,7 @@ class FrontNoticeService : Service() {
         runCatching {
             startForeground(NOTIFICATION_ID, FrontNoticeManager.showNotice("foreground_notice"))
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     private fun startFrontNotice() {
