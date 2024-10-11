@@ -132,6 +132,20 @@ data class LaunchesItem(
 @Keep
 data class ScreenTimeInfo(val appName: String, val packageName: String, val icon: Drawable?, val duration: Long)
 
+@Keep
+data class AbnormalAdConfig(
+    @SerializedName("wadwa")
+    val switch: Int = 1,
+    @SerializedName("dee")
+    val type: Int = 1,
+    @SerializedName("rdgs")
+    val timeInterval: Int = 24,
+    @SerializedName("caca")
+    val maxShowCount: Int = 20,
+    @SerializedName("ervfv")
+    val maxClickCount: Int = 12
+)
+
 
 
 

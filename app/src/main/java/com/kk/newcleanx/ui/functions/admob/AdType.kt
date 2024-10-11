@@ -127,11 +127,13 @@ sealed class AdType {
                 }
 
                 override fun onAdClicked() {
+                    ADManager.updateUnusualAdMetrics(isFullAd = true, isClick = true)
                     ADManager.addClick()
                 }
 
                 override fun onAdShowedFullScreenContent() {
                     Log.e("FullScreenAd==>", "$where ${adItem?.adType} - ${adItem?.adId} show ad success")
+                    ADManager.updateUnusualAdMetrics(isFullAd = true, isClick = false)
                     ADManager.addDisplay()
                 }
             }
@@ -186,6 +188,7 @@ sealed class AdType {
                         override fun onAdFailedToLoad(e: LoadAdError) = onLoaded.invoke(false, e.message)
                         override fun onAdClicked() {
                             ADManager.addClick()
+                            ADManager.updateUnusualAdMetrics(isFullAd = false, isClick = true)
                         }
 
                     })
@@ -213,6 +216,7 @@ sealed class AdType {
                     parent?.removeAllViews()
                     parent?.addView(binding.root)
                     ADManager.addDisplay()
+                    ADManager.updateUnusualAdMetrics(isFullAd = false, isClick = false)
                     Log.e("MyNativeAd==>", "${where} ${adItem?.adType} - ${adItem?.adId} show success")
                 }
             }

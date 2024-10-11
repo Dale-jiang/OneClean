@@ -8,6 +8,7 @@ lateinit var app: MyAPP
 var isToSettings = false
 
 val busObserver = MutableLiveData<String>()
+var abnormalAdConfig = AbnormalAdConfig()
 
 val main_list_data = arrayListOf(
     MainFunction(R.string.free_up_space, -1, ""),

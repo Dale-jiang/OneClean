@@ -1,6 +1,7 @@
 package com.kk.newcleanx.data.local
 
 import com.google.gson.Gson
+import com.kk.newcleanx.utils.getFirInstallTime
 import com.tencent.mmkv.MMKV
 import kotlin.reflect.KProperty
 
@@ -55,3 +56,8 @@ var showNotificationPerDialogTime by MMKVStorageDelegate(0L)
 
 var timerNoticeLastShowTime by MMKVStorageDelegate(0L)
 var unlockNoticeLastShowTime by MMKVStorageDelegate(0L)
+
+var unusualAdClickCount by MMKVStorageDelegate(0)
+var unusualAdShowCount by MMKVStorageDelegate(0)
+var appInstallTime by MMKVStorageDelegate(app.getFirInstallTime())
+var isUnusualUser by MMKVStorageDelegate(false)

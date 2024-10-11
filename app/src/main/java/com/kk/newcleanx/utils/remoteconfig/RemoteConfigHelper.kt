@@ -1,10 +1,14 @@
 package com.kk.newcleanx.utils.remoteconfig
 
+import android.util.Log
 import com.google.firebase.remoteconfig.get
+import com.google.gson.Gson
 import com.kk.newcleanx.BuildConfig
+import com.kk.newcleanx.data.local.AbnormalAdConfig
 import com.kk.newcleanx.data.local.LOCAL_AD_JSON
 import com.kk.newcleanx.data.local.LOCAL_NOTICE_CONFIG_JSON
 import com.kk.newcleanx.data.local.LOCAL_NOTICE_TEXT_JSON
+import com.kk.newcleanx.data.local.abnormalAdConfig
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.notice.NormalNoticeManager
 
@@ -25,6 +29,7 @@ object RemoteConfigHelper : RemoteConfigBase() {
         getAdConfig()
         getNoticeConfigs()
         getNoticeText()
+        getAbnormalAdConfig()
     }
 
     private fun getAdConfig() {
@@ -45,6 +50,20 @@ object RemoteConfigHelper : RemoteConfigBase() {
         runCatching {
             val json = remoteConfig["octext"].asString()
             NormalNoticeManager.initNoticeText(json.ifBlank { LOCAL_NOTICE_TEXT_JSON })
+        }
+    }
+
+    private fun getAbnormalAdConfig() {
+        runCatching {
+            val json = remoteConfig["ad_toomuch"].asString()
+            if (json.isEmpty()) return
+            runCatching {
+                abnormalAdConfig = Gson().fromJson(json, AbnormalAdConfig::class.java)
+            }.onFailure {
+                abnormalAdConfig = AbnormalAdConfig()
+            }
+        }.onFailure { exception ->
+            Log.e("getAbnormalAdConfig", "Error: ${exception.message}", exception)
         }
     }
 

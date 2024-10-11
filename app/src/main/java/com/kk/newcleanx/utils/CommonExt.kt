@@ -318,6 +318,16 @@ fun Long.formatDuration(): String {
 }
 
 
+fun Context.getFirInstallTime(): Long {
+    return try {
+        val installTime = this.packageManager.getPackageInfo(this.packageName, 0).firstInstallTime
+        installTime
+    } catch (e: PackageManager.NameNotFoundException) {
+        0L
+    }
+}
+
+
 fun CoroutineScope.launchTicker(
     first: Long,
     interval: Long,
