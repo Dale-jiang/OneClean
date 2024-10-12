@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
 import com.kk.newcleanx.utils.CoroutineHelper
 import com.kk.newcleanx.utils.CoroutineHelper.taskCheckScope
 import com.kk.newcleanx.utils.CoroutineHelper.timerTaskCheckScope
@@ -49,12 +50,16 @@ object NormalNoticeTask {
     }
 
     fun initTask(context: Context) {
-        runCatching {
-            context.registerReceiver(unlockReceiver, IntentFilter().apply {
-                addAction(Intent.ACTION_USER_PRESENT)
-            })
+
+        if (shouldStartFrontendService()) {
+            runCatching {
+                context.registerReceiver(unlockReceiver, IntentFilter().apply {
+                    addAction(Intent.ACTION_USER_PRESENT)
+                })
+            }
+            timerNoticeCheck()
         }
-        timerNoticeCheck()
+
         postSessionBack()
         TbaHelper.eventPost("start_timer_task")
     }

@@ -32,6 +32,7 @@ import com.kk.newcleanx.ui.functions.notice.NormalNoticeManager
 import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
+import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
 import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.delay
@@ -81,7 +82,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
             TbaHelper.eventPost("oc_ad_chance", hashMapOf("ad_pos_id" to "oc_launch"))
         }
 
-        if (!hasNotificationPermission() && isAtLeastAndroid13()) {
+        if (shouldStartFrontendService() && !hasNotificationPermission() && isAtLeastAndroid13()) {
             notificationLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
 

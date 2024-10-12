@@ -50,6 +50,7 @@ import com.kk.newcleanx.utils.CommonUtils
 import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid13
 import com.kk.newcleanx.utils.CommonUtils.isAtLeastAndroid8
+import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
 import com.kk.newcleanx.utils.formatStorageSize
 import com.kk.newcleanx.utils.showAntivirusNotice
 import com.kk.newcleanx.utils.startFrontNoticeService
@@ -283,7 +284,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                 noticeType = null
             }
         } else {
-            if (!hasNotificationPermission() && !showBackAd) {
+            if (!hasNotificationPermission() && !showBackAd && shouldStartFrontendService()) {
                 requestNotificationPer()
             }
         }

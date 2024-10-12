@@ -25,8 +25,8 @@ object FrontNoticeManager {
 
     private fun buildChannel() = run {
         NotificationManagerCompat.from(app).createNotificationChannel(
-                NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_DEFAULT).setSound(null, null).setLightsEnabled(false)
-                        .setVibrationEnabled(false).setShowBadge(false).setName(CHANNEL_ID).build()
+            NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_DEFAULT).setSound(null, null).setLightsEnabled(false)
+                .setVibrationEnabled(false).setShowBadge(false).setName(CHANNEL_ID).build()
         )
     }
 
@@ -57,12 +57,12 @@ object FrontNoticeManager {
 
 
     @SuppressLint("MissingPermission")
-    fun showNotice(type:String="normal_notice"): Notification = run {
+    fun showNotice(type: String = "normal_notice"): Notification = run {
         buildChannel()
         val largeViews = buildRemoteViews(true)
         val tinyViews = buildRemoteViews(false)
         val builder = NotificationCompat.Builder(app, CHANNEL_ID).setSmallIcon(R.drawable.notice_small_icon).setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE).setOnlyAlertOnce(true).setGroupSummary(false).setGroup("FRONT").setSound(null).setOngoing(true)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE).setOnlyAlertOnce(true).setGroupSummary(false).setGroup("FRONT").setSound(null).setOngoing(true)
         if (CommonUtils.isMiUI() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             builder.setCustomContentView(tinyViews).setCustomBigContentView(largeViews).setCustomHeadsUpContentView(largeViews)
         } else {
@@ -71,7 +71,9 @@ object FrontNoticeManager {
         val notification = builder.build()
         runCatching {
             NotificationManagerCompat.from(app).notify(NOTIFICATION_ID, notification)
-            TbaHelper.eventPost("front_notice_type", hashMapOf("nt_type" to type))
+            if ((CommonUtils.isAtLeastAndroid14() && type == "normal_notice") || type == "foreground_notice") {
+                TbaHelper.eventPost("front_notice_type", hashMapOf("nt_type" to type))
+            }
         }
         return notification
     }

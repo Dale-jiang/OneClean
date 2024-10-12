@@ -42,6 +42,7 @@ import com.kk.newcleanx.ui.common.WebViewActivity
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeManager
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeService
 import com.kk.newcleanx.utils.CommonUtils.getDateRangeNameByIndex
+import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -58,15 +59,18 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 fun Context.startFrontNoticeService() = run {
-    if (CommonUtils.isAtLeastAndroid14() || (CommonUtils.isAtLeastAndroid12() && this is Application)) {
-        runCatching {
-            FrontNoticeManager.showNotice("normal_notice")
-            TbaHelper.eventPost("normal_notice")
-        }
-    } else {
-        runCatching {
-            ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
-            TbaHelper.eventPost("foreground_notice")
+    if (shouldStartFrontendService()){
+        if (CommonUtils.isAtLeastAndroid14() || (CommonUtils.isAtLeastAndroid12() && this is Application)) {
+            runCatching {
+                FrontNoticeManager.showNotice("normal_notice")
+                if (CommonUtils.isAtLeastAndroid14())
+                    TbaHelper.eventPost("normal_notice")
+            }
+        } else {
+            runCatching {
+                ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
+                TbaHelper.eventPost("foreground_notice")
+            }
         }
     }
 }

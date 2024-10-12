@@ -5,7 +5,6 @@ import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.app.usage.StorageStatsManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -392,6 +391,31 @@ object CommonUtils {
 //        val resolveInfoList = app.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
 //        return resolveInfoList.any { it.activityInfo.packageName == packageName }
 //    }
+
+
+    private fun getSystemCountryCode(): String {
+        return try {
+            app.resources.configuration.locales.get(0).country
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+    private fun getSystemLanguage(): String {
+        return try {
+            app.resources.configuration.locales.get(0).language
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+    fun shouldStartFrontendService(): Boolean {
+        val countryCode = getSystemCountryCode()
+        val language = getSystemLanguage()
+        return !(countryCode.equals("KR", ignoreCase = true) || language.equals("ko", ignoreCase = true))
+    }
 
 
 }
