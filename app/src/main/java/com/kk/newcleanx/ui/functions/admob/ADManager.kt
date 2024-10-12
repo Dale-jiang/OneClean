@@ -27,7 +27,6 @@ object ADManager {
     private var displayMax = 0
     private var clickMax = 0
 
-
     val ocLaunchLoader = FullScreenAdLoader("oc_launch")
     val ocScanIntLoader = FullScreenAdLoader("oc_scan_int")
     val ocCleanIntLoader = FullScreenAdLoader("oc_clean_int")
@@ -58,7 +57,6 @@ object ADManager {
             }
         }
     }
-
 
     fun addClick() = run {
         runCatching {
@@ -97,9 +95,9 @@ object ADManager {
 
         if (hoursSinceInstall >= abnormalAdConfig.timeInterval) {
             // Reset counters if time interval has passed
-            appInstallTime = currentTime
             unusualAdShowCount = if (isClick) 0 else 1
             unusualAdClickCount = if (isClick) 1 else 0
+            appInstallTime = currentTime
         } else {
             // Update counters based on whether it is a click or a show
             if (isClick) {
@@ -114,7 +112,6 @@ object ADManager {
             hasReachedUnusualAdLimit()
         }
     }
-
 
     private fun hasReachedUnusualAdLimit(): Boolean {
 
