@@ -71,3 +71,9 @@
 
 -keep class com.trustlook.** { *;}
 
+-keep class com.tencent.mmkv.** {*;}
+-dontwarn com.tencent.mmkv.**
+
+-keep class **.R$* {
+    <fields>;
+}
