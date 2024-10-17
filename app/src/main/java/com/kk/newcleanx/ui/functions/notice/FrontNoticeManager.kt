@@ -30,20 +30,25 @@ object FrontNoticeManager {
         )
     }
 
-    private fun buildRemoteViews(isLarge: Boolean): RemoteViews = let {
+    private fun buildRemoteViews(isLarge: Boolean, netPair: Pair<String, String>): RemoteViews = let {
         RemoteViews(app.packageName, if (isLarge) R.layout.notice_front_large else R.layout.notice_front_tiny).apply {
 
             if (isLarge) {
                 setTextViewText(R.id.tv_clean, app.getString(R.string.string_clean))
                 setTextViewText(R.id.tv_antivirus, app.getString(R.string.string_antivirus))
-                setTextViewText(R.id.tv_big_files, app.getString(R.string.big_files))
-                setTextViewText(R.id.tv_empty_folder, app.getString(R.string.empty_folders))
+            }
+
+            if (netPair.first.isNotBlank()) {
+                setTextViewText(R.id.tv_net_up, netPair.first)
+            }
+
+            if (netPair.second.isNotBlank()) {
+                setTextViewText(R.id.tv_net_down, netPair.second)
             }
 
             setOnClickPendingIntent(R.id.clean, buildClickPendingIntent(NoticeType("clean", "front_notice")))
             setOnClickPendingIntent(R.id.antivirus, buildClickPendingIntent(NoticeType("antivirus", "front_notice")))
-            setOnClickPendingIntent(R.id.big_files, buildClickPendingIntent(NoticeType("big_file", "front_notice")))
-            setOnClickPendingIntent(R.id.empty_folder, buildClickPendingIntent(NoticeType("empty_folder", "front_notice")))
+            setOnClickPendingIntent(R.id.net_traffic, buildClickPendingIntent(NoticeType("net_traffic", "front_notice")))
         }
     }
 
@@ -57,10 +62,10 @@ object FrontNoticeManager {
 
 
     @SuppressLint("MissingPermission")
-    fun showNotice(type: String = "normal_notice"): Notification = run {
+    fun showNotice(type: String = "normal_notice", netPair: Pair<String, String>): Notification = run {
         buildChannel()
-        val largeViews = buildRemoteViews(true)
-        val tinyViews = buildRemoteViews(false)
+        val largeViews = buildRemoteViews(true, netPair)
+        val tinyViews = buildRemoteViews(false, netPair)
         val builder = NotificationCompat.Builder(app, CHANNEL_ID).setSmallIcon(R.drawable.notice_small_icon).setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE).setOnlyAlertOnce(true).setGroupSummary(false).setGroup("FRONT").setSound(null).setOngoing(true)
         if (CommonUtils.isMiUI() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -71,7 +76,7 @@ object FrontNoticeManager {
         val notification = builder.build()
         runCatching {
             NotificationManagerCompat.from(app).notify(NOTIFICATION_ID, notification)
-            if ((CommonUtils.isAtLeastAndroid14() && type == "normal_notice") || type == "foreground_notice") {
+            if (type.isNotBlank() && type != "normal_notice") {
                 TbaHelper.eventPost("front_notice_type", hashMapOf("nt_type" to type))
             }
         }

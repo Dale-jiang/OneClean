@@ -4,13 +4,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.TrafficStats
 import android.util.Log
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.utils.CommonUtils.hasNotificationPermission
 import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
 import com.kk.newcleanx.utils.CoroutineHelper
 import com.kk.newcleanx.utils.CoroutineHelper.checkServiceScope
 import com.kk.newcleanx.utils.CoroutineHelper.taskCheckScope
 import com.kk.newcleanx.utils.CoroutineHelper.timerTaskCheckScope
+import com.kk.newcleanx.utils.formatBytes
 import com.kk.newcleanx.utils.launchTicker
 import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
@@ -20,6 +23,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 object NormalNoticeTask {
+
+    private var previousRxBytes = 0L
+    private var previousTxBytes = 0L
 
     private val unlockReceiver by lazy {
         object : BroadcastReceiver() {
@@ -70,12 +76,44 @@ object NormalNoticeTask {
         checkServiceScope.launch {
             while (true) {
                 delay(5 * 60 * 1000L)
-                withContext(Dispatchers.Main){
-                    app.startFrontNoticeService()
+                withContext(Dispatchers.Main) {
+                    app.startFrontNoticeService(false)
                 }
             }
         }
     }
+
+    fun startNetWorkTrafficMonitor() {
+
+        if (!hasNotificationPermission()) return
+
+        previousRxBytes = TrafficStats.getTotalRxBytes()
+        previousTxBytes = TrafficStats.getTotalTxBytes()
+
+        checkServiceScope.launch {
+            while (true) {
+                delay(4 * 1000L)
+                kotlin.runCatching {
+                    val currentRxBytes = TrafficStats.getTotalRxBytes()
+                    val currentTxBytes = TrafficStats.getTotalTxBytes()
+
+                    val rxSpeed = (currentRxBytes - previousRxBytes) / 4 // receive
+                    val txSpeed = (currentTxBytes - previousTxBytes) / 4 // send
+
+                    previousRxBytes = currentRxBytes
+                    previousTxBytes = currentTxBytes
+
+                    val rxSpeedStr = rxSpeed.formatBytes()
+                    val txSpeedStr = txSpeed.formatBytes()
+
+                    withContext(Dispatchers.Main) {
+                        FrontNoticeManager.showNotice("", txSpeedStr to rxSpeedStr)
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun timerNoticeCheck() {
         timerTaskCheckScope.launchTicker(60000L, 60000L, Dispatchers.Main) {

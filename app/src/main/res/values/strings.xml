@@ -157,5 +157,6 @@
     <string name="string_last60min">Last 60 mins</string>
     <string name="string_today">Today</string>
     <string name="no_data_yet">No Data Yet</string>
+    <string name="network_traffic">Network Traffic</string>
 
 </resources>

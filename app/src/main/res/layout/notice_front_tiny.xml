@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:orientation="horizontal">
@@ -26,6 +27,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
+
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
@@ -33,36 +35,80 @@
             android:src="@drawable/svg_notice_antivirus" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/big_files"
+    <RelativeLayout
+        android:id="@+id/net_traffic"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/svg_notice_big_files"
-            android:contentDescription="@string/big_files" />
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="10dp"
+            android:background="#e3e3e3" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/empty_folder"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end"
+                android:paddingEnd="5dp">
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/svg_notice_empty_folders"
-            android:contentDescription="@string/empty_folders" />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:contentDescription="@string/network_traffic"
+                    android:src="@drawable/net_arrow_up" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_net_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:includeFontPadding="false"
+                    android:text="0 KB/s"
+                    android:textColor="#3CC72B"
+                    android:textSize="11sp"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|start"
+                android:paddingStart="5dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:contentDescription="@string/network_traffic"
+                    android:src="@drawable/net_arrow_down" />
+
+                <TextView
+                    android:id="@+id/tv_net_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:includeFontPadding="false"
+                    android:text="0 KB/s"
+                    android:textColor="#4FA8F8"
+                    android:textSize="10sp"
+                    tools:ignore="HardcodedText,SmallSp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

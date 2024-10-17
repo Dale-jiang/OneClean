@@ -17,6 +17,7 @@
 
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:name=".MyAPP"
@@ -149,7 +150,11 @@
 
         <service
             android:name=".ui.functions.notice.FrontNoticeService"
-            android:exported="false" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Network usage details are displayed by the foreground service in the Notification Center." />
+        </service>
 
         <service
             android:name=".ui.functions.notice.service.MyFirebaseMessagingService"

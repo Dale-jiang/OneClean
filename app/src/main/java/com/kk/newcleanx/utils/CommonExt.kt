@@ -42,8 +42,8 @@ import com.kk.newcleanx.ui.common.WebViewActivity
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeManager
 import com.kk.newcleanx.ui.functions.notice.FrontNoticeService
 import com.kk.newcleanx.utils.CommonUtils.getDateRangeNameByIndex
+import com.kk.newcleanx.utils.CommonUtils.isServiceRunning
 import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
-import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,18 +58,24 @@ import java.util.Locale
 import kotlin.math.log10
 import kotlin.math.pow
 
-fun Context.startFrontNoticeService() = run {
-    if (shouldStartFrontendService()){
-        if (CommonUtils.isAtLeastAndroid14() || (CommonUtils.isAtLeastAndroid12() && this is Application)) {
+fun Context.startFrontNoticeService(ifCheck: Boolean = true) = run {
+    if (shouldStartFrontendService()) {
+        if ((CommonUtils.isAtLeastAndroid12() && this is Application)) {
             runCatching {
-                FrontNoticeManager.showNotice("normal_notice")
-                if (CommonUtils.isAtLeastAndroid14())
-                    TbaHelper.eventPost("normal_notice")
+                FrontNoticeManager.showNotice("normal_notice", "" to "")
             }
         } else {
-            runCatching {
-                ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
-                TbaHelper.eventPost("foreground_notice")
+
+            if (ifCheck) {
+                if (!isServiceRunning(FrontNoticeService::class.java)) {
+                    runCatching {
+                        ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
+                    }
+                }
+            } else {
+                runCatching {
+                    ContextCompat.startForegroundService(this, Intent(this, FrontNoticeService::class.java))
+                }
             }
         }
     }
@@ -328,6 +334,15 @@ fun Context.getFirInstallTime(): Long {
         installTime
     } catch (e: PackageManager.NameNotFoundException) {
         0L
+    }
+}
+
+fun Long.formatBytes(): String = let {
+    when {
+        this >= 1_073_741_824 -> String.format(Locale.getDefault(), "%.2f GB/s", this / 1_073_741_824.0) // 1 GB = 1024^3 bytes
+        this >= 1_048_576 -> String.format(Locale.getDefault(), "%.2f MB/s", this / 1_048_576.0) // 1 MB = 1024^2 bytes
+        this >= 1024 -> String.format(Locale.getDefault(), "%.2f KB/s", this / 1024.0) // 1 KB = 1024 bytes
+        else -> "$this B/s" // bytes
     }
 }
 

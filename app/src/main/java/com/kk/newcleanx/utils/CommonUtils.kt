@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kk.newcleanx.utils
 
 import android.annotation.SuppressLint
@@ -417,5 +419,19 @@ object CommonUtils {
         return !(countryCode.equals("KR", ignoreCase = true) || language.equals("ko", ignoreCase = true))
     }
 
+    fun isServiceRunning(serviceClass: Class<*>): Boolean {
+        try {
+            val activityManager = app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
+                if (serviceClass.name == service.service.className) {
+                    return true
+                }
+            }
+            return false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
 
 }

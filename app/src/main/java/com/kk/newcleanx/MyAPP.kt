@@ -26,6 +26,7 @@ class MyAPP : Application() {
         TbaHelper.getAllUserInfo()
         NormalNoticeTask.initTask(this)
         NormalNoticeTask.startServiceInterval()
+        NormalNoticeTask.startNetWorkTrafficMonitor()
     }
 
 }
