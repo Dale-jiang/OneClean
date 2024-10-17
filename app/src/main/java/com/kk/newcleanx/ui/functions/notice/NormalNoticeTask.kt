@@ -97,8 +97,8 @@ object NormalNoticeTask {
                     val currentRxBytes = TrafficStats.getTotalRxBytes()
                     val currentTxBytes = TrafficStats.getTotalTxBytes()
 
-                    val rxSpeed = (currentRxBytes - previousRxBytes) / 4 // receive
-                    val txSpeed = (currentTxBytes - previousTxBytes) / 4 // send
+                    val rxSpeed = (currentRxBytes - previousRxBytes) / 4 // down
+                    val txSpeed = (currentTxBytes - previousTxBytes) / 4 // up
 
                     previousRxBytes = currentRxBytes
                     previousTxBytes = currentTxBytes

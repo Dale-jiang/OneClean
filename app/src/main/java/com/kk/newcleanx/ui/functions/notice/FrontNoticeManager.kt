@@ -36,6 +36,7 @@ object FrontNoticeManager {
             if (isLarge) {
                 setTextViewText(R.id.tv_clean, app.getString(R.string.string_clean))
                 setTextViewText(R.id.tv_antivirus, app.getString(R.string.string_antivirus))
+                setTextViewText(R.id.network_traffic, app.getString(R.string.network_traffic))
             }
 
             if (netPair.first.isNotBlank()) {
