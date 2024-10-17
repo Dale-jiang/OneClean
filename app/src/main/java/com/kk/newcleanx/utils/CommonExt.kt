@@ -339,9 +339,9 @@ fun Context.getFirInstallTime(): Long {
 
 fun Long.formatBytes(): String = let {
     when {
-        this >= 1_073_741_824 -> String.format(Locale.getDefault(), "%.2f GB/s", this / 1_073_741_824.0) // 1 GB = 1024^3 bytes
-        this >= 1_048_576 -> String.format(Locale.getDefault(), "%.2f MB/s", this / 1_048_576.0) // 1 MB = 1024^2 bytes
-        this >= 1024 -> String.format(Locale.getDefault(), "%.2f KB/s", this / 1024.0) // 1 KB = 1024 bytes
+        this >= 1_073_741_824 -> String.format(Locale.getDefault(), "%.1f GB/s", this / 1_073_741_824.0) // 1 GB = 1024^3 bytes
+        this >= 1_048_576 -> String.format(Locale.getDefault(), "%.1f MB/s", this / 1_048_576.0) // 1 MB = 1024^2 bytes
+        this >= 1024 -> String.format(Locale.getDefault(), "%.1f KB/s", this / 1024.0) // 1 KB = 1024 bytes
         else -> "$this B/s" // bytes
     }
 }
