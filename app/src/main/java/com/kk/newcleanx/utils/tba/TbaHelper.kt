@@ -48,7 +48,7 @@ object TbaHelper : TbaBase() {
     private const val MAX_RETRIES = 4
     private const val RETRY_DELAY_MILLIS = 60000L
 
-    fun getAllUserInfo() {
+    fun getAllUserInfo() = runCatching {
         getGoogleInfo()
         getCloakInfo()
         getReferrerInfo()

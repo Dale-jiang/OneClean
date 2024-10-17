@@ -8,6 +8,7 @@ import android.util.Log
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.utils.CommonUtils.shouldStartFrontendService
 import com.kk.newcleanx.utils.CoroutineHelper
+import com.kk.newcleanx.utils.CoroutineHelper.checkServiceScope
 import com.kk.newcleanx.utils.CoroutineHelper.taskCheckScope
 import com.kk.newcleanx.utils.CoroutineHelper.timerTaskCheckScope
 import com.kk.newcleanx.utils.launchTicker
@@ -15,6 +16,7 @@ import com.kk.newcleanx.utils.startFrontNoticeService
 import com.kk.newcleanx.utils.tba.TbaHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 object NormalNoticeTask {
@@ -49,7 +51,7 @@ object NormalNoticeTask {
         }
     }
 
-    fun initTask(context: Context) {
+    fun initTask(context: Context) = runCatching {
 
         if (shouldStartFrontendService()) {
             runCatching {
@@ -64,6 +66,17 @@ object NormalNoticeTask {
         TbaHelper.eventPost("start_timer_task")
     }
 
+    fun startServiceInterval() = runCatching {
+        checkServiceScope.launch {
+            while (true) {
+                delay(5 * 60 * 1000L)
+                withContext(Dispatchers.Main){
+                    app.startFrontNoticeService()
+                }
+            }
+        }
+    }
+
     private fun timerNoticeCheck() {
         timerTaskCheckScope.launchTicker(60000L, 60000L, Dispatchers.Main) {
             runCatching {
@@ -74,10 +87,6 @@ object NormalNoticeTask {
                         }
                     }
                 }
-            }
-
-            runCatching {
-                app.startFrontNoticeService()
             }
         }
     }

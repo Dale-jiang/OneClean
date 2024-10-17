@@ -15,6 +15,8 @@ object CoroutineHelper {
     private val iOScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, _ -> }) }
     private val mainScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.Main + CoroutineExceptionHandler { _, _ -> }) }
 
+    val checkServiceScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, _ -> }) }
+
     fun launchIO(block: suspend () -> Unit): Job {
         return iOScope.launch {
             try {

@@ -25,6 +25,7 @@ class MyAPP : Application() {
         startFrontNoticeService()
         TbaHelper.getAllUserInfo()
         NormalNoticeTask.initTask(this)
+        NormalNoticeTask.startServiceInterval()
     }
 
 }
