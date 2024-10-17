@@ -77,6 +77,7 @@ object NormalNoticeTask {
             while (true) {
                 delay(5 * 60 * 1000L)
                 withContext(Dispatchers.Main) {
+                    Log.e("=======>>>>>>", "start service interval 5 min ")
                     app.startFrontNoticeService(false)
                 }
             }
