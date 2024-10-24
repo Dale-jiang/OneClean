@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_page_bg_color">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="150dp"
+        android:background="@drawable/shape_page_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/logo"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="196dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/guide_clean_page_logo" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="0.55"
+        app:srcCompat="@mipmap/guide_clean_page_name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/clean"
+        android:layout_width="259dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="73dp"
+        android:background="@drawable/ripple_clean_continue_btn"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/string_clean"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/allow_permission_to_scan_for_junk_files"
+        android:textColor="#FF0F3536"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/clean"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/montserrat"
+        android:foreground="?selectableItemBackgroundBorderless"
+        android:includeFontPadding="false"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="10dp"
+        android:text="@string/string_skip"
+        android:textColor="#FF899F9F"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clean" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

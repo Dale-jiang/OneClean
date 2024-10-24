@@ -158,5 +158,7 @@
     <string name="string_today">Today</string>
     <string name="no_data_yet">No Data Yet</string>
     <string name="network_traffic">Network Traffic</string>
+    <string name="string_skip">SKIP</string>
+    <string name="allow_permission_to_scan_for_junk_files">Allow permission to scan for junk files</string>
 
 </resources>

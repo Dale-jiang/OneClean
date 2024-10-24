@@ -156,9 +156,15 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
     private fun navigateToNextPage() {
 
+//        if (isFirstStartup) {
+        if (true) {
+            GuideCleanPageActivity.start(this)
+            finish()
+            return
+        }
+
         if (noticeType == null) { //open
             Log.e("navigateToNextPage==>", "noticeType is null")
-            isFirstStartup = false
             MainActivity.start(this, null)
         } else {
             Log.e("navigateToNextPage==>", "noticeType= scene:${noticeType!!.scene} toPage:${noticeType!!.toPage}")
