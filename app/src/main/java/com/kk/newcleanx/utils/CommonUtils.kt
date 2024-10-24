@@ -434,4 +434,15 @@ object CommonUtils {
         }
     }
 
+    fun getCurrentDateTimeInMillis(): Long {
+        val currentTime = System.currentTimeMillis()
+        return Calendar.getInstance().apply {
+            timeInMillis = currentTime
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+    }
+
 }

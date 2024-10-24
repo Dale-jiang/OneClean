@@ -61,3 +61,6 @@ var unusualAdClickCount by MMKVStorageDelegate(0)
 var unusualAdShowCount by MMKVStorageDelegate(0)
 var appInstallTime by MMKVStorageDelegate(app.getFirInstallTime())
 var isUnusualUser by MMKVStorageDelegate(false)
+
+var antivirusRedPointLastShowTime by MMKVStorageDelegate(0L)
+var duplicateFilesRedPointLastShowTime by MMKVStorageDelegate(0L)

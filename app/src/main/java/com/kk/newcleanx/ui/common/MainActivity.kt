@@ -28,7 +28,9 @@ import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
 import com.kk.newcleanx.data.local.NoticeType
 import com.kk.newcleanx.data.local.RECENT_APP
 import com.kk.newcleanx.data.local.SCAN_ANTIVIRUS
+import com.kk.newcleanx.data.local.antivirusRedPointLastShowTime
 import com.kk.newcleanx.data.local.app
+import com.kk.newcleanx.data.local.duplicateFilesRedPointLastShowTime
 import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.data.local.showNotificationPerDialogTime
 import com.kk.newcleanx.databinding.AcMainBinding
@@ -149,6 +151,7 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initAdapter() {
 
         adapter = MainListAdapter(this) {
@@ -162,6 +165,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                                     showBackAd = true
                                     TbaHelper.eventPost("antivirus_scan", hashMapOf("mg_source" to "home"))
                                     AntivirusScanningActivity.start(this)
+                                    antivirusRedPointLastShowTime = System.currentTimeMillis()
+                                    adapter?.notifyDataSetChanged()
                                 }
                             }
                         }
@@ -216,6 +221,8 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
                     requestAllFilePermission { success ->
                         if (success) {
                             DuplicateFileActivity.start(this)
+                            duplicateFilesRedPointLastShowTime = System.currentTimeMillis()
+                            adapter?.notifyDataSetChanged()
                         }
                     }
                 }

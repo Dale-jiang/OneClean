@@ -14,8 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.55"
-        app:srcCompat="@drawable/one_clean" />
-
+        app:srcCompat="@mipmap/one_clean" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -25,7 +24,7 @@
         android:fontFamily="@font/montserrat"
         android:includeFontPadding="false"
         android:text="@string/this_action_can_contain_ads"
-        android:textColor="@color/color_ff6f9d9e"
+        android:textColor="@color/white"
         android:textSize="11sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/progress_bar"
