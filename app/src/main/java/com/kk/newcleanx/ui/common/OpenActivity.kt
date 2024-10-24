@@ -69,6 +69,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
         override fun onFinish() {
             navigateToNextPage()
+            loadingOtherAd()
         }
     }
 
