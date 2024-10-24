@@ -58,11 +58,12 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     private val countDownTimer = object : CountDownTimer(10000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             val elapsedSeconds = (10000 - millisUntilFinished) / 1000
-            if (elapsedSeconds >= 3 && checkCondition()) {
+            if (elapsedSeconds >= 2 && checkCondition()) {
                 cancel()
                 showFullAd {
                     navigateToNextPage()
                 }
+                loadingOtherAd()
             }
         }
 
@@ -120,15 +121,13 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
     private fun loadingAd() {
         lifecycleScope.launch {
-
             ADManager.ocLaunchLoader.loadAd(this@OpenActivity)
-            ADManager.ocScanIntLoader.loadAd(this@OpenActivity)
-            ADManager.ocCleanIntLoader.loadAd(this@OpenActivity)
-
-            ADManager.ocScanNatLoader.loadAd(this@OpenActivity)
-            ADManager.ocCleanNatLoader.loadAd(this@OpenActivity)
-            ADManager.ocMainNatLoader.loadAd(this@OpenActivity)
         }
+    }
+
+    private fun loadingOtherAd() {
+        ADManager.ocScanIntLoader.loadAd(this@OpenActivity)
+        ADManager.ocCleanIntLoader.loadAd(this@OpenActivity)
     }
 
     private fun doAdProgress() {
@@ -157,8 +156,7 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
 
     private fun navigateToNextPage() {
 
-//        if (isFirstStartup) {
-        if (true && newGuideType != "0") {
+        if (isFirstStartup && newGuideType != "0") {
             GuideCleanPageActivity.start(this)
             finish()
             return

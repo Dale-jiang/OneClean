@@ -104,11 +104,13 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         noticeType = intent.getParcelableExtra(KEY_NOTICE_FUNCTION)
+        loadNativeAd()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        loadNativeAd()
         TbaHelper.eventPost("home_page")
         noticeType = intent?.getParcelableExtra(KEY_NOTICE_FUNCTION)
         binding.btnScan.startAnimation(
@@ -407,6 +409,13 @@ class MainActivity : AllFilePermissionActivity<AcMainBinding>() {
 
     }
 
+    private fun loadNativeAd() {
+        lifecycleScope.launch {
+            ADManager.ocScanNatLoader.loadAd(this@MainActivity)
+            ADManager.ocCleanNatLoader.loadAd(this@MainActivity)
+            ADManager.ocMainNatLoader.loadAd(this@MainActivity)
+        }
+    }
 
     private var ad: AdType? = null
     private fun showMainNatAd() {

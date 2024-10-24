@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import com.kk.newcleanx.data.local.isFirstStartup
+import com.kk.newcleanx.data.local.isToSettings
 import com.kk.newcleanx.databinding.AcGuideCleanPageBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
@@ -19,8 +20,15 @@ class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding
         }
     }
 
+    override fun onPostResume() {
+        super.onPostResume()
+        isToSettings = true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        isFirstStartup = false
 
         TbaHelper.eventPost("new_page")
 
@@ -43,7 +51,6 @@ class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding
             requestAllFilePermission(false) {
                 if (it) {
                     TbaHelper.eventPost("new_permission_yes")
-                    isFirstStartup = false
                     startActivities(
                         arrayOf(
                             Intent(this, MainActivity::class.java),
@@ -59,12 +66,15 @@ class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding
 
         binding.skip.setOnClickListener {
             TbaHelper.eventPost("new_skip")
-            isFirstStartup = false
             MainActivity.start(this, null)
             finish()
         }
 
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isToSettings = false
     }
 
 }
