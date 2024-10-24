@@ -30,7 +30,7 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
     private var animator: ValueAnimator? = null
 
     private val permissionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-       // isToSettings = false
+        // isToSettings = false
         if (CommonUtils.hasAllStoragePermission()) {
             mBlack(true)
         } else mBlack(false)
@@ -40,57 +40,62 @@ abstract class AllFilePermissionActivity<VB : ViewBinding> : BaseActivity<VB>() 
         if (CommonUtils.hasAllStoragePermission()) mBlack(true) else mBlack(false)
     }
 
-    fun requestAllFilePermission(block: (Boolean) -> Unit) {
+    fun requestAllFilePermission(showDialog: Boolean = true, block: (Boolean) -> Unit) {
         this.mBlack = block
         if (CommonUtils.hasAllStoragePermission()) {
             mBlack(true)
             return
         }
-        showRequestDialog {
-            if (it) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
+        fun request() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+                isToSettings = true
+                permissionResult.launch(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                    data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
+                })
+
+                lifecycleScope.launch {
+                    delay(400)
+                    startActivity(Intent(this@AllFilePermissionActivity, PermissionSettingDialogActivity::class.java))
+                }
+
+            } else {
+                if (alreadyRequestStoragePermissions.not()) {
+                    alreadyRequestStoragePermissions = true
+                    permissionLauncher.launch(CommonUtils.storagePermissions)
+                } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    permissionLauncher.launch(CommonUtils.storagePermissions)
+                } else {
                     isToSettings = true
-                    permissionResult.launch(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                    permissionResult.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
                     })
-
-                    lifecycleScope.launch {
-                        delay(400)
-                        startActivity(Intent(this@AllFilePermissionActivity, PermissionSettingDialogActivity::class.java))
-                    }
-
-                } else {
-                    if (alreadyRequestStoragePermissions.not()) {
-                        alreadyRequestStoragePermissions = true
-                        permissionLauncher.launch(CommonUtils.storagePermissions)
-                    } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        permissionLauncher.launch(CommonUtils.storagePermissions)
-                    } else {
-                        isToSettings = true
-                        permissionResult.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.parse("package:${this@AllFilePermissionActivity.packageName}")
-                        })
-                    }
                 }
-            } else mBlack(false)
+            }
         }
+
+        if (showDialog) {
+            showRequestDialog {
+                if (it) request() else mBlack(false)
+            }
+        } else request()
 
     }
 
 
     private fun showRequestDialog(block: (Boolean) -> Unit) {
         CustomAlertDialog(this).showDialog(title = getString(R.string.app_name),
-                                           message = getString(R.string.grant_permission_to_use),
-                                           positiveButtonText = getString(R.string.string_ok),
-                                           negativeButtonText = getString(R.string.string_cancel),
-                                           onPositiveButtonClick = {
-                                               block(true)
-                                               it.dismiss()
-                                           },
-                                           onNegativeButtonClick = {
-                                               block(false)
-                                           })
+            message = getString(R.string.grant_permission_to_use),
+            positiveButtonText = getString(R.string.string_ok),
+            negativeButtonText = getString(R.string.string_cancel),
+            onPositiveButtonClick = {
+                block(true)
+                it.dismiss()
+            },
+            onNegativeButtonClick = {
+                block(false)
+            })
     }
 
     protected fun startProgress(
