@@ -6,6 +6,7 @@ import com.kk.newcleanx.R
 
 lateinit var app: MyAPP
 var isToSettings = false
+var newGuideType = "1"
 
 val busObserver = MutableLiveData<String>()
 var abnormalAdConfig = AbnormalAdConfig()

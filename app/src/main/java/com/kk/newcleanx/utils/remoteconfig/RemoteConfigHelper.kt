@@ -9,6 +9,7 @@ import com.kk.newcleanx.data.local.LOCAL_AD_JSON
 import com.kk.newcleanx.data.local.LOCAL_NOTICE_CONFIG_JSON
 import com.kk.newcleanx.data.local.LOCAL_NOTICE_TEXT_JSON
 import com.kk.newcleanx.data.local.abnormalAdConfig
+import com.kk.newcleanx.data.local.newGuideType
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.notice.NormalNoticeManager
 
@@ -30,6 +31,7 @@ object RemoteConfigHelper : RemoteConfigBase() {
         getNoticeConfigs()
         getNoticeText()
         getAbnormalAdConfig()
+        getGuideConfig()
     }
 
     private fun getAdConfig() {
@@ -64,6 +66,15 @@ object RemoteConfigHelper : RemoteConfigBase() {
             }
         }.onFailure { exception ->
             Log.e("getAbnormalAdConfig", "Error: ${exception.message}", exception)
+        }
+    }
+
+    private fun getGuideConfig() {
+        val json = remoteConfig["new_guide"].asString()
+        kotlin.runCatching {
+            if (json.isNotBlank()) {
+                newGuideType = json
+            }
         }
     }
 

@@ -21,6 +21,7 @@ import com.kk.newcleanx.data.local.KEY_NOTICE_FUNCTION
 import com.kk.newcleanx.data.local.NoticeType
 import com.kk.newcleanx.data.local.app
 import com.kk.newcleanx.data.local.isFirstStartup
+import com.kk.newcleanx.data.local.newGuideType
 import com.kk.newcleanx.databinding.AcOpenBinding
 import com.kk.newcleanx.ui.base.BaseActivity
 import com.kk.newcleanx.ui.functions.admob.ADManager
@@ -157,11 +158,13 @@ class OpenActivity : BaseActivity<AcOpenBinding>() {
     private fun navigateToNextPage() {
 
 //        if (isFirstStartup) {
-        if (true) {
+        if (true && newGuideType != "0") {
             GuideCleanPageActivity.start(this)
             finish()
             return
         }
+
+        isFirstStartup = false
 
         if (noticeType == null) { //open
             Log.e("navigateToNextPage==>", "noticeType is null")
