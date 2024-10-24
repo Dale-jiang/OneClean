@@ -27,8 +27,10 @@ import kotlinx.coroutines.launch
 class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, JunkScanningResultActivity::class.java))
+        fun start(context: Context, isFormGuide: Boolean) {
+            context.startActivity(Intent(context, JunkScanningResultActivity::class.java).apply {
+                putExtra("new_guide", isFormGuide)
+            })
         }
     }
 
@@ -36,6 +38,8 @@ class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
         return binding.toolbar.root
     }
 
+
+    private val isFormGuide by lazy { intent?.getBooleanExtra("new_guide", false) ?: false }
 
     private val adapter by lazy {
         JunkScanningResultAdapter(this@JunkScanningResultActivity) {
@@ -59,7 +63,7 @@ class JunkScanningResultActivity : BaseActivity<AcJunkScanningResultBinding>() {
             onBackPressedDispatcher.addCallback { finish() }
 
             btnClean.setOnClickListener {
-                JunkCleanActivity.start(this@JunkScanningResultActivity, CleanType.JunkType)
+                JunkCleanActivity.start(this@JunkScanningResultActivity, CleanType.JunkType, isFormGuide)
                 finish()
             }
 

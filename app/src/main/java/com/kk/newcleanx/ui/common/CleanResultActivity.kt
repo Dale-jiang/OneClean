@@ -18,7 +18,6 @@ import com.kk.newcleanx.data.local.INTENT_KEY
 import com.kk.newcleanx.databinding.AcCleanResultBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.common.adapter.CleanResultListAdapter
-import com.kk.newcleanx.ui.common.adapter.MainListAdapter
 import com.kk.newcleanx.ui.functions.admob.ADManager
 import com.kk.newcleanx.ui.functions.admob.AdType
 import com.kk.newcleanx.ui.functions.appmanager.AppManagerActivity
@@ -33,9 +32,10 @@ import kotlinx.coroutines.launch
 class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
 
     companion object {
-        fun start(context: Context, type: CleanType?) {
+        fun start(context: Context, type: CleanType?, isFormGuide: Boolean = false) {
             context.startActivity(Intent(context, CleanResultActivity::class.java).apply {
                 putExtra(INTENT_KEY, type)
+                putExtra("new_guide", isFormGuide)
             })
         }
     }
@@ -44,9 +44,15 @@ class CleanResultActivity : AllFilePermissionActivity<AcCleanResultBinding>() {
         return binding.toolbar.root
     }
 
+    private val isFormGuide by lazy { intent?.getBooleanExtra("new_guide", false) ?: false }
     private var adapter: CleanResultListAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (isFormGuide) {
+            TbaHelper.eventPost("new_clean_resultpage")
+        }
+
         initAdapter()
         showNatAd()
 

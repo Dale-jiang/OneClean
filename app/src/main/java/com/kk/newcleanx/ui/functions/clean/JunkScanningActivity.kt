@@ -33,6 +33,8 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
         }
     }
 
+    private val isFormGuide by lazy { intent?.getBooleanExtra("new_guide", false) ?: false }
+
     private val viewModel by viewModels<JunkScanningViewModel>()
 
     override fun topView(): View {
@@ -41,6 +43,11 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (isFormGuide) {
+            TbaHelper.eventPost("new_cleaning")
+        }
+
         binding.apply {
             toolbar.ivBack.setColorFilter(ContextCompat.getColor(this@JunkScanningActivity, R.color.color_83401b), PorterDuff.Mode.SRC_IN)
             toolbar.tvTitle.text = getString(R.string.string_scanning)
@@ -105,10 +112,10 @@ class JunkScanningActivity : AllFilePermissionActivity<AcJunkScanningBinding>() 
                     while (binding.progressBar.progress < 100) delay(50L)
                     showFullAd {
                         if (it) {
-                            JunkScanningResultActivity.start(this@JunkScanningActivity)
+                            JunkScanningResultActivity.start(this@JunkScanningActivity, isFormGuide)
                             finish()
                         } else {
-                            CleanResultActivity.start(this@JunkScanningActivity, CleanType.JunkType)
+                            CleanResultActivity.start(this@JunkScanningActivity, CleanType.JunkType, isFormGuide)
                             finish()
                         }
                     }

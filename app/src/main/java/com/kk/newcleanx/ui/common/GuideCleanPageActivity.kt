@@ -9,6 +9,7 @@ import com.kk.newcleanx.data.local.isFirstStartup
 import com.kk.newcleanx.databinding.AcGuideCleanPageBinding
 import com.kk.newcleanx.ui.base.AllFilePermissionActivity
 import com.kk.newcleanx.ui.functions.clean.JunkScanningActivity
+import com.kk.newcleanx.utils.tba.TbaHelper
 
 class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding>() {
 
@@ -20,6 +21,8 @@ class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        TbaHelper.eventPost("new_page")
 
         binding.clean.startAnimation(
             ScaleAnimation(
@@ -34,13 +37,19 @@ class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding
         )
 
         binding.clean.setOnClickListener {
+
+            TbaHelper.eventPost("new_clean")
+
             requestAllFilePermission(false) {
                 if (it) {
+                    TbaHelper.eventPost("new_permission_yes")
                     isFirstStartup = false
                     startActivities(
                         arrayOf(
                             Intent(this, MainActivity::class.java),
-                            Intent(this, JunkScanningActivity::class.java)
+                            Intent(this, JunkScanningActivity::class.java).apply {
+                                putExtra("new_guide", true)
+                            }
                         )
                     )
                     finish()
@@ -49,6 +58,7 @@ class GuideCleanPageActivity : AllFilePermissionActivity<AcGuideCleanPageBinding
         }
 
         binding.skip.setOnClickListener {
+            TbaHelper.eventPost("new_skip")
             isFirstStartup = false
             MainActivity.start(this, null)
             finish()

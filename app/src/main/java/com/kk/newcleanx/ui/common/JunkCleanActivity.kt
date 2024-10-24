@@ -28,9 +28,10 @@ import kotlinx.coroutines.launch
 class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
     companion object {
-        fun start(context: Context, type: CleanType) {
+        fun start(context: Context, type: CleanType, isFormGuide: Boolean = false) {
             context.startActivity(Intent(context, JunkCleanActivity::class.java).apply {
                 putExtra(INTENT_KEY, type)
+                putExtra("new_guide", isFormGuide)
             })
         }
     }
@@ -39,6 +40,7 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
         return binding.toolbar.root
     }
 
+    private val isFormGuide by lazy { intent?.getBooleanExtra("new_guide", false) ?: false }
     private val viewModel by viewModels<JunkCleanViewModel>()
     private var mProgress = 0
 
@@ -62,7 +64,7 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
             btnContinue.setOnClickListener {
                 if (type != CleanType.BigFileType) {
-                    CleanResultActivity.start(this@JunkCleanActivity, type)
+                    CleanResultActivity.start(this@JunkCleanActivity, type, isFormGuide)
                 }
                 finish()
             }
@@ -125,14 +127,14 @@ class JunkCleanActivity : AllFilePermissionActivity<AcJunkCleanBinding>() {
 
     private fun onBackClicked() {
         CustomAlertDialog(this).showDialog(title = getString(R.string.string_tips),
-                                           message = getString(R.string.string_cleaning_stop_tip),
-                                           positiveButtonText = getString(R.string.string_ok),
-                                           negativeButtonText = getString(R.string.string_cancel),
-                                           onPositiveButtonClick = {
-                                               it.dismiss()
-                                               finish()
-                                           },
-                                           onNegativeButtonClick = {})
+            message = getString(R.string.string_cleaning_stop_tip),
+            positiveButtonText = getString(R.string.string_ok),
+            negativeButtonText = getString(R.string.string_cancel),
+            onPositiveButtonClick = {
+                it.dismiss()
+                finish()
+            },
+            onNegativeButtonClick = {})
     }
 
 
